@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5 p-5 pt-0">
+  <div class="card shadow-sm border-0">
+    <div class="row g-0">
+      <!-- Coluna da imagem -->
+      {% if business[5] %}
+      <div class="col-md-4 p-3 d-flex align-items-center justify-content-between">
+        <img src="{{ url_for('static', filename='uploads/' ~ business[5]) }}" 
+             class="img-fluid img-square rounded-start" 
+             alt="{{ business[1] }}">
+      </div>
+      {% endif %}
+
+      <!-- Coluna das informações -->
+      <div class="col-md-8">
+        <div class="card-body">
+          <!-- Nome do negócio + Badge -->
+          <h2 class="card-title mb-3 d-flex align-items-center">
+            {{ business[1] }}
+            <span class="badge bg-primary ms-auto" style="font-size: 0.4em;">{{ business[3] }}</span>
+          </h2>
+
+          <!-- Descrição -->
+          <h5>Descrição</h5>
+          <p class="card-text">{{ business[2] }}</p>
+
+          <div class="d-flex align-items-center justify-content-between">
+          	  <div class="text-left">
+		          <!-- Contato -->
+		          <ul class="list-unstyled">
+		            {% for c in business[4].split() %}
+		            <li><i class="bi bi-telephone-fill me-2"></i>{{ c.strip() }}</li>
+		            {% endfor %}
+		          </ul>
+	          </div>
+
+	          <!-- QR Code -->
+	          <div class="mt-4 ms-auto">
+	            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ request.url }}" 
+	                 alt="QR code" class="border p-1 rounded">
+	          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

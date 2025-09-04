@@ -1,0 +1,83 @@
+
+/* Corpo e fundo */
+body {
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    color: #0A1F44;
+}
+
+.img-square {
+    width: 100%;        /* ocupa a largura do card */
+    aspect-ratio: 1 / 1;  /* força quadrado */
+    object-fit: cover;  /* corta a imagem se for maior, mantém o centro */
+}
+
+/* Navbar */
+.navbar, .offcanvas {
+    background-color: #c6c6c6 !important;
+}
+.navbar-brand, .nav-link, .dropdown-item {
+    
+}
+.navbar-brand:hover, .nav-link:hover, .dropdown-item:hover {
+}
+
+.title {
+    color: #7FB3F0;
+    text-align: center;
+}
+.title-2 {
+    color: #7FB3F0;
+    text-align: center;
+    font-weight: 800;
+}
+
+.icone{
+    text-decoration: None;
+    cursor: pointer;
+    color: #A6A6A6;
+}
+.icone:hover{
+    color: #C4C4C4;
+}
+
+/* Botões */
+.btn-primary {
+    background-color: #7FB3F0 !important;
+    border-color: #7FB3F0 !important;
+}
+.btn-primary:hover {
+    background-color: #95C8F4 !important;
+    border-color: #95C8F4 !important;
+}
+
+/* Input / select */
+.form-control, .form-select {
+    background-color: #D9E9FA !important;
+    color: #0A1F44 !important;
+    border: 1px solid #7FB3F0 !important;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #95C8F4 !important;
+    box-shadow: 0 0 5px #7FB3F0 !important;
+}
+
+/* Tags */
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.tag {
+    background-color: #A3C9F1;
+    color: #0A1F44;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+.tag:hover {
+    background-color: #95C8F4;
+}

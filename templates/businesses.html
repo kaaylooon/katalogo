@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center"
+		style="width: 70px; height: 60px;"
+		href="addbusiness">
+	<span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">add</span>
+</a>
+
+<div class="container mt-3">
+  <div class="row">
+    {% for b in businesses %}
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 shadow-sm">
+
+        <div class="card-body d-flex flex-column">
+          <!-- Logo + Nome -->
+          <div class="d-flex align-items-center mb-2">
+            {% if b[5] %}
+            <img src="{{ url_for('static', filename='uploads/' ~ b[5]) }}" 
+                 alt="{{ b[1] }}" 
+                 class="rounded-circle me-3"
+                 style="width: 50px; height: 50px; object-fit: cover;">
+            {% endif %}
+            <h5 class="card-title mb-0">
+              {{ b[1] }}<br>
+              <span class="badge bg-primary " 
+                    style="font-size: 0.5em; vertical-align: middle;">
+                {{ b[3] }}
+              </span>
+            </h5>
+          </div>
+
+          <!-- Descrição -->
+          <p class="card-text text-muted small flex-grow-1">
+            {{ b[2][:130] }}...
+          </p>
+
+          <!-- Botão -->
+          <a href="/business/{{ b[0] }}" class="btn btn-sm btn-primary mt-auto">Ver mais</a>
+        </div>
+
+        <div class="card-footer text-muted small">
+          {{ b[6] }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

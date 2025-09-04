@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+	<h1 class="title">Feed</h1>
+</div>
+
+
+
+<div class="container mt-3">
+	{% for f in feed %}
+		<div class="card mb-3">
+			<!--<img class="card-img-top" src="..." alt="Card image cap">-->
+			<div class="card-body">
+				<h5 class="card-title">Card title</h5>
+				<p class="card-text">
+					This is a wider card with supporting text below as a natural lead-in to additional content.
+				</p>
+				<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+			</div>
+		</div>
+	{% endfor %}
+</div>
+{% endblock %}

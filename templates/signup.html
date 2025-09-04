@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container d-flex justify-content-center p-5 pt-0">
+    <div class="row g-4">
+        <div class="col-md-12">
+            <form action="/signup" method="post" class="card row g-3 needs-validation p-5" novalidate>
+                <h1 class="title-2">SIGN-UP</h1>
+                <div class="col-md-12">
+                    <label for="validationUsername2" class="form-label">Usuário</label>
+                    <div class="input-group has-validation">
+                        <span class="input-group-text" id="validationUsernamePrepend2">@</span>
+                        <input name ="username" type="text" class="form-control" id="validationUsername2" aria-describedby="validationUsernamePrepend3" required>
+                        <div class="invalid-feedback">
+                            Por favor, digite um nome de usuário válido e único.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="exampleFormControlInput1" class="form-label">Endereço de e-mail</label>
+                    <input name ="email" type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required aria-describedby="validationUsernamePrepend4">
+                    <div class="invalid-feedback">
+                        Por favor, digite um e-mail válido.
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="inputPassword2" class="form-label">Senha</label>
+                    <input name="password" type="password" id="inputPassword2" class="form-control" aria-describedby="passwordHelpBlock2 validationUsernamePrepend5" required>
+                    <div class="invalid-feedback">
+                        Por favor, digite uma senha válida.
+                    </div>
+                    <div id="passwordHelpBlock2" class="form-text">Sua senha deve ter 8–20 caracteres, conter letras e números, e não pode ter espaços, caracteres especiais ou emoji.
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="inputPassword2" class="form-label">Confirme</label>
+                    <input type="password" id="inputPassword2" class="form-control" aria-describedby="passwordHelpBlock2" required>
+                    <div class="invalid-feedback">
+                        Por favor, confirme a senha.
+                    </div>
+                </div>
+                <div class="col-12">
+                	<div class="p-1 d-flex">
+
+                    <button class="btn btn-primary" type="submit">
+                    SIGN-UN</button>
+                    <a class="btn btn-secondary ms-auto" type="button" href="login">SIGN-IN</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+(() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-3">
+  <div class="card p-3">
+    <form class="row g-3" action="/addbusiness" method="POST" enctype="multipart/form-data">
+      
+      <!-- Nome -->
+      <div class="col-12">
+        <label for="nome" class="form-label">Nome do negócio</label>
+        <input type="text" class="form-control" id="nome" name="nome" required>
+      </div>
+
+      <!-- Descrição -->
+      <div class="col-12">
+        <label for="descricao" class="form-label">Descrição</label>
+        <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+      </div>
+
+      <div class="col-12">
+        <label for="contato" class="form-label">Contato</label>
+        <input type="text" class="form-control" id="contato" name="contato" required>
+      </div>
+
+      <!-- Categoria -->
+      <div class="col-12">
+        <label class="form-label">Categoria</label>
+        <select class="form-select" name="categoria" required>
+          <option value="" selected>Escolha a categoria...</option>
+			<option value="Bebidas">Bebidas</option>
+			<option value="Doces e Salgados">Doces e Salgados</option>
+			<option value="Livros">Livros</option>
+			<option value="Educação">Educação</option>
+			<option value="Aulas Particulares">Aulas Particulares</option>
+			<option value="Tecnologia">Tecnologia</option>
+			<option value="Informática">Informática</option>
+			<option value="Serviços">Serviços</option>
+			<option value="Arte">Arte</option>
+			<option value="Artesanato">Artesanato</option>
+			<option value="Desenhos">Desenhos</option>
+			<option value="Música">Música</option>
+			<option value="Roupas">Roupas</option>
+			<option value="Acessórios">Acessórios</option>
+			<option value="Beleza">Beleza</option>
+			<option value="Esportes">Esportes</option>
+			<option value="Jogos">Jogos</option>
+			<option value="Eventos">Eventos</option>
+			<option value="Brechó">Brechó</option>
+			<option value="Clube/Grupo">Clube/Grupo</option>
+			<option value="Diversos">Diversos</option>
+
+        </select>
+      </div>
+
+      <!-- Upload da logo -->
+      <div class="col-12">
+        <label for="logo" class="form-label">Logo do negócio</label>
+        <input class="form-control" type="file" id="logo" name="logo" accept="image/*">
+      </div>
+
+      <!-- Botão -->
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Adicionar negócio</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}
