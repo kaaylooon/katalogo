@@ -1,0 +1,9 @@
+# Ignorar o banco SQLite
+db.db
+
+# Cache do Python
+__pycache__/
+
+static/uploads/*
+!static/uploads/.gitkeep
+

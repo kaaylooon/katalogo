@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center"
-		style="width: 70px; height: 60px;"
+<div class="container p-5">
+
+  <form action="{{ url_for('routes.businesses') }}" method="get" class="mb-4">
+     <label for="exampleDataList" class="form-label">Buscar</label>
+    <input type="text" class="form-control" name="q" placeholder="Digite o nome do negócio..." id="exampleDataList">
+</form>
+</div>
+
+
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm"
+		style="width: 60px; height: 60px; z-index: 1050;"
 		href="addbusiness">
 	<span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">add</span>
 </a>
@@ -37,11 +46,15 @@
           </p>
 
           <!-- Botão -->
-          <a href="/business/{{ b[0] }}" class="btn btn-sm btn-primary mt-auto">Ver mais</a>
-        </div>
 
-        <div class="card-footer text-muted small">
-          {{ b[6] }}
+            <div class="d-flex justify-content-between text-muted" style="font-size: 0.9rem;">
+              <div><i class="bi bi-chat"></i> 12</div>
+              <div><i class="bi bi-arrow-repeat"></i> 4</div>
+              <div><i class="bi bi-heart"></i> 35</div>
+              <div><i class="bi bi-upload"></i></div>
+            </div>
+            
+          <a href="/business/{{ b[0] }}" class="btn btn-sm btn-primary mt-auto">Ver mais</a>
         </div>
       </div>
     </div>

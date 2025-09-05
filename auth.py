@@ -1,8 +1,19 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from functools import wraps
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+
+from db import *
 
 auth = Blueprint('auth', __name__)
+
+
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #SIGIN, SIGNUP, LOGOUT
 
@@ -10,12 +21,20 @@ auth = Blueprint('auth', __name__)
 def login():
 	if request.method == "POST":
 		username = request.form.get('username')
+		session['user'] = username
+
 		password = request.form.get('password')
-		flash(f'Bem-vindo(a), {username}', 'success')
-		return redirect("/")
-	else:
-		flash('Usuário ou senha incorretos.', "danger")
-	return render_template('login.html')
+
+		user = verificar_user(username)	
+
+		if user and check_password_hash(user[1], password):
+			session["user_id"] = user[0]
+			session["role"] = user[2]
+			flash('Login feito.', 'success')
+			return redirect("/")
+		else:
+			flash('Usuário ou senha incorretos.', "danger")
+	return render_template("login.html")
 
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -24,6 +43,20 @@ def signup():
 		email = request.form.get("email")
 		password = request.form.get("password")
 		hashed = generate_password_hash(password)
+
+		telephone = request.form.get('number')
+
+		#file = request.files['pfp']
+		#if file and allowed_file(file.filename):
+		#	filename = secure_filename(file.filename)
+		#	file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+		try:
+			registrar_user(username, email, hashed, telephone)
+			flash('Conta criada com sucesso')
+			return redirect('/login')
+		except:
+			flash('Usuário ou e-mail já existe.', 'danger')
 	return render_template('signup.html')
 
 @auth.route("/logout")
@@ -38,7 +71,7 @@ def login_required(f):
 	@wraps(f)
 	def decorated(*args, **kwargs):
 		if "user_id" not in session:
-			flash("Você precisa logar para acessar.", "warning")
+			flash("Você precisa logar.", "warning")
 			return redirect("/login")
 		return f(*args, **kwargs)
 	return decorated

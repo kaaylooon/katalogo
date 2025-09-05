@@ -6,6 +6,15 @@ body {
     color: #0A1F44;
 }
 
+:root {
+    color-scheme: light !important;
+}
+
+a{
+    text-decoration: none;
+    text-decoration-line: none;
+}
+
 .img-square {
     width: 100%;        /* ocupa a largura do card */
     aspect-ratio: 1 / 1;  /* força quadrado */

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5 p-5 pt-0">
+    <!-- Perfil do usuário -->
+    <div class="card p-4 mb-4 shadow-sm">
+        <div class="row align-items-center">
+            <!-- Foto -->
+            <div class="d-flex align-items-center">
+                <img src="{{ user[5] or url_for('static', filename='user.png') }}"
+                alt="{{ user[1] }}" 
+                class="rounded-circle me-3"
+                style="width: 50px; height: 50px; object-fit: cover;">
+
+                <h2 class="card-title mb-0 d-flex align-items-center flex-grow-1">{{ user[1] }} 
+                    <span class="badge {{ 'bg-primary' if user[2] == 'user' else 'bg-danger'}} ms-auto" style="font-size: 0.4em; height: fit-content;">
+                        {% if user[2] == 'user' %}
+                            Membro
+                        {% else %}
+                            Admin
+                        {% endif %}
+                    </span>
+                </h2> 
+            </div>
+        </div>
+    </div>
+    
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Meus negócios</h5>
+      {% for b in business %}
+      <div class="card">
+        <div class="d-flex align-items-center card-body card-text">
+                <img src="{{ url_for('static', filename='uploads/' ~ b[2]) }}"
+                alt="{{ user[1] }}" 
+                class="rounded-circle me-3"
+                style="width: 50px; height: 50px; object-fit: cover;">
+
+                <a href="{{ url_for('routes.business', business_id=b[0]) }}" class="card-title mb-0 d-flex align-items-center flex-grow-1">{{ b[1] }}</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+
+</div>
+
+{% endblock %}

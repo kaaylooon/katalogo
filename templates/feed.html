@@ -6,19 +6,47 @@
 	<h1 class="title">Feed</h1>
 </div>
 
-
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm"
+		style="width: 60px; height: 60px; z-index: 1050;"
+		href="/addfeed">
+	<span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">add</span>
+</a>
 
 <div class="container mt-3">
 	{% for f in feed %}
-		<div class="card mb-3">
-			<!--<img class="card-img-top" src="..." alt="Card image cap">-->
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">
-					This is a wider card with supporting text below as a natural lead-in to additional content.
-				</p>
-				<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-			</div>
+		<div class="card mb-3" style="max-width: 540px;">
+		  <div class="row g-0">
+		    <!-- Avatar -->
+		    <div class="col-auto p-2">
+		      <img src="https://via.placeholder.com/48" class="rounded-circle" alt="Avatar">
+		    </div>
+
+		    <!-- Conteúdo do post -->
+		    <div class="col">
+		      <div class="card-body p-2">
+		        <!-- Header: nome + username + data -->
+		        <h6 class="card-title mb-1">
+		          Nome do Usuário <span class="text-muted">@username · 2h</span>
+		        </h6>
+
+		        <!-- Texto do post -->
+		        <p class="card-text mb-2">
+		          Este é um exemplo de tweet/post no estilo X. Pode ter links, menções e hashtags.
+		        </p>
+
+		        <!-- Imagem opcional -->
+		        <img src="https://via.placeholder.com/400x200" class="img-fluid rounded mb-2" alt="Imagem do post">
+
+		        <!-- Botões de interação -->
+		        <div class="d-flex justify-content-between text-muted" style="font-size: 0.9rem;">
+		          <div><i class="bi bi-chat"></i> 12</div>
+		          <div><i class="bi bi-arrow-repeat"></i> 4</div>
+		          <div><i class="bi bi-heart"></i> 35</div>
+		          <div><i class="bi bi-upload"></i></div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
 		</div>
 	{% endfor %}
 </div>

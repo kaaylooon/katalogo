@@ -1,70 +1,125 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center py-3">
+            <h4 class="mb-0"><i class="bi bi-shop me-2"></i>Adicionar Negócio</h4>
+        </div>
+        <div class="card-body p-4">
+            <form class="card-body row g-4" action="/addbusiness" method="POST" enctype="multipart/form-data">
+                <div class="col-md-6">
+                    <label for="nome" class="form-label">Nome do negócio</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required>
+                    <div class="form-text">Escolha um nome que represente bem o seu negócio.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="categoria" class="form-label">Categoria</label>
+                    <select class="form-select" name="categoria" required>
+                        <option value="" selected disabled>Escolha a categoria...</option>
 
-<div class="container mt-3">
-  <div class="card p-3">
-    <form class="row g-3" action="/addbusiness" method="POST" enctype="multipart/form-data">
-      
-      <!-- Nome -->
-      <div class="col-12">
-        <label for="nome" class="form-label">Nome do negócio</label>
-        <input type="text" class="form-control" id="nome" name="nome" required>
-      </div>
+                         <option value="Bebidas">Bebidas</option>
 
-      <!-- Descrição -->
-      <div class="col-12">
-        <label for="descricao" class="form-label">Descrição</label>
-        <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
-      </div>
+                         <option value="Doces e Salgados">Doces e Salgados</option>
 
-      <div class="col-12">
-        <label for="contato" class="form-label">Contato</label>
-        <input type="text" class="form-control" id="contato" name="contato" required>
-      </div>
+                         <option value="Livros">Livros</option>
 
-      <!-- Categoria -->
-      <div class="col-12">
-        <label class="form-label">Categoria</label>
-        <select class="form-select" name="categoria" required>
-          <option value="" selected>Escolha a categoria...</option>
-			<option value="Bebidas">Bebidas</option>
-			<option value="Doces e Salgados">Doces e Salgados</option>
-			<option value="Livros">Livros</option>
-			<option value="Educação">Educação</option>
-			<option value="Aulas Particulares">Aulas Particulares</option>
-			<option value="Tecnologia">Tecnologia</option>
-			<option value="Informática">Informática</option>
-			<option value="Serviços">Serviços</option>
-			<option value="Arte">Arte</option>
-			<option value="Artesanato">Artesanato</option>
-			<option value="Desenhos">Desenhos</option>
-			<option value="Música">Música</option>
-			<option value="Roupas">Roupas</option>
-			<option value="Acessórios">Acessórios</option>
-			<option value="Beleza">Beleza</option>
-			<option value="Esportes">Esportes</option>
-			<option value="Jogos">Jogos</option>
-			<option value="Eventos">Eventos</option>
-			<option value="Brechó">Brechó</option>
-			<option value="Clube/Grupo">Clube/Grupo</option>
-			<option value="Diversos">Diversos</option>
+                         <option value="Educação">Educação</option>
 
-        </select>
-      </div>
+                         <option value="Aulas Particulares">Aulas Particulares</option>
 
-      <!-- Upload da logo -->
-      <div class="col-12">
-        <label for="logo" class="form-label">Logo do negócio</label>
-        <input class="form-control" type="file" id="logo" name="logo" accept="image/*">
-      </div>
+                          <option value="Tecnologia">Tecnologia</option>
 
-      <!-- Botão -->
-      <div class="col-12">
-        <button type="submit" class="btn btn-primary">Adicionar negócio</button>
-      </div>
+                          <option value="Informática">Informática</option>
 
-    </form>
-  </div>
+                          <option value="Serviços">Serviços</option>
+
+                          <option value="Arte">Arte</option>
+
+                          <option value="Artesanato">Artesanato</option>
+
+                          <option value="Desenhos">Desenhos</option>
+
+                          <option value="Música">Música</option>
+
+                          <option value="Roupas">Roupas</option>
+
+                          <option value="Acessórios">Acessórios</option>
+
+                          <option value="Beleza">Beleza</option>
+
+                          <option value="Esportes">Esportes</option>
+
+                          <option value="Jogos">Jogos</option>
+
+                          <option value="Eventos">Eventos</option>
+
+                          <option value="Brechó">Brechó</option>
+
+                          <option value="Clube/Grupo">Clube/Grupo</option>
+
+                          <option value="Diversos">Diversos</option>
+                        </select>
+                </div>
+                
+                <div class="col-12">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="descricao" name="descricao" rows="4" placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais." required></textarea>
+                </div>
+               <div class="col-12">
+                    <label for="contato" class="form-label">Contato</label>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div id="contatos-container">
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text" id="validationUsernamePrepend1">@</span>
+                                    <input name="insta" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group has-validation">
+                                <span class="input-group-text" id="validationUsernamePrepend2">+55</span>
+                                <input name="telephone" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="logo" class="form-label">Logo do negócio</label>
+                    <input class="form-control" type="file" id="logo" name="logo" accept="image/*">
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary">Adicionar Negócio</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+<script>
+    function adicionarContato() {
+        const container = document.getElementById('contatos-container');
+        const novoInputDiv = document.createElement('div');
+        novoInputDiv.className = 'input-group mb-2';
+
+        const novoInputSpan = document.createElement('span');
+        novoInputSpan.className = 'input-group-text';
+        // Alternar ícones
+        const iconHTML = container.children.length % 2 === 0 ? '<i class="bi bi-instagram"></i>' : '<i class="bi bi-envelope"></i>';
+        novoInputSpan.innerHTML = iconHTML;
+
+        const novoInput = document.createElement('input');
+        novoInput.type = 'text';
+        novoInput.className = 'form-control contato-input';
+        novoInput.name = 'contato[]';
+        novoInput.placeholder = container.children.length % 2 === 0 ? '@perfilinsta' : 'email@exemplo.com';
+
+        novoInputDiv.appendChild(novoInputSpan);
+        novoInputDiv.appendChild(novoInput);
+        container.appendChild(novoInputDiv);
+    }
+</script>
 
 {% endblock %}

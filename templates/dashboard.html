@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% for user in users %}
-	<p>{{ user[0] }}</p> 
-	<p>{{ user[1] }}</p> 
-	<p>{{ user[2] }}</p> 
-	<p>{{ user[3] }}</p> 
-	<p>{{ user[4] }}</p> 
-	<p>{{ user[5] }}</p> 
-	<p>{{ user[6] }}</p> 
-	<br>
-{% endfor %}
+<div class="container p-5">
+	<h5>Usuários</h5>
+	{% for user in users %}
+		<div class="card">
+			<div class="card-body card-text">
+				<a href="{{ url_for('routes.perfil', user_id=user[0]) }}" class="btn btn-secondary mb-0 d-flex align-items-center flex-grow-1">1. {{ user[1] }}</a>
+			</div>
+		</div>
+	{% endfor %}
+</div>
 
 {% endblock %}

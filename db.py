@@ -15,6 +15,7 @@ def tabela_feed():
 		description TEXT NOT NULL,
 		category TEXT,
 		contact TEXT,
+		by_user TEXT,
 		image_path TEXT,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)
@@ -38,11 +39,12 @@ def tabela_users():
 	cur.execute("""
 		CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		username TEXT NOT NULL,
-		email TEXT NOT NULL,
-		password TEXT,
-		telephone TEXT,
+		username TEXT NOT NULL UNIQUE,
+		email TEXT NOT NULL UNIQUE,
+		password TEXT NOT NULL,
+		telephone TEXT NOT NULL,
 		pfp_path TEXT,
+		role TEXT NOT NULL DEFAULT 'user',
 		joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)
 	""")
@@ -57,6 +59,37 @@ def mostrar_users():
 	conn.close()
 	return users
 
+def mostrar_user(user_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("SELECT id, username, role, joined_at, email, pfp_path FROM users WHERE id = ?", (user_id,))
+	user_dados = cur.fetchone()
+	conn.close()
+	return user_dados
+
+def mostrar_businesses_user(user_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("SELECT id, nome, logo_path, added_at, by_user FROM business WHERE by_user = ?", (user_id,))
+	meusbusinesses = cur.fetchall()
+	conn.close()
+	return meusbusinesses
+
+def registrar_user(username, email, hashed, telephone):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("INSERT OR IGNORE INTO users (username, email, password, telephone) VALUES (?, ?, ?, ?)", (username, email, hashed, telephone))
+	conn.commit()
+	conn.close()
+
+def verificar_user(username):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("SELECT id, password, role FROM users WHERE username = ?", (username,))
+	user = cur.fetchone()
+	conn.close()
+	return user
+
 #BUSINESS
 
 def tabela_business():
@@ -70,21 +103,26 @@ def tabela_business():
 		categoria TEXT,
 		contato TEXT,
 		logo_path TEXT,
-		added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		by_user TEXT
 		)
 	""")
 	conn.commit()
 	conn.close()
 
-def mostrar_business():
+def mostrar_business(search_query):
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
-	cur.execute("SELECT * FROM business ORDER BY added_at DESC")
-	business = cur.fetchall()
-	conn.close()
-	return business
 
-def buscar_business(business_id):
+	if search_query:
+		cur.execute("SELECT * FROM business WHERE nome LIKE ? ORDER BY added_at DESC", ('%' + search_query + '%',))
+	else:
+		cur.execute("SELECT * FROM business ORDER BY added_at DESC")
+	businesses = cur.fetchall()
+	conn.close()
+	return businesses
+
+def buscar_id_business(business_id):
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
 	cur.execute("SELECT * FROM business WHERE id = ?", (business_id,))
@@ -92,14 +130,29 @@ def buscar_business(business_id):
 	conn.close()
 	return business
 
-def adicionar_business(nome, descricao, categoria, contato, filename):
+def buscar_nome_business(nome):
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
-	cur.execute("INSERT INTO business (nome, descricao, categoria, contato, logo_path) VALUES (?, ?, ?, ?, ?)", (nome, descricao, categoria, contato, filename))
+	cur.execute("SELECT id FROM business WHERE nome = ?", (nome,))
+	business = cur.fetchone()
+	conn.close()
+	return business[0] if business else None
+
+def adicionar_business(nome, descricao, categoria, contato, filename, by_user):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("INSERT INTO business (nome, descricao, categoria, contato, logo_path, by_user) VALUES (?, ?, ?, ?, ?, ?)", (nome, descricao, categoria, contato, filename, by_user))
 	conn.commit()
 	conn.close()
 
+#MISC
 
+def tornar_admin(user_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("UPDATE users SET role = 'admin' WHERE id = ?", (user_id,))
+	conn.commit()
+	conn.close()
 
 #INIT
 
@@ -107,3 +160,6 @@ def init_db():
 	tabela_feed()
 	tabela_users()
 	tabela_business()
+
+	tornar_admin(1)
+	#tornar_admin(2)
