@@ -11,6 +11,7 @@ from apirequests import *
 routes = Blueprint('routes', __name__)
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
@@ -128,7 +129,8 @@ def addbusiness():
 
 		if file and allowed_file(file.filename):
 			filename = secure_filename(file.filename)
-			file.save(os.path.join(UPLOAD_FOLDER, filename))
+			file_path = os.path.join(UPLOAD_FOLDER, filename)
+			file.save(file_path)
 		else:
 			filename = None
 

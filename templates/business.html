@@ -138,13 +138,15 @@ add_comment
           </ul>
         </div>
       </div>
-
+      {% if business.lat and business.lon %}
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
           <h5 class="card-title">Localização</h5> 
           <div id="map" style="height: 300px;"></div>
         </div>
       </div>
+      {% endif %}
+
     <div class="border-0"> <div class="text-center"> <h5 class="">Compartilhar</h5> <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ request.url }}" alt="QR code" class="border p-1 rounded"> </div> </div>
     </div>
 
