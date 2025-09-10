@@ -1,4 +1,3 @@
-from flask import Blueprint
 import requests
 
 ESTADO_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
