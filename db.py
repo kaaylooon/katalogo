@@ -3,18 +3,14 @@ import os
 
 DB_NAME = os.path.join(os.path.dirname(__file__), "db.db")
 
-#FEED
-
 def tabela_feed():
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
 	cur.execute("""
 		CREATE TABLE IF NOT EXISTS feed (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		title TEXT NOT NULL,
+		business_id TEXT,
 		description TEXT NOT NULL,
-		category TEXT,
-		contact TEXT,
 		by_user TEXT,
 		image_path TEXT,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -22,16 +18,6 @@ def tabela_feed():
 	""")
 	conn.commit()
 	conn.close()
-
-def mostrar_feed():
-	conn = sqlite3.connect(DB_NAME)
-	cur = conn.cursor()
-	cur.execute("SELECT * FROM feed ORDER BY created_at DESC")
-	feed = cur.fetchall()
-	conn.close()
-	return feed
-
-#USERS
 
 def tabela_users():
 	conn = sqlite3.connect(DB_NAME)
@@ -50,6 +36,163 @@ def tabela_users():
 	""")
 	conn.commit()
 	conn.close()
+
+def tabela_business():
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS business (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		nome TEXT NOT NULL,
+		descricao TEXT,
+		categoria TEXT,
+		instagram TEXT,
+		numero TEXT,
+		email TEXT,
+		logo_path TEXT,
+		added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		by_user INTEGER,
+		comments_count INTEGER DEFAULT 0,
+		lat REAL, 
+		lon REAL
+		)
+	""")
+	conn.commit()
+	conn.close()
+
+def tabela_comentarios():
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("""CREATE TABLE IF NOT EXISTS comentarios (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		user_id INTEGER,
+		content TEXT,
+		business_id INTEGER,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)
+	""")
+	conn.commit()
+	conn.close()
+
+def tabela_horarios():
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS horarios(
+			ID INTEGER PRIMARY KEY AUTOINCREMENT,
+			business_id INTEGER NOT NULL,
+			dia_semana INTEGER NOT NULL,
+			abre TIME NO NULL,
+			fecha TIME NOT NULL,
+			FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
+		)
+	""")
+
+def mostrar_disponivel(business_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+
+	cur.execute("SELECT * FROM horarios WHERE business_id = ? AND dia_semana = strftime('%w', 'now', 'localtime')", (business_id,))
+
+	horario = cur.fetchall()
+
+	conn.close()
+	return horario
+
+def add_horario(business_id, dia_semana, abre, fecha):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+
+	cur.execute("INSERT INTO horarios (business_id, dia_semana, abre, fecha) VALUES (?, ?, ?, ?)", (business_id, dia_semana, abre, fecha))
+	conn.commit()
+	conn.close()
+
+
+def mostrar_comentarios(business_id):
+	conn = sqlite3.connect(DB_NAME)
+	conn.row_factory = sqlite3.Row
+	cur = conn.cursor()
+
+	cur.execute("""
+		SELECT c.*, u.username, u.pfp_path
+		FROM comentarios c 
+		JOIN users u ON c.user_id = u.id
+		JOIN business b ON c.business_id = b.id
+		WHERE c.business_id = ?
+		ORDER BY c.created_at DESC
+	""", (business_id,))
+
+	comentarios = cur.fetchall()
+	conn.close()
+	return comentarios
+
+def mostrar_comentarios_user(user_id):
+	conn = sqlite3.connect(DB_NAME)
+	conn.row_factory = sqlite3.Row
+	cur = conn.cursor()
+
+	cur.execute("""
+		SELECT c.*, u.username, u.pfp_path
+		FROM comentarios c 
+		JOIN users u ON c.user_id = u.id
+		JOIN business b ON c.business_id = b.id
+		WHERE c.user_id = ?
+		ORDER BY c.created_at DESC
+	""", (user_id,))
+
+	comentarios = cur.fetchall()
+	conn.close()
+	return comentarios
+
+def add_comentario(user_id,
+		content, business_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("INSERT INTO comentarios (user_id, content, business_id) VALUES (?, ?, ?)", (user_id,
+		content, business_id))
+
+	cur.execute("UPDATE business SET comments_count = comments_count + 1 WHERE id = ?", (business_id,))
+
+	conn.commit()
+	conn.close()
+
+def mostrar_feed():
+	conn = sqlite3.connect(DB_NAME)
+	conn.row_factory = sqlite3.Row
+	cur = conn.cursor()
+	cur.execute("""
+		SELECT f.*, b.nome, b.logo_path, b.comments_count
+		FROM feed f
+		JOIN business b ON f.business_id = b.id
+		ORDER BY f.created_at DESC
+	""")
+	feed = cur.fetchall()
+	conn.close()
+	return feed
+
+def mostrar_feed_business(business_id):
+	conn = sqlite3.connect(DB_NAME)
+	conn.row_factory = sqlite3.Row
+	cur = conn.cursor()
+	cur.execute("""
+		SELECT f.*, b.nome, b.logo_path, b.comments_count
+		FROM feed f
+		JOIN business b ON f.business_id = b.id
+		WHERE f.business_id = ?
+		ORDER BY f.created_at DESC
+	""", (business_id,))
+	feeds = cur.fetchall()
+	conn.close()
+	return feeds
+
+def add_feed(business_id, description, by_user, image_path):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("INSERT OR IGNORE INTO feed (business_id,description, by_user, image_path) VALUES (?, ?, ?, ?)", (business_id, description, by_user, image_path))
+	conn.commit()
+	conn.close()
+
+#USERS
 
 def mostrar_users():
 	conn = sqlite3.connect(DB_NAME)
@@ -92,38 +235,32 @@ def verificar_user(username):
 
 #BUSINESS
 
-def tabela_business():
+def mostrar_business(search_query='', categoria=''):
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
-	cur.execute("""
-		CREATE TABLE IF NOT EXISTS business (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		nome TEXT NOT NULL,
-		descricao TEXT,
-		categoria TEXT,
-		contato TEXT,
-		logo_path TEXT,
-		added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-		by_user TEXT
-		)
-	""")
-	conn.commit()
-	conn.close()
 
-def mostrar_business(search_query):
-	conn = sqlite3.connect(DB_NAME)
-	cur = conn.cursor()
+	query = "SELECT * FROM business WHERE 1=1"
+	params = []
 
 	if search_query:
-		cur.execute("SELECT * FROM business WHERE nome LIKE ? ORDER BY added_at DESC", ('%' + search_query + '%',))
-	else:
-		cur.execute("SELECT * FROM business ORDER BY added_at DESC")
+		query += " AND nome LIKE ?"
+		params.append(f"%{search_query}%")
+
+	if categoria:
+		query += " AND categoria = ?"
+		params.append(categoria)
+
+	query += " ORDER BY added_at DESC"
+
+	cur.execute(query, params)
 	businesses = cur.fetchall()
+
 	conn.close()
 	return businesses
 
 def buscar_id_business(business_id):
 	conn = sqlite3.connect(DB_NAME)
+	conn.row_factory = sqlite3.Row
 	cur = conn.cursor()
 	cur.execute("SELECT * FROM business WHERE id = ?", (business_id,))
 	business = cur.fetchone()
@@ -138,10 +275,10 @@ def buscar_nome_business(nome):
 	conn.close()
 	return business[0] if business else None
 
-def adicionar_business(nome, descricao, categoria, contato, filename, by_user):
+def adicionar_business(nome, descricao, categoria, instagram, numero, email, filename, by_user, lat, lon):
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
-	cur.execute("INSERT INTO business (nome, descricao, categoria, contato, logo_path, by_user) VALUES (?, ?, ?, ?, ?, ?)", (nome, descricao, categoria, contato, filename, by_user))
+	cur.execute("INSERT INTO business (nome, descricao, categoria, instagram, numero, email, logo_path, by_user, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (nome, descricao, categoria, instagram, numero, email, filename, by_user, lat, lon))
 	conn.commit()
 	conn.close()
 
@@ -154,12 +291,18 @@ def tornar_admin(user_id):
 	conn.commit()
 	conn.close()
 
+def comentar():
+	conn = sqlite3.connect()
+	cur = conn.cursor()
+	cur.execute()
+
+	cur.execute("UPDATE feed SET comments_count = comments_count + 1")
+
 #INIT
 
 def init_db():
 	tabela_feed()
 	tabela_users()
 	tabela_business()
-
-	tornar_admin(1)
-	#tornar_admin(2)
+	tabela_comentarios()
+	tabela_horarios()

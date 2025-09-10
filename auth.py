@@ -71,7 +71,7 @@ def login_required(f):
 	@wraps(f)
 	def decorated(*args, **kwargs):
 		if "user_id" not in session:
-			flash("Você precisa logar.", "warning")
+			#flash("Você precisa logar.", "warning")
 			return redirect("/login")
 		return f(*args, **kwargs)
 	return decorated

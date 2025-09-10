@@ -1,56 +1,56 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="container d-flex justify-content-center">
-    <div class="row g-4">
-        <!-- Card 1 -->
-        <div class="col-md-12">
-            <form action="/login" method="post" class="card row g-3 needs-validation p-5" novalidate>
+{% extends "base.html" %} {% block content %}
+<div class="container d-flex justify-content-center p-5">
+ <div class="card shadow-sm" style="max-width: 400px; width: 100%;">
+  <h1 class="card-title title-2 text-center mt-4">ENTRAR</h1>
 
-                <h1 class="title-2">LOG-IN</h1>
-
-                <div class="col-md-12">
-                    <label for="validationUsername1" class="form-label">Usuário</label>
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="validationUsernamePrepend1">@</span>
-                        <input name= "username" type="text" class="form-control" id="validationUsername1" aria-describedby="validationUsernamePrepend1" required>
-                        <div class="invalid-feedback">
-                            Por favor, digite um nome válido e único.
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <label for="inputPassword1" class="form-label">Senha</label>
-                    <input name = "password" type="password" id="inputPassword1" class="form-control" aria-describedby="validationUsernamePrepend2" required>
-                    <div class="invalid-feedback">
-                            Por favor, digite uma senha válida.
-                        </div>
-                </div>
-                <div class="col-12">
-                	<div class="p-1 d-flex">
-
-                    <button class="btn btn-primary" type="submit">
-                    SIGN-IN</button>
-                    <a class="btn btn-secondary ms-auto" type="button" href="signup">SIGN-UP</a>
-                    </div>
-                </div>
-            </form>
-        </div>
+  <form action="/login" method="post" class="needs-validation p-4" novalidate>
+   <div class="card-body">
+    <div class="mb-3">
+     <label for="validationUsername1" class="form-label">Usuário</label>
+     <div class="input-group has-validation">
+      <span class="input-group-text" id="validationUsernamePrepend1">@</span>
+      <input name="username" type="text" class="form-control" id="validationUsername1" aria-describedby="validationUsernamePrepend1" required />
+      <div class="invalid-feedback">
+       Por favor, digite um nome válido e único.
+      </div>
+     </div>
     </div>
+
+    <div class="mb-3">
+     <label for="inputPassword1" class="form-label">Senha</label>
+     <input name="password" type="password" id="inputPassword1" class="form-control" required />
+     <div class="invalid-feedback">
+      Por favor, digite uma senha válida.
+     </div>
+    </div>
+
+    <div class="d-grid mt-4">
+     <button class="btn btn-primary" type="submit">
+      Entrar
+     </button>
+    </div>
+   </div>
+  </form>
+ </div>
 </div>
 
 <script>
-(() => {
-    'use strict'
-    const forms = document.querySelectorAll('.needs-validation')
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
+ (() => {
+  "use strict";
+  const forms = document.querySelectorAll(".needs-validation");
+  Array.from(forms).forEach((form) => {
+   form.addEventListener(
+    "submit",
+    (event) => {
+     if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+     }
+     form.classList.add("was-validated");
+    },
+    false
+   );
+  });
+ })();
 </script>
 {% endblock %}

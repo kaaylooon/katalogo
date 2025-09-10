@@ -1,80 +1,98 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <div class="container d-flex justify-content-center p-5 pt-0">
-    <div class="row g-4">
-        <div class="col-md-12">
-            <form action="/signup" method="post" class="card row g-3 needs-validation p-5" novalidate>
-                <h1 class="title-2">SIGN-UP</h1>
-                <div class="col-md-12">
-                    <label for="validationUsername2" class="form-label">Usuário</label>
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="validationUsernamePrepend2">@</span>
-                        <input name ="username" type="text" class="form-control" id="validationUsername2" aria-describedby="validationUsernamePrepend3" required>
-                        <div class="invalid-feedback">
-                            Por favor, digite um nome de usuário válido e único.
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <label for="validationUsername2" class="form-label">Número de telefone</label>
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="validationUsernamePrepend2">(+55)</span>
-                        <input name ="number" type="text" class="form-control"  required>
-                        <div class="invalid-feedback">
-                            Por favor, digite um número válido.
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <label for="exampleFormControlInput1" class="form-label">Endereço de e-mail</label>
-                    <input name ="email" type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required aria-describedby="validationUsernamePrepend4">
-                    <div class="invalid-feedback">
-                        Por favor, digite um e-mail válido.
-                    </div>
-                </div>
-
-                <div class="col-md-12">
-                    <label for="inputPassword2" class="form-label">Senha</label>
-                    <input name="password" type="password" id="inputPassword2" class="form-control" aria-describedby="passwordHelpBlock2 validationUsernamePrepend5" required>
-                    <div class="invalid-feedback">
-                        Por favor, digite uma senha válida.
-                    </div>
-                    <div id="passwordHelpBlock2" class="form-text">Sua senha deve ter 8–20 caracteres, conter letras e números, e não pode ter espaços, caracteres especiais ou emoji.
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <label for="inputPassword2" class="form-label">Confirme</label>
-                    <input type="password" id="inputPassword2" class="form-control" aria-describedby="passwordHelpBlock2" required>
-                    <div class="invalid-feedback">
-                        Por favor, confirme a senha.
-                    </div>
-                </div>
-                <div class="col-12">
-                	<div class="p-1 d-flex">
-
-                    <button class="btn btn-primary" type="submit">
-                    SIGN-UN</button>
-                    <a class="btn btn-secondary ms-auto" type="button" href="login">SIGN-IN</a>
-                    </div>
-                </div>
-            </form>
-        </div>
+ <div class="card shadow-sm" style="max-width: 800px; width: 100%;">
+  <form action="/signup" method="post" class="needs-validation p-5" novalidate>
+   <h1 class="title-2 mb-4 text-center">REGISTRO</h1>
+   <div class="row g-3">
+    <div class="col-md-6">
+     <label for="validationUsername2" class="form-label">Usuário</label>
+     <div class="input-group has-validation">
+      <span class="input-group-text" id="validationUsernamePrepend2">@</span>
+      <input name="username" type="text" class="form-control" id="validationUsername2" aria-describedby="validationUsernamePrepend2" required />
+      <div class="invalid-feedback">
+       Por favor, digite um nome de usuário válido e único.
+      </div>
+     </div>
     </div>
+
+    <div class="col-md-6">
+     <label for="phoneNumber" class="form-label">Número de telefone</label>
+     <div class="input-group has-validation">
+      <span class="input-group-text">+55</span>
+      <input name="number" type="text" id="phoneNumber" class="form-control" required />
+      <div class="invalid-feedback">
+       Por favor, digite um número válido.
+      </div>
+     </div>
+    </div>
+
+    <div class="col-md-6">
+     <label for="emailInput" class="form-label">Endereço de e-mail</label>
+     <input name="email" type="email" class="form-control" id="emailInput" placeholder="name@example.com" required />
+     <div class="invalid-feedback">
+      Por favor, digite um e-mail válido.
+     </div>
+    </div>
+
+    <div class="w-100"></div>
+
+    <div class="col-6">
+     <label for="inputPassword2" class="form-label">Senha</label>
+     <input name="password" type="password" id="inputPassword2" class="form-control" required />
+     <div class="invalid-feedback">
+      Por favor, digite uma senha válida.
+     </div>
+     <div id="passwordHelpBlock2" class="form-text">
+      Sua senha deve ter 8–20 caracteres, conter letras e números, e não pode ter espaços, caracteres especiais ou emoji.
+     </div>
+    </div>
+
+    <div class="col-6">
+     <label for="inputPasswordConfirm" class="form-label">Confirme a senha</label>
+     <input type="password" id="inputPasswordConfirm" class="form-control" required />
+     <div class="invalid-feedback">
+      As senhas não coincidem.
+     </div>
+    </div>
+
+    <div class="d-grid mt-4">
+     <button class="btn btn-primary px-4" type="submit">Registrar</button>
+    </div>
+   </div>
+  </form>
+ </div>
 </div>
+
 <script>
-(() => {
-    'use strict'
-    const forms = document.querySelectorAll('.needs-validation')
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
+ (() => {
+  "use strict";
+  const form = document.querySelector(".needs-validation");
+  const password = document.getElementById("inputPassword2");
+  const confirm = document.getElementById("inputPasswordConfirm");
+
+  form.addEventListener("submit", (event) => {
+   if (password.value !== confirm.value) {
+    confirm.setCustomValidity("Senhas diferentes");
+   } else {
+    confirm.setCustomValidity("");
+   }
+
+   if (!form.checkValidity()) {
+    event.preventDefault();
+    event.stopPropagation();
+   }
+   form.classList.add("was-validated");
+  });
+
+  confirm.addEventListener("input", () => {
+   if (password.value !== confirm.value) {
+    confirm.setCustomValidity("Senhas diferentes");
+   } else {
+    confirm.setCustomValidity("");
+   }
+  });
+ })();
 </script>
+
 {% endblock %}

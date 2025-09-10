@@ -1,15 +1,14 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <div class="container p-5">
-	<h5>Usuários</h5>
-	{% for user in users %}
-		<div class="card">
-			<div class="card-body card-text">
-				<a href="{{ url_for('routes.perfil', user_id=user[0]) }}" class="btn btn-secondary mb-0 d-flex align-items-center flex-grow-1">1. {{ user[1] }}</a>
-			</div>
-		</div>
-	{% endfor %}
+ <h5>Usuários</h5>
+ {% for user in users %}
+ <div class="card">
+  <div class="card-body card-text">
+   <a href="{{ url_for('routes.perfil', user_id=user[0]) }}" class="btn btn-secondary mb-0 d-flex align-items-center flex-grow-1">1. {{ user[1] }}</a>
+  </div>
+ </div>
+ {% endfor %}
 </div>
 
 {% endblock %}

@@ -1,125 +1,211 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="container">
-    <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white text-center py-3">
-            <h4 class="mb-0"><i class="bi bi-shop me-2"></i>Adicionar Negócio</h4>
-        </div>
-        <div class="card-body p-4">
-            <form class="card-body row g-4" action="/addbusiness" method="POST" enctype="multipart/form-data">
-                <div class="col-md-6">
-                    <label for="nome" class="form-label">Nome do negócio</label>
-                    <input type="text" class="form-control" id="nome" name="nome" required>
-                    <div class="form-text">Escolha um nome que represente bem o seu negócio.</div>
-                </div>
-                <div class="col-md-6">
-                    <label for="categoria" class="form-label">Categoria</label>
-                    <select class="form-select" name="categoria" required>
-                        <option value="" selected disabled>Escolha a categoria...</option>
-
-                         <option value="Bebidas">Bebidas</option>
-
-                         <option value="Doces e Salgados">Doces e Salgados</option>
-
-                         <option value="Livros">Livros</option>
-
-                         <option value="Educação">Educação</option>
-
-                         <option value="Aulas Particulares">Aulas Particulares</option>
-
-                          <option value="Tecnologia">Tecnologia</option>
-
-                          <option value="Informática">Informática</option>
-
-                          <option value="Serviços">Serviços</option>
-
-                          <option value="Arte">Arte</option>
-
-                          <option value="Artesanato">Artesanato</option>
-
-                          <option value="Desenhos">Desenhos</option>
-
-                          <option value="Música">Música</option>
-
-                          <option value="Roupas">Roupas</option>
-
-                          <option value="Acessórios">Acessórios</option>
-
-                          <option value="Beleza">Beleza</option>
-
-                          <option value="Esportes">Esportes</option>
-
-                          <option value="Jogos">Jogos</option>
-
-                          <option value="Eventos">Eventos</option>
-
-                          <option value="Brechó">Brechó</option>
-
-                          <option value="Clube/Grupo">Clube/Grupo</option>
-
-                          <option value="Diversos">Diversos</option>
-                        </select>
-                </div>
-                
-                <div class="col-12">
-                    <label for="descricao" class="form-label">Descrição</label>
-                    <textarea class="form-control" id="descricao" name="descricao" rows="4" placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais." required></textarea>
-                </div>
-               <div class="col-12">
-                    <label for="contato" class="form-label">Contato</label>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div id="contatos-container">
-                                <div class="input-group has-validation">
-                                    <span class="input-group-text" id="validationUsernamePrepend1">@</span>
-                                    <input name="insta" type="text" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group has-validation">
-                                <span class="input-group-text" id="validationUsernamePrepend2">+55</span>
-                                <input name="telephone" type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <label for="logo" class="form-label">Logo do negócio</label>
-                    <input class="form-control" type="file" id="logo" name="logo" accept="image/*">
-                </div>
-
-                <div class="col-12 mt-4">
-                    <button type="submit" class="btn btn-primary">Adicionar Negócio</button>
-                </div>
-            </form>
-        </div>
+{% extends "base.html" %} {% block content %}
+<div class="container p-4 pt-0">
+ <div class="card shadow-sm">
+  <div class="card-header bg-primary text-white text-center py-3">
+   <h4 class="mb-0">Adicionar Negócio</h4>
+  </div>
+  <div class="card-body p-4">
+   <form class="card-body row g-4" action="/addbusiness" method="POST" enctype="multipart/form-data">
+    <div class="col-6">
+     <label for="nome" class="form-label" style="font-weight: 600;">Nome</label>
+     <input type="text" class="form-control" id="nome" name="nome" required />
+     <div class="form-text">Escolha um nome que represente bem o seu negócio.</div>
     </div>
+
+    <div class="col-6">
+     <label for="categoria" class="form-label" style="font-weight: 600;">Categoria</label>
+     <select class="form-select" name="categoria" required>
+      <option value="" selected disabled>Escolha...</option>
+
+      <option value="Alimentação">Alimentação</option>
+      <option value="Livros e Educação">Livros e Educação</option>
+      <option value="Tecnologia e Informática">Tecnologia e Informática</option>
+      <option value="Serviços">Serviços</option>
+      <option value="Arte e Cultura">Arte e Cultura</option>
+      <option value="Moda e Beleza">Moda e Beleza</option>
+      <option value="Esportes e Lazer">Esportes e Lazer</option>
+      <option value="Eventos e Entretenimento">Eventos e Entretenimento</option>
+      <option value="Comércio de segunda mão">Comércio de segunda mão</option>
+      <option value="Pets e Animais">Pets e Animais</option>
+      <option value="Saúde e Bem-estar">Saúde e Bem-estar</option>
+      <option value="Turismo e Viagens">Turismo e Viagens</option>
+      <option value="Diversos">Diversos</option>
+     </select>
+    </div>
+
+    <div class="col-12">
+     <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
+     <textarea class="form-control" id="descricao" name="descricao" rows="4" placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais." required></textarea>
+    </div>
+
+    <div class="col-12">
+     <label class="form-label" style="font-weight: 600;">Horário de funcionamento</label>
+     <div class="row g-3">
+      {% for prefix, nome in dias %}
+      <div class="col-md-6">
+       <label for="inputEmail" class="form-label">{{ nome }}</label>
+       <div class="input-group has-validation">
+        <input type="time" class="form-control" id="abre" name="{{ prefix }}_abre" required />
+        <input type="time" class="form-control" id="fecha" name="{{ prefix }}_fecha" required />
+       </div>
+      </div>
+      {% endfor %}
+     </div>
+    </div>
+
+    <div class="col-12">
+     <label for="contato" class="form-label" style="font-weight: 600;">Contato (opcional)</label>
+
+     <div class="row g-3">
+      <!-- Instagram -->
+      <div class="col-6">
+       <label for="inputInsta" class="form-label">Instagram</label>
+       <div class="input-group has-validation">
+        <span class="input-group-text"><i class="bi bi-instagram"></i></span>
+        <input name="insta" type="text" class="form-control" id="inputInsta" placeholder="@examplo" />
+       </div>
+      </div>
+
+      <!-- Número de telefone -->
+      <div class="col-6">
+       <label for="inputNumber" class="form-label">Telefone</label>
+       <div class="input-group has-validation">
+        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+        <input name="number" type="text" class="form-control" id="inputNumber" placeholder="(XX) XXXXX-XXXX" />
+       </div>
+      </div>
+      <!-- Email -->
+      <div class="col-md-6">
+       <label for="inputEmail" class="form-label">E-mail</label>
+       <div class="input-group has-validation">
+        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+        <input name="email" type="email" class="form-control" id="inputEmail" placeholder="email@exemplo.com" />
+       </div>
+      </div>
+     </div>
+    </div>
+
+    <div class="row g-3">
+
+    <label class="form-label" style="font-weight: 600;">Localização (opcional)</label>
+
+     <div class="col-6">
+      <label for="inputCep" class="form-label">CEP</label>
+
+      <input name="cep" type="integer" class="form-control" id="inputCep" placeholder="XXXXX-XXX" />
+     </div>
+
+     <div class="col-6">
+      <label for="estado" class="form-label">Estado</label>
+
+      <select class="form-select" name="estado" id="estado">
+       <option value="" selected disabled>Escolha...</option>
+
+       <option value="RO">Rondônia</option>
+       <option value="AC">Acre</option>
+       <option value="AM">Amazonas</option>
+       <option value="RR">Roraima</option>
+       <option value="PA">Pará</option>
+       <option value="AP">Amapá</option>
+       <option value="TO">Tocantins</option>
+       <option value="MA">Maranhão</option>
+       <option value="PI">Piauí</option>
+       <option value="CE">Ceará</option>
+       <option value="RN">Rio Grande do Norte</option>
+       <option value="PB">Paraíba</option>
+       <option value="PE">Pernambuco</option>
+       <option value="AL">Alagoas</option>
+       <option value="SE">Sergipe</option>
+       <option value="BA">Bahia</option>
+       <option value="MG">Minas Gerais</option>
+       <option value="ES">Espírito Santo</option>
+       <option value="RJ">Rio de Janeiro</option>
+       <option value="SP">São Paulo</option>
+       <option value="PR">Paraná</option>
+       <option value="SC">Santa Catarina</option>
+       <option value="RS">Rio Grande do Sul</option>
+       <option value="MS">Mato Grosso do Sul</option>
+       <option value="MT">Mato Grosso</option>
+       <option value="GO">Goiás</option>
+       <option value="DF">Distrito Federal</option>
+      </select>
+     </div>
+    </div>
+
+    <div class="row g-3">
+     <div class="col-md-6">
+      <label for="municipio" class="form-label">Cidade / Município</label>
+
+      <select id="municipio" class="form-select" name="municipio">
+       <option value="" selected disabled>Escolha...</option>
+      </select>
+     </div>
+
+     <div class="col-md-6">
+      <label for="bairro" class="form-label">Bairro</label>
+      <input name="bairro" type="text" class="form-control" id="bairro" />
+     </div>
+    </div>
+
+    <div class="row g-3">
+     <div class="col-9">
+      <label for="ruaAvenida" class="form-label">Rua / Avenida</label>
+      <div class="input-group has-validation">
+       <input name="ruaAvenida" type="text" class="form-control" id="ruaAvenida" />
+      </div>
+     </div>
+
+     <div class="col-3">
+      <label for="numeroCasa" class="form-label">Número</label>
+      <input name="numeroCasa" type="text" class="form-control" id="numeroCasa" />
+     </div>
+    </div>
+
+    <div class="row g-3">
+     <div class="col-12 col-md-6">
+      <label for="logoUpload" class="form-label" style="font-weight: 600;">Logo do negócio (opcional)</label>
+      <div class="row g-3">
+       <input class="form-control" type="file" id="logoUpload" name="logo" accept="image/*" />
+      </div>
+     </div>
+    </div>
+
+    <div class="d-grid mt-4">
+     <button type="submit" class="btn btn-primary">Adicionar Negócio</button>
+    </div>
+   </form>
+  </div>
+ </div>
 </div>
 
 <script>
-    function adicionarContato() {
-        const container = document.getElementById('contatos-container');
-        const novoInputDiv = document.createElement('div');
-        novoInputDiv.className = 'input-group mb-2';
+ document.addEventListener("DOMContentLoaded", function () {
+  const estadoSelect = document.getElementById("estado");
+  const municipioSelect = document.getElementById("municipio");
 
-        const novoInputSpan = document.createElement('span');
-        novoInputSpan.className = 'input-group-text';
-        // Alternar ícones
-        const iconHTML = container.children.length % 2 === 0 ? '<i class="bi bi-instagram"></i>' : '<i class="bi bi-envelope"></i>';
-        novoInputSpan.innerHTML = iconHTML;
+  estadoSelect.addEventListener("change", function () {
+   const uf = this.value;
 
-        const novoInput = document.createElement('input');
-        novoInput.type = 'text';
-        novoInput.className = 'form-control contato-input';
-        novoInput.name = 'contato[]';
-        novoInput.placeholder = container.children.length % 2 === 0 ? '@perfilinsta' : 'email@exemplo.com';
+   // coloca opção de carregando
+   municipioSelect.innerHTML = "<option value='' selected disabled>Carregando...</option>";
 
-        novoInputDiv.appendChild(novoInputSpan);
-        novoInputDiv.appendChild(novoInput);
-        container.appendChild(novoInputDiv);
-    }
+   fetch(`/get_municipios/${uf}`)
+    .then((res) => res.json())
+    .then((data) => {
+     municipioSelect.innerHTML = "<option value='' selected disabled>Escolha...</option>";
+     data.forEach((m) => {
+      const opt = document.createElement("option");
+      opt.value = m.nome;
+      opt.textContent = m.nome;
+      municipioSelect.appendChild(opt);
+     });
+    })
+    .catch((err) => {
+     console.error("Erro ao carregar municípios:", err);
+     municipioSelect.innerHTML = "<option value='' selected disabled>Erro ao carregar</option>";
+    });
+  });
+ });
 </script>
 
 {% endblock %}

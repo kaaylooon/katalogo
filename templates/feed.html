@@ -1,53 +1,114 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-<div class="container">
-	<h1 class="title">Feed</h1>
-</div>
 
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm"
-		style="width: 60px; height: 60px; z-index: 1050;"
-		href="/addfeed">
-	<span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">add</span>
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm "
+   style="width: 60px; height: 60px; z-index: 1050;"
+
+  {% if 'user_id' in session %}
+    data-bs-target="#add_feed"
+    data-bs-toggle="modal"
+  {% else %}
+    href="{{ url_for('auth.login')}}"
+  {% endif %}>
+   <span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">post_add</span>
 </a>
 
-<div class="container mt-3">
-	{% for f in feed %}
-		<div class="card mb-3" style="max-width: 540px;">
-		  <div class="row g-0">
-		    <!-- Avatar -->
-		    <div class="col-auto p-2">
-		      <img src="https://via.placeholder.com/48" class="rounded-circle" alt="Avatar">
-		    </div>
+<div class="modal fade" id="add_feed" tabindex="-1" aria-labelledby="addFeedLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addFeedLabel">Novo Post</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{ url_for('routes.feed') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <div class="modal-body">
+          <div class="mb-3">
 
-		    <!-- Conteúdo do post -->
-		    <div class="col">
-		      <div class="card-body p-2">
-		        <!-- Header: nome + username + data -->
-		        <h6 class="card-title mb-1">
-		          Nome do Usuário <span class="text-muted">@username · 2h</span>
-		        </h6>
+            <label for="business" class="form-label">Negócio</label>
+                    <select class="form-select" name="business_id" required>
+                        {% if meusbusinesses %}
+                          {% for b in meusbusinesses %}
+                            <option value="{{ b[0] }}">{{ b[1] }}</option>
+                          {% endfor %}
+                        {% else %}
+                          <option disabled>Nenhum negócio disponível</option>
+                        {% endif %}
+                    </select>
 
-		        <!-- Texto do post -->
-		        <p class="card-text mb-2">
-		          Este é um exemplo de tweet/post no estilo X. Pode ter links, menções e hashtags.
-		        </p>
 
-		        <!-- Imagem opcional -->
-		        <img src="https://via.placeholder.com/400x200" class="img-fluid rounded mb-2" alt="Imagem do post">
-
-		        <!-- Botões de interação -->
-		        <div class="d-flex justify-content-between text-muted" style="font-size: 0.9rem;">
-		          <div><i class="bi bi-chat"></i> 12</div>
-		          <div><i class="bi bi-arrow-repeat"></i> 4</div>
-		          <div><i class="bi bi-heart"></i> 35</div>
-		          <div><i class="bi bi-upload"></i></div>
-		        </div>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-	{% endfor %}
+            <label for="postText" class="form-label">Conteúdo</label>
+            <textarea class="form-control" id="postText" name="content" rows="3" placeholder="O que você quer compartilhar?" required></textarea>
+            <div class="invalid-feedback">
+              Por favor, escreva algo antes de enviar.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="postImage" class="form-label">Imagem (opcional)</label>
+            <input class="form-control" type="file" id="postImage" name="image" accept="image/*">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Postar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
+
+<h1 class="text-center pt-5 p-4">Atividades recentes</h1>
+
+<div class="container p-4">
+    {% for f in feed %}
+      <div class="card glass-card mb-4 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-2">
+            <a href="{{ url_for('routes.business', business_id=f.business_id) }}">
+              <img src="{{ url_for('static', filename='uploads/' ~ f['logo']) if f['logo'] else 'https://placehold.co/150' }}" 
+                   alt="{{ f['nome'] }}" 
+                   class="rounded-circle me-3" 
+                   style="width: 50px; height: 50px; object-fit: cover;">
+            
+            <div>
+              <b>{{ f['nome'] }}</b></a><br>
+              <small class="text-muted">{{ f['created_at']|humandate }}</small>
+            </div>
+          </div>
+
+          <p class="mb-2">{{ f['description'] }}</p>
+
+          {% if f['image_path'] %}
+            <img src="{{ url_for('static', filename='uploads/' ~ f['image_path']) }}" class="img-fluid rounded mb-2" alt="Imagem do post">
+          {% endif %}
+
+          <div class="d-flex justify-content-between text-muted" style="font-size: 0.9rem;">
+            <div><i class="bi bi-chat" style="cursor:pointer;"></i> {{ f['comments_count'] }}</div>
+            <div><i class="bi bi-arrow-repeat" style="cursor:pointer;"></i></div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    {% if not feed %}
+      <p class="text-muted text-center">Nenhum feed publicado ainda</p>
+    {% endif %}
+</div>
+
+
+<script>
+(() => {
+  'use strict';
+  const forms = document.querySelectorAll('.needs-validation');
+  Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+      }, false);
+  });
+})();
+</script>
+
 {% endblock %}

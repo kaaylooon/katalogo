@@ -1,57 +1,81 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
-<div class="container p-5">
-
-  <form action="{{ url_for('routes.businesses') }}" method="get" class="mb-4">
-     <label for="exampleDataList" class="form-label">Buscar</label>
-    <input type="text" class="form-control" name="q" placeholder="Digite o nome do negócio..." id="exampleDataList">
-</form>
-</div>
-
-
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm"
-		style="width: 60px; height: 60px; z-index: 1050;"
-		href="addbusiness">
-	<span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">add</span>
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow" style="width: 60px; height: 60px; z-index: 1050;" href="addbusiness">
+ <span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">
+  add_business
+ </span>
 </a>
 
-<div class="container mt-3">
-  <div class="row">
-    {% for b in businesses %}
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 shadow-sm">
-
-        <div class="card-body d-flex flex-column">
-          <!-- Logo + Nome -->
-          <div class="d-flex align-items-center mb-2">
-            {% if b[5] %}
-            <img src="{{ url_for('static', filename='uploads/' ~ b[5]) }}" 
-                 alt="{{ b[1] }}" 
-                 class="rounded-circle me-3"
-                 style="width: 50px; height: 50px; object-fit: cover;">
-            {% endif %}
-            <h5 class="card-title mb-0">
-              {{ b[1] }}<br>
-              <span class="badge bg-primary " 
-                    style="font-size: 0.5em; vertical-align: middle;">
-                {{ b[3] }}
-              </span>
-            </h5>
-          </div>
-
-          <!-- Descrição -->
-          <p class="card-text text-muted small flex-grow-1">
-            {{ b[2][:130] }}...
-          </p>
-
-          <!-- Botão -->
-          <a href="/business/{{ b[0] }}" class="btn btn-sm btn-primary mt-auto">Ver mais</a>
-        </div>
-      </div>
+<div class="container p-5 pt-4 pb-5">
+ <div class="row">
+  <form action="{{ url_for('routes.businesses') }}" method="get" class="card-body">
+   <div class="d-grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+    <div class="">
+     <label for="exampleDataList" class="form-label fw-semibold">Nome</label>
+     <input type="text" class="form-control" name="q" placeholder="Nome do negócio" id="exampleDataList" />
     </div>
-    {% endfor %}
-  </div>
+
+    <div class="filter-dropdown">
+     <label class="form-label fw-semibold">Categoria</label>
+     <div class="dropdown">
+      <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+       Escolha a categoria
+      </button>
+      <ul class="dropdown-menu w-100">
+       <li><a class="dropdown-item" href="?categoria=Alimentação">Alimentação</a></li>
+       <li><a class="dropdown-item" href="?categoria=Livros%20e%20Educação">Livros e Educação</a></li>
+       <li><a class="dropdown-item" href="?categoria=Tecnologia%20e%20Informática">Tecnologia e Informática</a></li>
+       <li><a class="dropdown-item" href="?categoria=Serviços">Serviços</a></li>
+       <li><a class="dropdown-item" href="?categoria=Arte%20e%20Cultura">Arte e Cultura</a></li>
+       <li><a class="dropdown-item" href="?categoria=Moda%20e%20Beleza">Moda e Beleza</a></li>
+       <li><a class="dropdown-item" href="?categoria=Esportes%20e%20Lazer">Esportes e Lazer</a></li>
+       <li><a class="dropdown-item" href="?categoria=Eventos%20e%20Entretenimento">Eventos e Entretenimento</a></li>
+       <li><a class="dropdown-item" href="?categoria=Comércio%20de%20segunda%20mão">Comércio de segunda mão</a></li>
+       <li><a class="dropdown-item" href="?categoria=Pets%20e%20Animais">Pets e Animais</a></li>
+       <li><a class="dropdown-item" href="?categoria=Saúde%20e%20Bem-estar">Saúde e Bem-estar</a></li>
+       <li><a class="dropdown-item" href="?categoria=Turismo%20e%20Viagens">Turismo e Viagens</a></li>
+       <li><a class="dropdown-item" href="?categoria=Diversos">Diversos</a></li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  </form>
+ </div>
 </div>
 
-{% endblock %}
+<div class="container mt-4">
+ <div class="row">
+  {% for b in businesses %}
+  <div class="col-md-4 mb-4">
+   <div class="card h-100 shadow-sm glass-card">
+    <div class="card-body d-flex flex-column">
+     <div class="d-flex align-items-center mb-2">
+      <img src="{{ url_for('static', filename='uploads/' ~ b[7]) if b[7] else 'https://placehold.co/150' }}" alt="{{ b[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+      <h5 class="card-title mb-0">
+       {{ b[1] }}<br />
+       <span class="badge bg-primary" style="font-size: 0.5em; vertical-align: middle;">
+        {{ b[3] }}
+       </span>
+       <!--<span class="badge {{ 'bg-secondary' if aberto else 'bg-danger' }}" style="font-size: 0.5em; vertical-align: middle;">
+    {{ 'Aberto' if aberto else 'Fechado' }}
+</span>-->
+      </h5>
+     </div>
+
+     <p class="line-clamp-3 card-text text-muted small flex-grow-1">
+      {{ b[2] }}
+     </p>
+
+     <a href="/business/{{ b[0] }}" class="btn btn-sm btn-primary mt-auto">Ver mais</a>
+    </div>
+   </div>
+  </div>
+  {% endfor %}
+ </div>
+</div>
+
+{% if not businesses %}
+<div class="text-center">
+ <p class="line-clamp-3 card-text text-muted small flex-grow-1">Nenhum business encontrado. Desculpe pela incoveniência</p>
+</div>
+{% endif %} {% endblock %}

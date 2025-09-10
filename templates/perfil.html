@@ -1,48 +1,126 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
-<div class="container mt-5 p-5 pt-0">
-    <!-- Perfil do usuário -->
-    <div class="card p-4 mb-4 shadow-sm">
-        <div class="row align-items-center">
-            <!-- Foto -->
-            <div class="d-flex align-items-center">
-                <img src="{{ user[5] or url_for('static', filename='user.png') }}"
-                alt="{{ user[1] }}" 
-                class="rounded-circle me-3"
-                style="width: 50px; height: 50px; object-fit: cover;">
+<div class="container">
+ <!-- Perfil do usuário -->
+ <div class="p-4">
+  <div class="row align-items-center">
+   <!-- Foto -->
+   <div class="d-flex align-items-center">
+    <img src="{{ user[5] or url_for('static', filename='user.png') }}" alt="{{ user[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
 
-                <h2 class="card-title mb-0 d-flex align-items-center flex-grow-1">{{ user[1] }} 
-                    <span class="badge {{ 'bg-primary' if user[2] == 'user' else 'bg-danger'}} ms-auto" style="font-size: 0.4em; height: fit-content;">
-                        {% if user[2] == 'user' %}
-                            Membro
-                        {% else %}
-                            Admin
-                        {% endif %}
-                    </span>
-                </h2> 
-            </div>
-        </div>
-    </div>
-    
-  <div class="card shadow-sm border-0 mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Meus negócios</h5>
-      {% for b in business %}
-      <div class="card">
-        <div class="d-flex align-items-center card-body card-text">
-                <img src="{{ url_for('static', filename='uploads/' ~ b[2]) }}"
-                alt="{{ user[1] }}" 
-                class="rounded-circle me-3"
-                style="width: 50px; height: 50px; object-fit: cover;">
+    <h2 class="card-title mb-0 d-flex align-items-center flex-grow-1">
+     {{ user[1] }}
+     <span class="badge {{ 'bg-primary' if user[2] == 'user' else 'bg-danger'}} ms-auto" style="font-size: 0.4em; height: fit-content;">
+      {% if user[2] == 'user' %} Membro {% else %} Admin {% endif %}
+     </span>
+    </h2>
+   </div>
+  </div>
+ </div>
+</div>
 
-                <a href="{{ url_for('routes.business', business_id=b[0]) }}" class="card-title mb-0 d-flex align-items-center flex-grow-1">{{ b[1] }}</a>
-      </div>
-      {% endfor %}
-    </div>
+<div class="container p-2">
+ <!-- Nav -->
+ <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+   <button class="nav-link active nav-item-business" id="sobre-tab" data-bs-toggle="tab" data-bs-target="#sobre" type="button" role="tab" aria-controls="sobre" aria-selected="true">
+    Sobre
+   </button>
+  </li>
+  <li class="nav-item" role="presentation">
+   <button class="nav-link nav-item-business" id="negocios-tab" data-bs-toggle="tab" data-bs-target="#negocios" type="button" role="tab" aria-controls="negocios" aria-selected="false">
+    Négócios
+   </button>
+  </li>
+  <li class="nav-item" role="presentation">
+   <button class="nav-link nav-item-business" id="comentarios-tab" data-bs-toggle="tab" data-bs-target="#comentarios" type="button" role="tab" aria-controls="comentarios" aria-selected="false">
+    Comentários
+   </button>
+  </li>
+ </ul>
+
+ <div class="tab-content mt-3 mb-4" id="profileTabsContent">
+  <!-- Aba Sobre -->
+  <div class="tab-pane fade show active" id="sobre" role="tabpanel" aria-labelledby="sobre-tab">
+   <div class="card shadow-sm border-0 mb-4 p-3">
+    <h5>Descrição</h5>
+    <p>
+     {{"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec efficitur nulla justo, ac ullamcorper dolor condimentum sed. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed gravida
+     vel metus ac tristique. Cras sed hendrerit ex. Donec sodales aliquam rutrum. Donec malesuada nisi magna, ac imperdiet odio pharetra ac. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean
+     tincidunt sodales nulla non ultricies. Phasellus convallis malesuada orci eget pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut mattis, lacus non placerat auctor, diam elit vulputate ligula, vitae pulvinar sem
+     magna sit amet tortor. Nunc quis dui eu metus convallis feugiat interdum sed magna. Suspendisse placerat interdum nunc in volutpat." if not user.descricao}}
+     <!-- FUNÇÃO PRA ADD/EDIT DESCRICAO-->
+    </p>
+   </div>
   </div>
 
+  <div class="tab-pane fade" id="negocios" role="tabpanel" aria-labelledby="negocios-tab">
+   {% if business %} {% if session.id == business["by_user"] %}
+   <a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm" style="width: 60px; height: 60px; z-index: 1050;" data-bs-toggle="modal" data-bs-target="#settings">
+    <span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">menu</span>
+   </a>
 
+   <div class="modal fade" id="settings" tabindex="-1" aria-labelledby="settingsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+     <div class="modal-content">
+      <div class="modal-header">
+       <h5 class="modal-title" id="settingsLabel">Gerenciar negócios</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <label for="#business" class="form-label">Excluir</label>
+       <form>
+        <select id="business" class="form-select" name="business_id" required>
+         {% for b in business %}
+         <option value="{{ b[0] }}">{{ b[1] }}</option>
+         {% endfor %}
+        </select>
+
+        <button name="del_business" type="submit" class="btn btn-primary mt-3">Excluir</button>
+       </form>
+      </div>
+     </div>
+    </div>
+   </div>
+   {% endif %}
+
+   <div class="row">
+    {% for b in business %}
+    <div class="col-md-6 mb-3">
+     <div class="card shadow-sm p-2 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center flex-grow-1">
+       <img src="{{ url_for('static', filename='uploads/' ~ b[2]) if b[2] else 'https://placehold.co/50' }}" alt="{{ b[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+       <a href="{{ url_for('routes.business', business_id=b[0]) }}" class="fw-bold text-decoration-none">{{ b[1] }}</a>
+      </div>
+     </div>
+    </div>
+    {% endfor %}
+   </div>
+   {% else %}
+   <p class="text-center text-muted">Nenhum negócio ainda</p>
+   {% endif %}
+  </div>
+
+  <!-- Aba Comentários -->
+  <div class="tab-pane fade" id="comentarios" role="tabpanel" aria-labelledby="comentarios-tab">
+   {% if comentarios %} {% for c in comentarios %}
+   <div class="card glass-card mb-4 shadow-sm">
+    <div class="card-body">
+     <div class="d-flex align-items-center mb-2">
+      <img src="{{ c['pfp_path'] or url_for('static', filename='user.png') }}" alt="foto" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+      <div>
+       <a href="{{ url_for('routes.perfil', user_id=c['user_id']) }}"><b>{{ c['username'] }}</b></a><br />
+       <small class="text-muted">{{ c['created_at']|humandate }}</small>
+      </div>
+     </div>
+     <p class="mb-0">{{ c['content'] }}</p>
+    </div>
+   </div>
+   {% endfor %} {% else %}
+   <p class="text-center text-muted">Nenhum comentário ainda</p>
+   {% endif %}
+  </div>
+ </div>
 </div>
 
 {% endblock %}
