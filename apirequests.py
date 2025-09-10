@@ -16,10 +16,10 @@ def get_coordenadas(address):
 			lon = float(data[0]["lon"])
 			return lat, lon
 		else:
-			address = 'Não encontrado.'
+			address = 'Rua Planalto, 205, Centro, Macajuba, BA'
 	except Exception as e:
 		print("Erro ao obter coordenadas:", e)
-		address = 'Não encontrado.'
+		address = 'Rua Planalto, 205, Centro, Macajuba, BA'
 
 def get_munipicios(uf):
 	url = f"{ESTADO_URL}/{uf}/municipios"

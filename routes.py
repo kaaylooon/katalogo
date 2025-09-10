@@ -111,17 +111,13 @@ def addbusiness():
 		cidadeMunicipio = request.form.get('municipio')
 		estado = request.form.get('estado')
 
-		pais = request.form.get('pais')
-		if not pais:
-			pais = 'Brasil'
-
-		address = f'{ruaAvenida}, {numeroCasa}, {bairro}, {cidadeMunicipio}, {estado}, {pais}'
+		address = f'{ruaAvenida}, {numeroCasa}, {bairro}, {cidadeMunicipio}, {estado}'
 
 		lat = None
 		lon = None
 		
 		if address and address != 'Não informado':
-			get_coordenadas(address)
+			lat, lon = get_coordenadas(address)
 
 		#LOGO
 
