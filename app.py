@@ -28,6 +28,7 @@ init_db()
 registrar_user('Kaylon', 'kaylon.contact@gmail.com', generate_password_hash('adm123'), '(11) 12345-6789')
 
 tornar_admin(1)
+
 adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', '@auruminitium', '(11) 91659-1346', 'kaylon.alt@outlook.com', 'auruminitium.jpeg', 1, -12.1358, -40.36)
 
 adicionar_business('Café & Prosa', 'O Café & Prosa é muito mais do que um café — é um ponto de encontro para quem ama cultura e boa conversa. Aqui você encontra cafés artesanais feitos com grãos selecionados, bolos e lanches fresquinhos, tudo preparado com carinho. Mas o diferencial vai além do cardápio: promovemos eventos culturais semanais, como leituras de poesia, workshops de escrita criativa, pequenos shows e encontros literários. Nosso espaço foi pensado para que cada visita seja uma experiência acolhedora, onde você pode relaxar, se inspirar e se conectar com outras pessoas que compartilham da paixão pela cultura.', 'Arte e Cultura', '@cafeprosa', '(11) 98765-4321', 'contato@cafeprosa.com', None, 2, -12.9714, -38.5014)
@@ -49,7 +50,7 @@ adicionar_business('Studio Verde', 'O Studio Verde é um espaço de jardinagem e
 adicionar_business('Arte em Feltro', 'A Arte em Feltro é uma loja especializada em artesanato em feltro, oferecendo peças decorativas, brinquedos educativos e lembranças personalizadas. Cada item é feito à mão com cuidado e atenção aos detalhes, garantindo exclusividade e qualidade. Ideal para quem busca presentes criativos ou decoração charmosa.', 'Arte e Cultura', '@arteemfeltro', '(31) 98765-4320', 'contato@arteemfeltro.com', None, 10, -12.2700, -38.9500)
 
 for business_id in range(1, 11):
-    for dia_semana in range(7):
-        add_horario(business_id, dia_semana, "08:00", "18:00")
+	for dia_semana in range(7):
+		add_horario(business_id, dia_semana, "08:00", "18:00")
 
 add_feed(1, 'Aqui o foco é base sólida, do começo ao avançado. Entenda os conceitos de verdade, construa raciocínio lógico e domine os fundamentos de Matemática e Física sem atalhos. Ideal para vestibulares, olimpíadas e quem quer estudar de forma eficiente! Vem aprender de verdade, sem enrolação.', 1, None)
