@@ -8,15 +8,14 @@
 
 <div class="container p-5 pt-4 pb-5">
  <div class="row">
+      <h5>Buscar / Filtrar</h5>
   <form action="{{ url_for('routes.businesses') }}" method="get" class="card-body">
    <div class="d-grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
     <div class="">
-     <label for="exampleDataList" class="form-label fw-semibold">Nome</label>
      <input type="text" class="form-control" name="q" placeholder="Nome do negócio" id="exampleDataList" />
     </div>
 
     <div class="filter-dropdown">
-     <label class="form-label fw-semibold">Categoria</label>
      <div class="dropdown">
       <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
        Escolha a categoria

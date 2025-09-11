@@ -1,14 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm "
-   style="width: 60px; height: 60px; z-index: 1050;"
-   data-bs-toggle="modal" data-bs-target="#add_feed">
-   <span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">
-add_comment
-</span>
-</a>
-
 {% if session.id == business["by_user"] %}
   <a class="btn btn-primary position-fixed bottom-0 end-10 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm "
      style="width: 60px; height: 60px; z-index: 1050;"
@@ -123,21 +115,30 @@ add_comment
 
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
-          <h5 class="card-title">Horário de funcionamento</h5>
+          <h5 class="card-title">Horário de funcionamento <small>(hoje)</small></h5>
           <p class="card-text">{{ horario[0][3] }} até {{ horario[0][4] }}</p>
         </div>
       </div>
-
+      {%if business[4] or business[4] or business[6] %}
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
           <h5 class="card-title">Contato</h5> 
           <ul class="list-unstyled">
-            <li><i class="bi bi-instagram me-2"></i>{{ business[4 ]}}</li>
-            <li><i class="bi bi-telephone me-2"></i>{{ business[5 ]}}</li>
-            <li><i class="bi bi-envelope me-2"></i>{{ business[6 ]}}</li>
+            {% if business[4] %}
+            <li><i class="bi bi-instagram me-2"
+            ></i>{{ business[4] }}</li>
+            {% endif %}
+            {% if business[5] %}
+            <li><i class="bi bi-telephone me-2"></i>{{ business[5] }}</li>
+            {% endif %}
+            {% if business[6] %}
+            <li><i class="bi bi-envelope me-2"></i>{{ business[6] }}</li>
+            {% endif %}
           </ul>
         </div>
       </div>
+      {% endif %}
+
       {% if business.lat and business.lon %}
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
@@ -202,6 +203,15 @@ add_comment
     {% else %}
       <p class="text-center">Nenhum comentário ainda. Seja o primeiro a comentar</p>
     {% endif %}
+
+
+    <a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm "
+       style="width: 60px; height: 60px; z-index: 1050;"
+       data-bs-toggle="modal" data-bs-target="#add_feed">
+       <span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">
+    add_comment
+    </span>
+    </a>
   </div>
 
 </div>
