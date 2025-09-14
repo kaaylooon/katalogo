@@ -1,11 +1,11 @@
 {% extends "base.html" %} {% block content %}
 
-<div class="container d-flex justify-content-center p-5 pt-0">
- <div class="card shadow-sm" style="max-width: 800px; width: 100%;">
-  <form action="/signup" method="post" class="needs-validation p-5" novalidate>
-   <h1 class="title-2 mb-4 text-center">REGISTRO</h1>
+<div class="container d-flex justify-content-center p-4 pt-0">
+ <div class="" style="max-width: 800px; width: 100%;">
+  <form action="/signup" method="post" class="needs-validation p-3" novalidate>
+   <h1 class="title-2 mb-3 text-center">REGISTRO</h1>
    <div class="row g-3">
-    <div class="col-md-6">
+    <div class="col-6">
      <label for="validationUsername2" class="form-label">Usuário</label>
      <div class="input-group has-validation">
       <span class="input-group-text" id="validationUsernamePrepend2">@</span>
@@ -16,7 +16,7 @@
      </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-6">
      <label for="phoneNumber" class="form-label">Número de telefone</label>
      <div class="input-group has-validation">
       <span class="input-group-text">+55</span>
@@ -43,9 +43,6 @@
      <div class="invalid-feedback">
       Por favor, digite uma senha válida.
      </div>
-     <div id="passwordHelpBlock2" class="form-text">
-      Sua senha deve ter 8–20 caracteres, conter letras e números, e não pode ter espaços, caracteres especiais ou emoji.
-     </div>
     </div>
 
     <div class="col-6">
@@ -55,6 +52,10 @@
       As senhas não coincidem.
      </div>
     </div>
+
+    <div id="passwordHelpBlock2" class="form-text">
+      Sua senha deve ter 8–20 caracteres, conter letras e números, e não pode ter espaços, caracteres especiais ou emoji.
+     </div>
 
     <div class="d-grid mt-4">
      <button class="btn btn-primary px-4" type="submit">Registrar</button>

@@ -3,6 +3,7 @@ from flask.views import MethodView
 from werkzeug.utils import secure_filename
 import os
 import datetime
+import logging
 
 from apirequests import get_munipicios
 from db import *
@@ -14,6 +15,15 @@ routes = Blueprint('routes', __name__)
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+
+#logging
+logging.basicConfig(
+	level=logging.INFO,
+	format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
 
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -50,6 +60,7 @@ def feed():
 		add_feed(business_id, content, session['user_id'], image_path)
 		business = buscar_id_business(business_id)
 
+		logger.info(f"Novo feed por {business[1]}. ID do negócio: {business_id}; ID do usuário: {session['user_id']})")
 		return redirect(url_for('routes.feed'))
 
 	return render_template("feed.html", feed=feed, meusbusinesses=meusbusinesses, business=business)
@@ -96,12 +107,12 @@ def addbusiness():
 
 		#CONTATO
 
-		instagram = request.form.get('insta', 'Não informado')
-		if instagram != 'Não informado' and '@' not in instagram:
+		instagram = request.form.get('insta')
+		if instagram and '@' not in instagram:
 			instagram = f'@{instagram}'
-
-		numero = request.form.get('number', 'Não informado')
-		email = request.form.get('email', 'Não informado')
+			
+		numero = request.form.get('number')
+		email = request.form.get('email')
 
 		#LOCALIZAÇÃO
 
@@ -143,6 +154,8 @@ def addbusiness():
 		#DB
 
 		adicionar_business(nome, descricao, categoria, instagram, numero, email, filename, by_user, lat, lon)
+
+		logger.info(f'Novo negócio: {nome}, criado por {by_user}')
 
 		business_id = buscar_nome_business(nome)
 
@@ -202,6 +215,8 @@ def comentar(business_id):
 		content = request.form.get('content')
 		add_comentario(session['user_id'],
 		content, business_id)
+
+		logger.info(f"Novo comentário no negócio de ID {business_id}, pelo usuário de ID {session['user_id']}")
 		return redirect(url_for('routes.business', business_id=business_id))
 
 @routes.route('/business/<int:business_id>/edit', methods=['GET', 'POST'])
@@ -235,6 +250,8 @@ def edit(business_id):
 		#update business details
 		edit_business(nome, categoria, descricao, instagram, numero, email, logo_filename, business_id)
 
+		logger.info(f"Negócio editado: {nome} (ID: {business_id}), pelo usuário de ID {session['user_id']}")
+
 		#handle carousel images upload
 		if 'images' in request.files:
 			carousel_files = request.files.getlist('images')
@@ -250,8 +267,27 @@ def edit(business_id):
 
 					add_business_images(business_id, filename)
 
+					logger.info(f"Imagens adicionadas ao negócio {business_id}, por {session['user_id']}")
+
 		return redirect(url_for('routes.business', business_id=business_id))
 	return render_template('editbusiness.html', business_id=business_id, business=business, images_urls=images_urls,)	
+
+@routes.route('/business/<int:business_id>/del')
+@login_required
+def delbusiness(business_id):
+	business = mostrar_business_by_id(business_id)
+	user_id = session.get('user_id')
+	next_url = request.args.get('next') or url_for('default_page')
+
+	if user_id == business[9]:
+		del_business(business_id)
+		flash('Négócio excluído com sucesso', 'sucess')
+		logger.info(f"Negócio excluído: {business_id}, por {user_id}")
+		return redirect(next_url)
+	else:
+		flash('Não foi possível excluir o negócio', 'danger')
+		logger.warning(f"Erro ao tentar excluir negócio: {business_id}, por {user_id}")
+		return redirect(request.referrer)
 
 @routes.route('/dashboard')
 @login_required
@@ -272,11 +308,15 @@ def perfil(user_id):
 	business = mostrar_businesses_user(user_id)
 	comentarios = mostrar_comentarios_user(user_id)
 
+	session_id = None
+	if 'user_id' in session:
+		session_id = session['user_id']
+
 	if not user:
 		return "Usuário não encontrado", 404
-	return render_template("perfil.html", user=user, business=business, comentarios=comentarios)
+	return render_template("perfil.html", user=user, business=business, comentarios=comentarios, session_id=session_id)
 
-@routes.route("/perfil/<int:user_id>/edit")
+@routes.route("/perfil/<int:user_id>/edit", methods=["GET", "POST"])
 @login_required
 def perfiledit(user_id):
 	user = mostrar_user(user_id)
@@ -285,9 +325,14 @@ def perfiledit(user_id):
 		return redirect('/')
 	if session['user_id'] != user[0]:
 		return redirect('/perfil/<int:user_id>')
+	if request.method == "POST":
+		username = request.form.get("username")
+		descricao = request.form.get("descricao", "Sem descrição")
 
-
-
+		edit_user(username, descricao, user_id)
+		
+		logger.info(f"Usuário editado: {username} (ID: {user_id}), pelo usuário de ID {session['user_id']}")
+		return redirect(url_for('routes.perfil', user_id=user_id))
 
 
 	return render_template("editperfil.html", user=user)

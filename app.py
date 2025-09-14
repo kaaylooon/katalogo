@@ -19,9 +19,9 @@ def humanize_datetime(value):
 		return arrow.get(value, "YYYY-MM-DD HH:mm:ss").humanize(locale="pt_br")
 app.jinja_env.filters['humandate'] = humanize_datetime
 
-x = 1
+x = False
 
-if x == 1:
+if x:
 	init_db()
 
 	registrar_user('Kaylon', 'kaylon.contact@gmail.com', generate_password_hash('adm123'), '(11) 12345-6789')
@@ -51,8 +51,7 @@ if x == 1:
 	for business_id in range(1, 11):
 			for dia_semana in range(7):
 				add_horario(business_id, dia_semana, "08:00", "18:00")
-
-if x == 2:
+else:
 	if __name__ == "__main__":
 		init_db()
 

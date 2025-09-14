@@ -126,6 +126,13 @@ def edit_business(nome, categoria, descricao, instagram, numero, email, filename
 	conn.commit()
 	conn.close()
 
+def del_business(business_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("DELETE FROM business WHERE id = ?", (business_id,))
+	conn.commit()
+	conn.close()
+
 def mostrar_disponivel(business_id):
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
@@ -248,6 +255,18 @@ def mostrar_user(user_id):
 	conn.close()
 	return user_dados
 
+
+def edit_user(username, descricao, user_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("""
+		UPDATE users
+		SET username = ?, descricao = ?
+		WHERE id = ?
+	""", (username, descricao, user_id))
+	conn.commit()
+	conn.close()
+
 def mostrar_businesses_user(user_id):
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
@@ -256,10 +275,19 @@ def mostrar_businesses_user(user_id):
 	conn.close()
 	return meusbusinesses
 
+def mostrar_business_by_id(business_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM business WHERE id = ?", (business_id,))
+	business = cur.fetchone()
+	conn.close()
+	return business
+
+
 def registrar_user(username, email, hashed, telephone):
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
-	cur.execute("INSERT OR IGNORE INTO users (username, email, password, telephone) VALUES (?, ?, ?, ?)", (username, email, hashed, telephone))
+	cur.execute("INSERT OR IGNORE INTO users (username, email, password, telephone, descricao) VALUES (?, ?, ?, ?, ?)", (username, email, hashed, telephone, ''))
 	conn.commit()
 	conn.close()
 
