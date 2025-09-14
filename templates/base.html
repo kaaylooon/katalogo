@@ -79,8 +79,6 @@
             </a>
           </div>
         {% endif %}
-        <li class="nav-item d-flex">
-        </li>
       </ul>
     </div>
   </div>
@@ -121,22 +119,6 @@
   initMDB({ Collapse, Ripple });
 </script>
 
-<!--
- <script>
-    const toggleBtn = document.getElementById('toggleTheme');
-    const htmlEl = document.documentElement; // seleciona <html>
-
-    toggleBtn.addEventListener('click', () => {
-      const currentTheme = htmlEl.getAttribute('data-bs-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      htmlEl.setAttribute('data-bs-theme', newTheme);
-    });
- </script>
--->
-<script>
-  document.documentElement.setAttribute("data-bs-theme", "light");
-</script>
-
 <script>
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/static/sw.js")
@@ -146,7 +128,6 @@
 </script>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 
 <div>
   {% block content %}{% endblock %}

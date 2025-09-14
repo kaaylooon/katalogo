@@ -31,7 +31,8 @@ def tabela_users():
 		telephone TEXT NOT NULL,
 		pfp_path TEXT,
 		role TEXT NOT NULL DEFAULT 'user',
-		joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		descricao TEXT
 		)
 	""")
 	conn.commit()
@@ -87,6 +88,43 @@ def tabela_horarios():
 			FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
 		)
 	""")
+
+def business_images_table():
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS business_images(
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			business_id INTEGER NOT NULL,
+			image_url TEXT NOT NULL,
+			FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
+		)
+	""")
+
+def add_business_images(business_id, image_url):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("INSERT INTO business_images VALUES (business_id, image_url) VALUES (?, ?)", (business_id, image_url))
+	conn.commit()
+	conn.close()
+
+def mostrar_business_images_urls(business_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM business_images WHERE business_id = ?", (business_id,))
+	images_urls = cur.fetchall()
+	return images_urls
+
+def edit_business(nome, categoria, descricao, instagram, numero, email, filename, business_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("""
+		UPDATE business
+		SET nome = ?, categoria = ?, descricao = ?, instagram = ?, numero = ?, email = ?, logo_path = ?
+		WHERE id = ?
+	""", (nome, categoria, descricao, instagram, numero, email, filename, business_id))
+	conn.commit()
+	conn.close()
 
 def mostrar_disponivel(business_id):
 	conn = sqlite3.connect(DB_NAME)
@@ -306,3 +344,4 @@ def init_db():
 	tabela_business()
 	tabela_comentarios()
 	tabela_horarios()
+	business_images_table()

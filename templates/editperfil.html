@@ -1,0 +1,75 @@
+{% extends "base.html" %} {% block content %}
+<div class="container p-4 pt-0">
+  <div class="card shadow-sm" style="max-width: 800px; margin: auto;">
+    <div class="card-header bg-primary text-white text-center py-3">
+      <h4 class="mb-0">Editar perfil</h4>
+    </div>
+    <div class="card-body p-4">
+      <form
+        class="row g-4"
+        action="{{ url_for('routes.perfiledit', user_id=user[0]) }}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="col-12 d-flex flex-column flex-md-row align-items-center mb-3">
+          <div class="me-md-4 mb-3 mb-md-0 text-center">
+            <input
+              class="form-control d-none"
+              type="file"
+              id="pfpUpload"
+              name="pfp"
+              accept="image/*"
+              onchange="previewPfp(event)"
+            />
+            <img
+              src="{{ url_for('static', filename='uploads/' ~ user[6]) if user[6] else 'https://placehold.co/150' }}"
+              alt="{{ user[1] }}"
+              class="mt-2 rounded-circle border"
+              style="width: 75px; height: 75px; object-fit: cover; cursor: pointer;"
+              onclick="document.getElementById('pfpUpload').click();"
+            />
+          </div>
+          <div class="flex-grow-1">
+            <label for="nome" class="form-label" style="font-weight: 600;">Nome</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nome"
+              name="nome"
+              value="{{ user[1] }}"
+              required
+            />
+            <div class="form-text">Escolha um nome que represente bem você.</div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
+          <textarea
+            class="form-control"
+            id="descricao"
+            name="descricao"
+            rows="4"
+            placeholder="Fale um pouco sobre você."
+            required
+          >{{ user[8] }}</textarea>
+        </div>
+
+        <div class="col-12 d-grid">
+          <button type="submit" class="btn btn-primary mt-3">Salvar alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function previewPfp(event) {
+    const [file] = event.target.files;
+    if (file) {
+      const imgElement = event.target.closest('div').querySelector('img');
+      imgElement.src = URL.createObjectURL(file);
+    }
+  }
+</script>
+{% endblock %}

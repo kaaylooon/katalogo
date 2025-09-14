@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, session, jsonify
+from flask.views import MethodView
 from werkzeug.utils import secure_filename
 import os
 import datetime
@@ -130,6 +131,15 @@ def addbusiness():
 		else:
 			filename = None
 
+		images = request.files['images[]']
+
+		if images and allowed_file(images.filename):
+			filename = secure_filename(images.filename)
+			images_path = os.path.join(UPLOAD_FOLDER, filename)
+			images.save(images_path)
+		else:
+			filename = None
+
 		#DB
 
 		adicionar_business(nome, descricao, categoria, instagram, numero, email, filename, by_user, lat, lon)
@@ -155,14 +165,19 @@ def get_munipicios_route(uf):
 	municipios_list = [{"nome": m["nome"]} for m in municipios]
 	return jsonify(municipios_list)
 
+#
+
 @routes.route('/business/<int:business_id>')
 def business(business_id):
 	business = buscar_id_business(business_id)
+	session_id = session.get('user_id') 
 
 	horario = mostrar_disponivel(business_id)
 	feeds = mostrar_feed_business(business_id)
 	aberto = False	
 	now_str = datetime.datetime.now().strftime("%H:%M")
+
+	images_urls = mostrar_business_images_urls(business_id)
 
 	if horario:
 		abre = horario[0][3]
@@ -176,7 +191,7 @@ def business(business_id):
 		flash('Negócio não encontrado.', 'danger')
 		return redirect(url_for('routes.businesses'))
 
-	return render_template("business.html", business=business, comentarios=comentarios, aberto=aberto, horario=horario, feeds=feeds)
+	return render_template("business.html", business=business, comentarios=comentarios, aberto=aberto, horario=horario, feeds=feeds, session_id=session_id, images_urls=images_urls)
 
 
 @routes.route('/business/<int:business_id>/comentar', methods=['GET', 'POST'])
@@ -189,12 +204,67 @@ def comentar(business_id):
 		content, business_id)
 		return redirect(url_for('routes.business', business_id=business_id))
 
+@routes.route('/business/<int:business_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit(business_id):
+	images_urls = mostrar_business_images_urls(business_id)
+	business = buscar_id_business(business_id)
+
+	if request.method == "POST":
+		#GET FORM DATA
+		nome = request.form.get('nome').capitalize()
+		categoria = request.form.get('categoria')
+		descricao = request.form.get('descricao', 'Sem descrição.').capitalize()
+
+		instagram = request.form.get('insta', 'Não informado')
+		if instagram != 'Não informado' and '@' not in instagram:
+			instagram = f'@{instagram}'
+		numero = request.form.get('number', 'Não informado')
+		email = request.form.get('email', 'Não informado')
+
+		logo_file = request.files.get('logo')
+		logo_filename = business['logo_path']
+
+		if logo_file and allowed_file(logo_file.filename):
+			logo_filename = secure_filename(logo_file.filename)
+			logo_filepath = os.path.join(UPLOAD_FOLDER, logo_filename)
+			logo_file.save(logo_filepath)
+		else:
+			logo_filename = business['logo_path'] if 'logo_path' in business.keys() else None
+
+		#update business details
+		edit_business(nome, categoria, descricao, instagram, numero, email, logo_filename, business_id)
+
+		#handle carousel images upload
+		if 'images' in request.files:
+			carousel_files = request.files.getlist('images')
+			for file in carousel_files:
+				#not empty and allowed type
+				if file.filename != '' and allowed_file(file.filename):
+					filename = secure_filename(file.filename)
+					filepath = os.path.join(UPLOAD_FOLDER, filename)
+
+					os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+					file.save(filepath)
+
+					add_business_images(business_id, filename)
+
+		return redirect(url_for('routes.business', business_id=business_id))
+	return render_template('editbusiness.html', business_id=business_id, business=business, images_urls=images_urls,)	
+
 @routes.route('/dashboard')
 @login_required
 @role_required('admin')
 def dashboard():
 	users = mostrar_users()
-	return render_template('dashboard.html', users=users)
+	businesses = None
+
+	for user in users:
+		user_id = user[0]
+		businesses = mostrar_businesses_user(user_id)
+
+	return render_template('dashboard.html', users=users, businesses=businesses)
 
 @routes.route("/perfil/<int:user_id>")
 def perfil(user_id):
@@ -205,3 +275,19 @@ def perfil(user_id):
 	if not user:
 		return "Usuário não encontrado", 404
 	return render_template("perfil.html", user=user, business=business, comentarios=comentarios)
+
+@routes.route("/perfil/<int:user_id>/edit")
+@login_required
+def perfiledit(user_id):
+	user = mostrar_user(user_id)
+	if not user:
+		flash('Usuário não encontrado.', 'warning')
+		return redirect('/')
+	if session['user_id'] != user[0]:
+		return redirect('/perfil/<int:user_id>')
+
+
+
+
+
+	return render_template("editperfil.html", user=user)

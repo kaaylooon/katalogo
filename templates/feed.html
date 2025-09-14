@@ -65,7 +65,7 @@
         <div class="card-body">
           <div class="d-flex align-items-center mb-2">
             <a href="{{ url_for('routes.business', business_id=f.business_id) }}">
-              <img src="{{ url_for('static', filename='uploads/' ~ f['logo']) if f['logo'] else 'https://placehold.co/150' }}" 
+              <img src="{{ url_for('static', filename='uploads/' ~ f['logo_path']) if f['logo_path'] else 'https://placehold.co/150' }}" 
                    alt="{{ f['nome'] }}" 
                    class="rounded-circle me-3" 
                    style="width: 50px; height: 50px; object-fit: cover;">

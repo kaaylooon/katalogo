@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container p-4 pt-0">
+  <div class="card shadow-sm" style="max-width: 800px; margin: auto;">
+    <div class="card-header bg-primary text-white text-center py-3 px-3">
+      <h4 class="mb-0">Editar Negócio</h4>
+    </div>
+    <div class="card-body p-4">
+      <form class="row g-4" action="{{ url_for('routes.edit', business_id=business['id']) }}" method="POST" enctype="multipart/form-data">
+        
+        <div class="row align-items-center mt-3">
+          
+          <div class="col-12 col-md-auto text-center mb-3 mb-md-0">
+            <input
+              class="form-control d-none"
+              type="file"
+              id="logoUpload"
+              name="logo"
+              accept="image/*"
+              onchange="previewLogo(event)"
+            />
+            <img
+              src="{{ url_for('static', filename='uploads/' ~ business[7]) if business[7] else 'https://placehold.co/150' }}"
+              alt="{{ business[1] }}"
+              class="rounded-circle border"
+              style="width: 75px; height: 75px; object-fit: cover; cursor: pointer;"
+              onclick="document.getElementById('logoUpload').click();"
+            />
+          </div>
+
+          <div class="col-12 col-md mb-3 mb-md-0">
+            <label for="nome" class="form-label" style="font-weight: 600;">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" value="{{ business.nome }}" required />
+          </div>
+
+          <div class="col-12 col-md">
+            <label for="categoria" class="form-label" style="font-weight: 600;">Categoria</label>
+            <select class="form-select" name="categoria" required>
+              <option value="" selected disabled>Escolha...</option>
+              <option value="Alimentação" {% if business.categoria == "Alimentação" %}selected{% endif %}>Alimentação</option>
+              <option value="Livros e Educação" {% if business.categoria == "Livros e Educação" %}selected{% endif %}>Livros e Educação</option>
+              <option value="Tecnologia e Informática" {% if business.categoria == "Tecnologia e Informática" %}selected{% endif %}>Tecnologia e Informática</option>
+              <option value="Serviços" {% if business.categoria == "Serviços" %}selected{% endif %}>Serviços</option>
+              <option value="Arte e Cultura" {% if business.categoria == "Arte e Cultura" %}selected{% endif %}>Arte e Cultura</option>
+              <option value="Moda e Beleza" {% if business.categoria == "Moda e Beleza" %}selected{% endif %}>Moda e Beleza</option>
+              <option value="Esportes e Lazer" {% if business.categoria == "Esportes e Lazer" %}selected{% endif %}>Esportes e Lazer</option>
+              <option value="Eventos e Entretenimento" {% if business.categoria == "Eventos e Entretenimento" %}selected{% endif %}>Eventos e Entretenimento</option>
+              <option value="Comércio de segunda mão" {% if business.categoria == "Comércio de segunda mão" %}selected{% endif %}>Comércio de segunda mão</option>
+              <option value="Pets e Animais" {% if business.categoria == "Pets e Animais" %}selected{% endif %}>Pets e Animais</option>
+              <option value="Saúde e Bem-estar" {% if business.categoria == "Saúde e Bem-estar" %}selected{% endif %}>Saúde e Bem-estar</option>
+              <option value="Turismo e Viagens" {% if business.categoria == "Turismo e Viagens" %}selected{% endif %}>Turismo e Viagens</option>
+              <option value="Diversos" {% if business.categoria == "Diversos" %}selected{% endif %}>Diversos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
+          <textarea class="form-control" id="descricao" name="descricao" rows="4" placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais." required>{{ business.descricao }}</textarea>
+        </div>
+
+        <div class="col-12">
+          <label for="contato" class="form-label" style="font-weight: 600;">Contato</label>
+          <div class="row g-3">
+            <div class="col-6">
+              <label for="inputInsta" class="form-label">Instagram</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text"><i class="bi bi-instagram"></i></span>
+                <input name="insta" type="text" class="form-control" id="inputInsta" placeholder="@examplo" value="{{business.instagram}}"/>
+              </div>
+            </div>
+            <div class="col-6">
+              <label for="inputNumber" class="form-label">Telefone</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                <input name="number" type="text" class="form-control" id="inputNumber" placeholder="(XX) XXXXX-XXXX" value="{{business.numero}}" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="inputEmail" class="form-label">E-mail</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                <input name="email" type="email" class="form-control" id="inputEmail" placeholder="email@exemplo.com" value="{{business.email}}"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-12">
+          <label for="imageUpload" class="form-label d-block" style="font-weight: 600;">
+            Imagens
+          </label>
+          <input
+            class="form-control"
+            type="file"
+            id="imageUpload"
+            name="images[]"
+            accept="image/*"
+            onchange="previewImages(event)"
+            multiple
+          />
+          <div id="previewContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
+        </div>
+
+        <div class="d-grid mt-4">
+          <button type="submit" class="btn btn-primary">Editar Negócio</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function previewLogo(event) {
+    const [file] = event.target.files;
+    if (file) {
+      const imgElement = event.target.closest('div').querySelector('img');
+      imgElement.src = URL.createObjectURL(file);
+    }
+  }
+
+  function previewImages(event) {
+    const files = event.target.files;
+    const previewContainer = document.getElementById("previewContainer");
+
+    // limpa previews antigos
+    previewContainer.innerHTML = "";
+
+    // percorre todos os arquivos selecionados
+    for (const file of files) {
+      if (!file.type.startsWith("image/")) continue;
+
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      img.className = "rounded border";
+      img.style.width = "150px";
+      img.style.height = "150px";
+      img.style.objectFit = "cover";
+      previewContainer.appendChild(img);
+    }
+  }
+</script>
+{% endblock %}
