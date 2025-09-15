@@ -61,7 +61,7 @@
 
 <div class="container p-4">
     {% for f in feed %}
-      <div class="card glass-card mb-4 shadow-sm">
+      <div class="card glass-card mb-4 shadow-sm" data-aos="fade-up">
         <div class="card-body">
           <div class="d-flex align-items-center mb-2">
             <a href="{{ url_for('routes.business', business_id=f.business_id) }}">

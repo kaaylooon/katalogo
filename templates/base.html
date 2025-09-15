@@ -20,6 +20,8 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
 
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet">
+
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,6 +123,15 @@
 </script>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+  AOS.init({
+    offset: 50,   // em px, quanto antes da tela ativar a animação
+    duration: 500,
+    easing: 'ease-out',
+  });
+</script>
 
 <div>
   {% block content %}{% endblock %}
