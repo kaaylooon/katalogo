@@ -19,7 +19,7 @@ def humanize_datetime(value):
 		return arrow.get(value, "YYYY-MM-DD HH:mm:ss").humanize(locale="pt_br")
 app.jinja_env.filters['humandate'] = humanize_datetime
 
-x = False
+x = True
 
 if x:
 	init_db()
