@@ -1,27 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="background-image-full"></div> <!-- só o fundo -->
+<!--<div class="background-image-full"></div>  -->
 
-<div class="container-fluid d-flex flex-column justify-content-center align-items-center text-center" style="min-height: calc(100vh - 300px);">
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center text-center" style="min-height: calc(100vh - 310px);">
 
- <!-- Título -->
-
- <h1 class="display-3 display-1 fw-bold text-monospace mb-2 text-monospace" style="
- font-size: 4.5rem; color: var(--COLOR1)">Katálogo</h1>
+ <h1 class="display-3 display-1 fw-bold text-monospace mb-1 text-monospace" style="
+ font-size: 4.5rem; color: var(--COLOR2)">Katálogo</h1>
 
  <p
-    class="lead text-mutedpx-2 px-md-5 mb-2" style="max-width: 80%; font-size: 1rem; color: #EBEBEB">
+    class="lead text-mutedpx-2 px-md-5 mb-2" style="max-width: 80%; font-size: 1rem;">
     Encontre aqui os 
-    <span class=""style="">melhores</span> negócios, produtos e serviços na sua região</p>
+    <strong>melhores</strong> negócios, produtos e serviços na sua região</p>
 
  <p
-    class="lead text-mutedpx-3"
-    style="max-width: 70%; font-size: 0.8rem; color:#EBEBEB">
+    class="lead text-mutedpx-3 px-md-5 mb-2"
+    style="max-width: 75%; font-size: 0.8rem;">
 
-  Descubra uma nova forma de gerenciar seus negócios e serviços. Explore, conecte-se e acompanhe tudo em um só lugar
+  Descubra uma nova forma de gerenciar seus negócios e serviços. Explore, conecte-se e acompanhe tudo <strong>em um só lugar</strong>
  </p>
+ <div class="mt-3">
+    <p
+      class="lead text-mutedpx-1"
+      >
+      Acessar como     
+    </p>
+    <div class="d-flex align-items-center">
+
+               <a class="btn btn-outline-secondary
+               me-3" href="#comerciante">
+                 Comerciante
+               </a>
+               <a class="btn btn-primary ms-auto" href="#cliente">
+                 Cliente
+               </a>
+    </div>
+ </div>
 
 </div>
 
+<!--#2-->
+
+<div id="cliente" class="container-fluid d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 100vh">
+
+ <h1 class="display-3 display-1 fw-bold text-monospace mb-1 text-monospace" style="
+ font-size: 3rem; color: var(--COLOR4)">Cliente</h1>
+
+ <p
+    class="lead text-mutedpx-2 px-md-5 mb-2" style="max-width: 80%; font-size: 1rem;">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla mattis lacus vel ultrices facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec dictum congue velit a commodo. Proin rutrum urna a est hendrerit, id sollicitudin purus euismod. Sed tempor risus eu tempus consequat. Ut diam odio, lacinia nec fermentum eget, ultricies in magna. Nullam semper vitae nibh at mollis. Nunc id augue sit amet nibh porttitor vestibulum. Donec tellus est, elementum eu convallis in, condimentum sit amet quam. Duis felis purus, tristique quis arcu at, bibendum aliquam enim. Fusce fermentum lectus ut lectus dapibus elementum. Nullam interdum mauris ut tempus scelerisque. Quisque eget nisi non mauris viverra suscipit sed a erat. Morbi a velit tincidunt, auctor nunc ut, commodo justo. Donec id suscipit eros, a ultrices libero.</p>
+</div>
+
+<!--#3-->
+
+<div id="comerciante" class="container-fluid d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 100vh;">
+
+ <h1 class="display-3 display-1 fw-bold text-monospace mb-1 text-monospace" style="
+ font-size: 3rem; color: var(--COLOR4)">Comerciante</h1>
+
+ <p
+    class="lead text-mutedpx-2 px-md-5 mb-2" style="max-width: 80%; font-size: 1rem;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla mattis lacus vel ultrices facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec dictum congue velit a commodo. Proin rutrum urna a est hendrerit, id sollicitudin purus euismod. Sed tempor risus eu tempus consequat. Ut diam odio, lacinia nec fermentum eget, ultricies in magna. Nullam semper vitae nibh at mollis. Nunc id augue sit amet nibh porttitor vestibulum. Donec tellus est, elementum eu convallis in, condimentum sit amet quam. Duis felis purus, tristique quis arcu at, bibendum aliquam enim. Fusce fermentum lectus ut lectus dapibus elementum. Nullam interdum mauris ut tempus scelerisque. Quisque eget nisi non mauris viverra suscipit sed a erat. Morbi a velit tincidunt, auctor nunc ut, commodo justo. Donec id suscipit eros, a ultrices libero.</p>
+</div>
 {% endblock %}

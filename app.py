@@ -19,9 +19,9 @@ def humanize_datetime(value):
 		return arrow.get(value, "YYYY-MM-DD HH:mm:ss").humanize(locale="pt_br")
 app.jinja_env.filters['humandate'] = humanize_datetime
 
-x = True
+push = True
 
-if x:
+if push:
 	init_db()
 
 	registrar_user('Kaylon', 'kaylon.contact@gmail.com', generate_password_hash('adm123'), '(11) 12345-6789')
