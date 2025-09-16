@@ -10,7 +10,7 @@ from db import init_db, tornar_admin, registrar_user, adicionar_business, add_fe
 
 app = Flask(__name__)
 
-app.secret_key = "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"
+app.secret_key = "secret_key"
 
 app.register_blueprint(routes) 
 app.register_blueprint(auth) 
