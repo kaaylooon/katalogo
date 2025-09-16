@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container p-4 pt-0">
+<div class="container p-4 pt-0" data-aos="fade-up">
   <div class="card shadow-sm" style="max-width: 800px; margin: auto;">
     <div class="card-header bg-primary text-white text-center py-3 px-3">
       <h4 class="mb-0">Editar Negócio</h4>
@@ -58,9 +58,25 @@
           <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
           <textarea class="form-control" id="descricao" name="descricao" rows="4" placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais." required>{{ business.descricao }}</textarea>
         </div>
-
+        {%if business[13]%}
         <div class="col-12">
-          <label for="contato" class="form-label" style="font-weight: 600;">Contato</label>
+          <label class="form-label" style="font-weight: 600;">Horário de funcionamento <small>(opcional)</small></label>
+          <div class="row g-3">
+            {% for prefix, nome in dias %}
+            <div class="col-md-6">
+              <label for="{{ prefix }}_horario" class="form-label">{{ nome }}</label>
+              <div class="input-group has-validation">
+                <input type="time" class="form-control" id="{{ prefix }}_abre" name="{{ prefix }}_abre" />
+                <input type="time" class="form-control" id="{{ prefix }}_fecha" name="{{ prefix }}_fecha" />
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        
+        
+        <div class="col-12">
+          <label for="contato" class="form-label" style="font-weight: 600;">Contato <small>(opcional)</small></label>
           <div class="row g-3">
             <div class="col-6">
               <label for="inputInsta" class="form-label">Instagram</label>
@@ -87,8 +103,71 @@
         </div>
         
         <div class="col-12">
+          <label class="form-label" style="font-weight: 600;">Localização (opcional)</label>
+          <div class="row g-3">
+            <div class="col-6">
+              <label for="inputCep" class="form-label">CEP</label>
+              <input name="cep" type="integer" class="form-control" id="inputCep" placeholder="XXXXX-XXX" />
+            </div>
+            <div class="col-6">
+              <label for="estado" class="form-label">Estado</label>
+              <select class="form-select" name="estado" id="estado">
+                <option value="" selected disabled>Escolha...</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="municipio" class="form-label">Cidade / Município</label>
+              <select id="municipio" class="form-select" name="municipio">
+                <option value="" selected disabled>Escolha...</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="bairro" class="form-label">Bairro</label>
+              <input name="bairro" type="text" class="form-control" id="bairro" />
+            </div>
+            <div class="col-9">
+              <label for="ruaAvenida" class="form-label">Rua / Avenida</label>
+              <div class="input-group has-validation">
+                <input name="ruaAvenida" type="text" class="form-control" id="ruaAvenida" />
+              </div>
+            </div>
+            <div class="col-3">
+              <label for="numeroCasa" class="form-label">Número</label>
+              <input name="numeroCasa" type="text" class="form-control" id="numeroCasa" />
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-12">
           <label for="imageUpload" class="form-label d-block" style="font-weight: 600;">
-            Imagens
+            Imagens <small>(opcional)</small>
           </label>
           <input
             class="form-control"
@@ -101,6 +180,7 @@
           />
           <div id="previewContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
         </div>
+        {%endif%}
 
         <div class="d-grid mt-4">
           <button type="submit" class="btn btn-primary">Editar Negócio</button>

@@ -55,7 +55,10 @@ def tabela_business():
 		by_user INTEGER,
 		comments_count INTEGER DEFAULT 0,
 		lat REAL, 
-		lon REAL
+		lon REAL,
+		premium BOOLEAN DEFAULT FALSE,
+		premium_valid_until DATE,
+		evento TEXT
 		)
 	""")
 	conn.commit()
@@ -114,6 +117,19 @@ def mostrar_business_images_urls(business_id):
 	cur.execute("SELECT * FROM business_images WHERE business_id = ?", (business_id,))
 	images_urls = cur.fetchall()
 	return images_urls
+
+
+def add_premium(premium, business_id):
+	conn = sqlite3.connect(DB_NAME)
+	cur = conn.cursor()
+	cur.execute("""
+		UPDATE business
+		SET premium = ?
+		WHERE id = ?
+	""", (premium, business_id))
+	conn.commit()
+	conn.close()
+
 
 def edit_business(nome, categoria, descricao, instagram, numero, email, filename, business_id):
 	conn = sqlite3.connect(DB_NAME)
@@ -341,10 +357,10 @@ def buscar_nome_business(nome):
 	conn.close()
 	return business[0] if business else None
 
-def adicionar_business(nome, descricao, categoria, instagram, numero, email, filename, by_user, lat, lon):
+def adicionar_business(nome, descricao, categoria, filename, by_user, evento):
 	conn = sqlite3.connect(DB_NAME)
 	cur = conn.cursor()
-	cur.execute("INSERT INTO business (nome, descricao, categoria, instagram, numero, email, logo_path, by_user, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (nome, descricao, categoria, instagram, numero, email, filename, by_user, lat, lon))
+	cur.execute("INSERT INTO business (nome, descricao, categoria, instagram, numero, email, logo_path, by_user, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (nome, descricao, categoria, '', '', '', filename, by_user, '', '', evento))
 	conn.commit()
 	conn.close()
 

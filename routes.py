@@ -1,20 +1,33 @@
 from flask import Blueprint, render_template, request, flash, redirect, session, jsonify
 from flask.views import MethodView
 from werkzeug.utils import secure_filename
+import stripe
+import json
 import os
 import datetime
 import logging
 
 from apirequests import get_munipicios
+
 from db import *
+
 from auth import *
 from apirequests import *
+from db.feed import mostrar_feed
+
+
+stripe.api_key = "SUA_CHAVE_SECRETA"
+
 
 routes = Blueprint('routes', __name__)
+
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+carousel_folder = os.path.join(UPLOAD_FOLDER, 'carousel')
+os.makedirs(carousel_folder, exist_ok=True)
 
 
 #logging
@@ -27,6 +40,11 @@ logger = logging.getLogger(__name__)
 
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
+
+
 
 @routes.route('/')
 def home():
@@ -76,17 +94,6 @@ def businesses():
 @routes.route('/addbusiness', methods=['GET', 'POST'])
 @login_required
 def addbusiness():
-	dias = [
-		("dom", "Domingo"),
-		("seg", "Segunda-feira"),
-		("ter", "Terça-feira"),
-		("qua", "Quarta-feira"),
-		("qui", "Quinta-feira"),
-		("sex", "Sexta-feira"),
-		("sab", "Sábado")
-	]
-	horarios = {}
-
 	if request.method == "POST":
 		by_user = session.get('user_id')
 
@@ -97,13 +104,6 @@ def addbusiness():
 		descricao = request.form.get('descricao', 'Sem descrição.')
 		descricao = descricao.capitalize()
 		categoria = request.form.get('categoria')
-		
-		#HORÁRIO
-
-		for d in dias:
-			abre = request.form.get(f'{d[0]}_abre')
-			fecha = request.form.get(f'{d[0]}_fecha')
-			horarios[d[0]] = (abre, fecha)
 
 		#CONTATO
 
@@ -113,23 +113,6 @@ def addbusiness():
 			
 		numero = request.form.get('number')
 		email = request.form.get('email')
-
-		#LOCALIZAÇÃO
-
-		cep = request.form.get('cep')
-		ruaAvenida = request.form.get('ruaAvenida')
-		numeroCasa = request.form.get('numeroCasa')
-		bairro = request.form.get('bairro')
-		cidadeMunicipio = request.form.get('municipio')
-		estado = request.form.get('estado')
-
-		address = f'{ruaAvenida}, {numeroCasa}, {bairro}, {cidadeMunicipio}, {estado}'
-
-		lat = None
-		lon = None
-		
-		if address and address != 'Não informado':
-			lat, lon = get_coordenadas(address)
 
 		#LOGO
 
@@ -142,34 +125,17 @@ def addbusiness():
 		else:
 			filename = None
 
-		images = request.files['images[]']
-
-		if images and allowed_file(images.filename):
-			filename = secure_filename(images.filename)
-			images_path = os.path.join(UPLOAD_FOLDER, filename)
-			images.save(images_path)
-		else:
-			filename = None
+		#evento
+		evento = request.form.get('evento') or None
 
 		#DB
-
-		adicionar_business(nome, descricao, categoria, instagram, numero, email, filename, by_user, lat, lon)
+		business_id = adicionar_business(nome, descricao, categoria, filename, by_user, evento)
 
 		logger.info(f'Novo negócio: {nome}, criado por {by_user}')
 
-		business_id = buscar_nome_business(nome)
-
-		if not business_id:
-			return redirect('/')
-
-		dias_map = {"dom":0, "seg":1, "ter":2, "qua":3, "qui":4, "sex":5, "sab":6}
-
-		for d, (abre, fecha) in horarios.items():
-			add_horario(business_id, dias_map[d], abre, fecha)
-
 		return redirect(f"/business/{business_id}")
 
-	return render_template("addbusiness.html", dias=dias)
+	return render_template("addbusiness.html")
 
 @routes.route("/get_municipios/<uf>")
 def get_munipicios_route(uf):
@@ -222,6 +188,16 @@ def comentar(business_id):
 @routes.route('/business/<int:business_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(business_id):
+	dias = [
+		("dom", "Domingo"),
+		("seg", "Segunda-feira"),
+		("ter", "Terça-feira"),
+		("qua", "Quarta-feira"),
+		("qui", "Quinta-feira"),
+		("sex", "Sexta-feira"),
+		("sab", "Sábado")
+	]
+	horarios = {}
 	images_urls = mostrar_business_images_urls(business_id)
 	business = buscar_id_business(business_id)
 
@@ -231,11 +207,40 @@ def edit(business_id):
 		categoria = request.form.get('categoria')
 		descricao = request.form.get('descricao', 'Sem descrição.').capitalize()
 
-		instagram = request.form.get('insta', 'Não informado')
-		if instagram != 'Não informado' and '@' not in instagram:
+		#HORÁRIO
+
+		for d in dias:
+			abre = request.form.get(f'{d[0]}_abre')
+			fecha = request.form.get(f'{d[0]}_fecha')
+			horarios[d[0]] = (abre, fecha)
+
+		#CONTATO
+
+		instagram = request.form.get('insta')
+		if instagram and '@' not in instagram:
 			instagram = f'@{instagram}'
-		numero = request.form.get('number', 'Não informado')
-		email = request.form.get('email', 'Não informado')
+			
+		numero = request.form.get('number')
+		email = request.form.get('email')
+
+		#LOCALIZAÇÃO
+
+		cep = request.form.get('cep')
+		ruaAvenida = request.form.get('ruaAvenida')
+		numeroCasa = request.form.get('numeroCasa')
+		bairro = request.form.get('bairro')
+		cidadeMunicipio = request.form.get('municipio')
+		estado = request.form.get('estado')
+
+		address = f'{ruaAvenida}, {numeroCasa}, {bairro}, {cidadeMunicipio}, {estado}'
+
+		lat = None
+		lon = None
+		
+		if address and address != 'Não informado':
+			lat, lon = get_coordenadas(address)
+
+		#LOGO
 
 		logo_file = request.files.get('logo')
 		logo_filename = business['logo_path']
@@ -247,30 +252,40 @@ def edit(business_id):
 		else:
 			logo_filename = business['logo_path'] if 'logo_path' in business.keys() else None
 
-		#update business details
-		edit_business(nome, categoria, descricao, instagram, numero, email, logo_filename, business_id)
+		dias_map = {"dom":0, "seg":1, "ter":2, "qua":3, "qui":4, "sex":5, "sab":6}
 
-		logger.info(f"Negócio editado: {nome} (ID: {business_id}), pelo usuário de ID {session['user_id']}")
+		for d, _ in dias:
+			abre = request.form.get(f'{d}_abre')
+			fecha = request.form.get(f'{d}_fecha')
+			horarios[d] = (abre, fecha)
 
-		#handle carousel images upload
 		if 'images' in request.files:
 			carousel_files = request.files.getlist('images')
 			for file in carousel_files:
-				#not empty and allowed type
 				if file.filename != '' and allowed_file(file.filename):
 					filename = secure_filename(file.filename)
-					filepath = os.path.join(UPLOAD_FOLDER, filename)
-
-					os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
+					filepath = os.path.join(carousel_folder, filename)
 					file.save(filepath)
-
 					add_business_images(business_id, filename)
+
+					try:
+						edit_business_conn(conn, ...)
+						for d, (abre, fecha) in horarios.items():
+							update_horario_conn(conn, business_id, dias_num, abre, fecha)
+							if not update_horario_conn:
+								add_horario(business_id, dias_num, abre, fecha)
+						for file in carousel_files:
+							add_business_images_conn(conn, business_id, filename)
+						conn.commit()
+					finally:
+						conn.close()
 
 					logger.info(f"Imagens adicionadas ao negócio {business_id}, por {session['user_id']}")
 
+		logger.info(f"Negócio editado: {nome} (ID: {business_id}), pelo usuário de ID {session['user_id']}")
+
 		return redirect(url_for('routes.business', business_id=business_id))
-	return render_template('editbusiness.html', business_id=business_id, business=business, images_urls=images_urls,)	
+	return render_template('editbusiness.html', business_id=business_id, business=business, images_urls=images_urls, dias=dias)	
 
 @routes.route('/business/<int:business_id>/del')
 @login_required
@@ -289,18 +304,121 @@ def delbusiness(business_id):
 		logger.warning(f"Erro ao tentar excluir negócio: {business_id}, por {user_id}")
 		return redirect(request.referrer)
 
+
+@routes.route('/business/<int:business_id>/upgrade')
+@login_required
+def upgrade(business_id):
+	business = mostrar_business_by_id(business_id)
+	return render_template('upgrade.html', business=business)
+
+@routes.route('/checkout/<int:business_id>')
+@login_required
+def checkout(business_id):
+	business = mostrar_business_by_id(business_id)
+	return 'hello'
+
+@routes.route('/checkout/<int:business_id>/card')
+@login_required
+def checkout_card(business_id):
+	business = mostrar_business_by_id(business_id)
+	session = stripe.checkout.Session.create(
+			payment_method_types=['card'],
+			line_items=[{
+				'price_data': {
+				'currency': 'brl',
+				'product_data': {'name': f'Plano Premium - Business {business_id}'},
+				'unit_amount': 1500,  # R$15,00 em centavos
+				'recurring': {'interval': 'month'}
+			},
+			'quantity': 1,
+		}],
+		mode='subscription',
+		success_url=url_for('routes.checkout_success', business_id=business_id, _external=True),
+		cancel_url=url_for('routes.checkout_cancel', business_id=business_id, _external=True),
+		client_reference_id=str(business_id)
+	)
+	return redirect(session.url)
+
+@routes.route('/checkout/<int:business_id>/success')
+@login_required
+def checkout_success(business_id):
+	business = mostrar_business_by_id(business_id)
+	premium = True
+	add_premium(premium, business_id)
+	return render_template('checkout_success.html', business=business)
+
+@routes.route('/checkout/<int:business_id>/cancel')
+@login_required
+def checkout_cancel(business_id):
+	business = mostrar_business_by_id(business_id)
+	return ''
+
+
+@routes.route('/stripe/webhook', methods=['POST'])
+def stripe_webhook():
+	payload = request.data
+	sig_header = request.headers.get('Stripe-Signature')
+	endpoint_secret = "SUA_CHAVE_ENDPOINT_WEBHOOK"
+
+	try:
+		event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+	except Exception as e:
+		return str(e), 400
+
+	# Assinatura criada / paga
+	if event['type'] == 'checkout.session.completed':
+		session = event['data']['object']
+		business_id = int(session['client_reference_id'])
+		business = mostrar_business_by_id(business_id)
+		premium = True
+		add_premium(premium, business_id)
+
+	return '', 200
+
+
+
 @routes.route('/dashboard')
 @login_required
 @role_required('admin')
 def dashboard():
 	users = mostrar_users()
-	businesses = None
+
+	feed = mostrar_feed()
+
+	businesses = []
 
 	for user in users:
 		user_id = user[0]
-		businesses = mostrar_businesses_user(user_id)
+		bus_list = mostrar_businesses_user(user_id)
+		if bus_list:
+			businesses.extend(bus_list)
+			for b in bus_list:
+				comentarios = mostrar_comentarios(b[0])
 
-	return render_template('dashboard.html', users=users, businesses=businesses)
+	return render_template('dashboard.html', users=users, businesses=businesses, comentarios=comentarios)
+
+@routes.route('/dashboard/business/<int:business_id>/premium', methods=['POST'])
+@login_required
+@role_required('admin')
+def toggle_premium(business_id):
+	business = mostrar_business_by_id(business_id)
+	if not business:
+		flash("Negócio não encontrado.", "danger")
+		return redirect(url_for('routes.dashboard'))
+
+	novo_status = not business[13]
+
+	add_premium(novo_status, business_id)
+	action = "ativado" if novo_status else "removido"
+
+	flash(f"Premium {action} para {business[1]}", "success")
+
+	return redirect(url_for('routes.dashboard'))
+
+
+
+
+
 
 @routes.route("/perfil/<int:user_id>")
 def perfil(user_id):

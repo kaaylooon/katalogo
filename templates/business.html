@@ -1,16 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if session_id == business.by_user %}
-  <a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow"
-     style="width: 60px; height: 60px; z-index: 1050;"
-     href="{{url_for('routes.edit', business_id=business[0])}}">
-     <span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">
-  edit
-  </span>
-  </a>
-  {% endif %}
-
 <!-- Modal -->
 <div class="modal fade" id="add_comment" tabindex="-1" aria-labelledby="addFeedLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -40,7 +30,7 @@
   </div>
 </div>
 
-<div class="container p-4 pt-0">
+<div class="container p-4 pt-0" data-aos="fade-up">
   <div class="border-0">
     <div class="d-flex align-items-center">
       <img src="{{ url_for('static', filename='uploads/' ~ business[7]) if business[7] else 'https://placehold.co/150' }}" 
@@ -49,7 +39,7 @@
            style="width: 50px; height: 50px; object-fit: cover;">
 
       <h2 class="card-title d-flex align-items-center flex-grow-1">
-        {{ business[1] }}
+        {{ business[1] }} 
         <span class="me-2 badge bg-primary ms-auto" style="font-size: 0.4em; height: fit-content;">
           {{ business[3] }}
         </span><span class="badge {{ 'bg-secondary' if aberto else 'bg-danger' }}" style="font-size: 0.4em; vertical-align: middle;">
@@ -57,22 +47,23 @@
 </span>
       </h2>
     </div>
-  </div>
 
-  
  <!-- Carousel -->
+  {% if business[13] %}
   <div id="carouselExampleControls" class="carousel slide mt-3 mb-3" data-bs-ride="carousel">
   <div class="carousel-inner">
-    {% for image in images_urls %}
-      <div class="carousel-item {% if loop.first %}active{% endif %}">
-        <img class="d-block w-100" src="{{ url_for('static', filename='uploads/carousel/' + image.image_path) }}" alt="Imagem do carrossel">
-      </div>
-    {% else %}
-      <div class="carousel-item active">
-        <img class="d-block w-100" src="https://placehold.co/1200x400?text=Vázio..." alt="Sem imagens">
-      </div>
-    {% endfor %}
+   {% if images_urls %}
+  {% for image in images_urls %}
+    <div class="carousel-item {% if loop.first %}active{% endif %}">
+      <img class="d-block w-100" src="{{ url_for('static', filename='uploads/carousel/' + image.image_path) }}" alt="Imagem do carrossel">
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="carousel-item active">
+    <img class="d-block w-100" src="https://placehold.co/1200x400?text=Vazio..." alt="Sem imagens">
   </div>
+{% endif %}
+
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Anterior</span>
@@ -81,6 +72,10 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Próximo</span>
   </button>
+</div>
+{% else %}
+<div class="mb-3"></div>
+{% endif %}
 </div>
 
   <!-- Nav -->
@@ -102,7 +97,7 @@
     </li>
   </ul>
 
-  <div class="tab-content mt-3 mb-4" id="businessTabsContent">
+  <div class="tab-content mt-3 mb-5" id="businessTabsContent">
 
     <!-- Aba Sobre -->
     <div class="tab-pane fade show active" id="sobre" role="tabpanel" aria-labelledby="sobre-tab">
@@ -113,7 +108,7 @@
         </div>
       </div>
       
-      {% if horario[0][3] and horario[0][4] %}
+      {% if horario and horario[0][3] and horario[0][4] %}
         <div class="card shadow-sm border-0 mb-4">
           <div class="card-body">
             <h5 class="card-title">Horário de funcionamento <small>(hoje)</small></h5>
@@ -150,6 +145,14 @@
         </div>
       </div>
       {% endif %}
+      {% if business[15] %}
+    <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Eventos  <small></small></h5>
+            <p class="card-text">{{ business[15]}}</p>
+          </div>
+        </div>
+      {% endif%}
 
     <div class="border-0"> <div class="text-center"> <h5 class="">Compartilhar</h5> <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ request.url }}" alt="QR code" class="border p-1 rounded"> </div> </div>
     </div>
@@ -218,6 +221,21 @@
   </div>
 
 </div>
+
+{% if session_id == business.by_user %}
+  <footer class="text-center bg-white shadow-sm fixed-bottom mt-5 p-2 m-4 mb-0 rounded" style="opacity: 0.7;" data-aos="zoom-up">
+    <div class="d-flex justify-content-center gap-5 text-muted " style="font-size: 2rem;">
+      <a href="{{url_for('routes.edit', business_id=business[0])}}">
+        <i class="bi bi-pencil-square" style="cursor:pointer;" title="Editar"></i>
+      </a>
+
+      <a href="{{url_for('routes.upgrade', business_id=business[0])}}">
+        <i class="bi bi-gem" style="cursor:pointer;" title="Upgrade"></i>
+      </a>
+    </div>
+  </footer>
+{% endif %}
+
 
 <script>
 function initMap() {

@@ -1,45 +1,111 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="title-2 mb-3 text-center" data-aos="zoom-in">DASHBOARD</h1>
+
+<div class="container p-4 pt-0">
+
+<!-- Tabela de Businesses -->
+<div class="container mt-5" data-aos="fade-up">
+    <h2 class="mb-3">Negócios</h2>
+    <table class="table table-striped table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>ID Usuário</th>
+                <th>Premium</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if businesses %}{% for b in businesses %}
+            <tr>
+                <td>{{ b[0] }}</td>
+                <td>{{ b[1] }}</td>
+                <td><a href="{{ url_for('routes.perfil', user_id=b[4]) }}">{{ b[4] }}</a></td>
+                <td>
+                    {% if b[5] %}
+                        <span class="badge bg-success">Sim</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Não</span>
+                    {% endif %}
+                </td>
+                <td class="d-flex gap-2">
+                    <form method="POST" action="{{ url_for('routes.toggle_premium', business_id=b[0]) }}">
+                        {% if b[13] %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Remover Premium</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-sm btn-outline-success">Dar Premium</button>
+                        {% endif %}
+                    </form>
+                    <a href="{{ url_for('routes.edit', business_id=b[0]) }}" class="btn btn-sm btn-secondary">Editar</a>
+                    <form method="POST" action="{{ url_for('routes.delbusiness', business_id=b[0]) }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            {%else%}
+        <p class="text-muted">Nenhum negócio registrado.</p>
+            {%endif%}
+        </tbody>
+    </table>
+</div>
+
+<!-- Feeds -->
+<div class="container mt-5" data-aos="fade-up">
+    <h2 class="mb-3">Feeds Recentes</h2>
+    {% if feed %}
+        {% for f in feed %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ f['nome'] }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Postado por: {{ f['by_user'] }}</h6>
+                <p class="card-text">{{ f['description'] }}</p>
+                {% if f['image_path'] %}
+                <img src="{{ url_for('static', filename='uploads/' ~ f['image_path']) }}" alt="Imagem do feed" class="img-fluid mb-2" />
+                {% endif %}
+                <form method="POST" action="{{ url_for('routes.del_feed', feed_id=f['id']) }}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Excluir Feed</button>
+                </form>
+            </div>
+
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Nenhum feed registrado.</p>
+    {% endif %}
+</div>
 
 
 
- <h1 class="text-center">Dashboard</h1>
+<!-- Feeds -->
+<div class="container mt-5" data-aos="fade-up">
+    <h2 class="mb-3">Comentários Recentes</h2>
+    {% if comentarios %}
+      {% for c in comentarios %}
+      <div class="card glass-card mb-4 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-2"><a href="{{ url_for('routes.perfil', user_id=c['user_id']) }}">
+            <img src="{{ c['pfp_path'] or url_for('static', filename='user.png') }}" 
+                 alt="foto" class="rounded-circle me-3" 
+                 style="width: 50px; height: 50px; object-fit: cover;">
+            <div>
+              <b>{{ c['username'] }}</b></a><br>
+              <small class="text-muted">{{ c['created_at']|humandate }}</small>
+            </div>
+          </div>
 
-<div class="container p-3">
- <h5 class="text-center">Usuários</h5>
-
- {% for user in users %}
- <div class="card mb-2">
-  <div class="card-header text-center">
-   <a href="{{ url_for('routes.perfil', user_id=user[0]) }}" class=" d-flex">
-
-        {{ user[1] }}
-    </a>
-  </div>
-   <div class="row g-3 p-3">
-    {% if businesses %}{% for b in businesses %}
-    <div class="col-md-6">
-     <div class="card shadow-sm d-flex p-2"  data-aos="fade-up">
-      <div class="d-flex align-items-center flex-grow-1">
-       <img src="{{ url_for('static', filename='uploads/' ~ b[2]) if b[2] else 'https://placehold.co/50' }}" alt="{{ b[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
-       <a href="{{ url_for('routes.business', business_id=b[0]) }}" class="fw-bold text-decoration-none">{{ b[1] }}</a>
-       <div class="ms-auto">
-        <button class="btn btn-link">Excluir</button>
-        <a class="btn btn-secondary" href="{{url_for('routes.edit', business_id=b[0])}}">Editar</a>
+          <p class="mb-0">{{ c['content'] }}</p>
         </div>
       </div>
-     </div>
-    </div>
-    {% endfor %}
-   </div>
-   {% else %}
-   <p class="text-center text-muted">Nenhum negócio ainda</p>
-   {% endif %}
-  </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">Nenhum comentário ainda. Seja o primeiro a comentar</p>
+    {% endif %}
 </div>
-</div>
-  {% endfor %}
-</div>
-    
 
+</div>
 
 {% endblock %}

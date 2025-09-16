@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+
+{%if business[13]%}
+<h1 class="title-2 text-center mb-1">PREMIUM</h1>
+  <p class="lead text-center mb-4">Este negócio já tem o plano premium!</p>
+{%else%}
+  <h1 class="title-2 text-center mb-1">PREMIUM</h1>
+  <p class="lead text-center mb-4">Desbloqueie todos os recursos do seu negócio e destaque-se!</p>
+
+<div class="container p-4 pt-" data-aos="fade-up">
+  <!-- Cards comparativos Free x Premium -->
+  <div class="row justify-content-center g-5">
+    <!-- Free -->
+    <div class="col-md-5">
+      <div class="card border-secondary h-100 shadow-sm" data-aos="zoom-out">
+        <div class="card-header d-flex justify-content-between align-items-center text-secondary fw-bold fs-5">Plano Gratuito</div>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Nome,  Categoria e Descrição <small>(curta)</small></li>
+            <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2"></i>Logo do negócio customizada</li>
+            <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2"></i>Horários de funcionamento</li>
+            <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2"></i>Contatos múltiplos</li>
+            <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2"></i>Destaque na listagem</li>
+            <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2"></i>
+            Estatísticas de visitas</li>
+            <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2"></i>
+            Postagem de atividades</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Premium -->
+    <div class="col-md-5">
+      <div class="card border-primary h-100 shadow-lg position-relative" data-aos="zoom-in">
+        <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary text-white fs-6" style="padding:0.5rem 1rem;">
+          Mais Popular
+        </div>
+        <div class="card-header d-flex justify-content-between align-items-center text-primary fw-bold fs-5">
+  Plano Premium
+</div>
+        <div class="card-body mt-2">
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Nome, Categoria e Descrição <small>(completa)</small></li>
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Logo do negócio customizada</li>
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Horários de funcionamento</li>
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Contatos múltiplos</li>
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Destaque na listagem</li>
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Estatísticas de visitas</li>
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Postagem de atividades</li>
+          </ul>
+          <div class="text-center mt-4 d-grid">
+            <a href="{{ url_for('routes.checkout_card', business_id=business[0]) }}" class="btn btn-primary shadow">
+              Desbloqueie agora por <strong>R$15/mês</strong>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center mt-5">
+  <h3>Por que Premium?</h3>
+  <p class="lead">Negócios Premium passam mais confiança e profissionalismo: logo personalizada, descrição completa, contatos claros e destaque na listagem fazem com que clientes percebam seu negócio como organizado, relevante e confiável logo de cara.</p>
+  </div>
+
+</div>
+{%endif%}
+{% endblock %}

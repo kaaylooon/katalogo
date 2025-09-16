@@ -1,0 +1,105 @@
+from .connection import get_connection
+from db.business import add_premium
+from db.users import tornar_admin, registrar_user
+from db.business import adicionar_business
+
+def tabela_feed():
+    with get_connection() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS feed (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                business_id TEXT,
+                description TEXT NOT NULL,
+                by_user TEXT,
+                image_path TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+def tabela_users():
+    with get_connection() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                email TEXT NOT NULL UNIQUE,
+                password TEXT NOT NULL,
+                telephone TEXT NOT NULL,
+                pfp_path TEXT,
+                role TEXT NOT NULL DEFAULT 'user',
+                joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                descricao TEXT
+            )
+        """)
+
+def tabela_business():
+    with get_connection() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS business (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                descricao TEXT,
+                categoria TEXT,
+                instagram TEXT,
+                numero TEXT,
+                email TEXT,
+                logo_path TEXT,
+                added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                by_user INTEGER,
+                comments_count INTEGER DEFAULT 0,
+                lat REAL, 
+                lon REAL,
+                premium BOOLEAN DEFAULT FALSE,
+                premium_valid_until DATE,
+                evento TEXT
+            )
+        """)
+
+def tabela_comentarios():
+    with get_connection() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS comentarios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                content TEXT,
+                business_id INTEGER,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+def tabela_horarios():
+    with get_connection() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS horarios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                business_id INTEGER NOT NULL,
+                dia_semana INTEGER NOT NULL,
+                abre TIME NOT NULL,
+                fecha TIME NOT NULL,
+                FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
+            )
+        """)
+
+def business_images_table():
+    with get_connection() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS business_images (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                business_id INTEGER NOT NULL,
+                image_url TEXT NOT NULL,
+                FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
+            )
+        """)
+
+def init_db():
+    tabela_feed()
+    tabela_users()
+    tabela_business()
+    tabela_comentarios()
+    tabela_horarios()
+    business_images_table()
+
+    registrar_user('Kaylon', 'admin@example.com', 'adm123', '(73) 12345-6789')
+    tornar_admin(1)
+    adicionar_business('Testando...', 'Fly me to the moon', 'Livro e Educação', None, 1, 'Feira do Empreendedor')
+    add_premium(True, 1)

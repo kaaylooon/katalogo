@@ -51,6 +51,8 @@ html{
  --COLOR4: #5a7f78;
 
  --COLOR5: #bbdec6;
+ --COLOR6: #D8E8DD;
+ --COLOR7: #E1F0E6;
 
  /*--COLOR1: #031634;
     --COLOR2: #033649;
@@ -70,6 +72,23 @@ html{
  -webkit-backdrop-filter: blur(15px);
  border: 1px solid var(--COLOR10);
  border-radius: 1rem;
+}
+
+ .selectable {
+    cursor: pointer;
+    transition: 0.2s;
+  }
+.selectable:hover {
+    background-color: var(--COLOR6);
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+.selectable.active {
+    background-color: var(--COLOR7);
+  }
+
+.card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s;
 }
 
 p{
@@ -129,6 +148,13 @@ a {
 .bg-primary {
  background-color: var(--COLOR2) !important;
 }
+.border-primary {
+  border-color: var(--COLOR4) !important;
+}
+.text-primary{
+  color: var(--COLOR2) !important;
+}
+
 .btn-primary {
  background-color: var(--COLOR3) !important;
  border-color: var(--COLOR3) !important;

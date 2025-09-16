@@ -7,7 +7,7 @@ href="{{url_for('routes.perfiledit', user_id=user[0])}}">
 </a>
 {% endif %}
 
-<div class="container">
+<div class="container" data-aos="fade-up">
  <div class="p-4">
   <div class="row align-items-center">
    <div class="d-flex align-items-center">
@@ -24,7 +24,7 @@ href="{{url_for('routes.perfiledit', user_id=user[0])}}">
  </div>
 </div>
 
-<div class="container p-2">
+<div class="container p-2" data-aos="fade-up">
  <ul class="nav nav-tabs" id="profileTabs" role="tablist">
   <li class="nav-item" role="presentation">
    <button class="nav-link active nav-item-business" id="sobre-tab" data-bs-toggle="tab" data-bs-target="#sobre" type="button" role="tab" aria-controls="sobre" aria-selected="true">
@@ -57,7 +57,7 @@ href="{{url_for('routes.perfiledit', user_id=user[0])}}">
   <div class="row">
    {% if business %} {% for b in business %}
    <div class="col-md-6 mb-3">
-    <div class="card shadow-sm p-2 d-flex"  data-aos="fade-up">
+    <div class="card shadow-sm p-2 d-flex" data-aos="fade-up">
      <div class="d-flex align-items-center flex-grow-1">
       <img src="{{ url_for('static', filename='uploads/' ~ b[2]) if b[2] else 'https://placehold.co/50' }}" alt="{{ b[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
       <a href="{{ url_for('routes.business', business_id=b[0]) }}" class="fw-bold text-decoration-none">{{ b[1] }}</a>

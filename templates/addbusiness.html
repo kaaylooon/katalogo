@@ -1,11 +1,11 @@
 {% extends "base.html" %} {% block content %}
-<div class="container p-4 pt-0">
+<div class="container p-4 pt-0" data-aos="fade-up">
   <div class="card" style="max-width: 800px; margin: auto;">
     <div class="card-header bg-primary text-white text-center py-3 px-3">
       <h4 class="mb-0">Adicionar Negócio</h4>
     </div>
     <div class="card-body p-4 d-flex justify-content-center">
-      <form class="row g-4 w-100" style="max-width: 700px;"" action="/addbusiness" method="POST" enctype="multipart/form-data">
+      <form class="row g-4 w-100" style="max-width: 700px;" action="/addbusiness" method="POST" enctype="multipart/form-data">
         
         <div class="row align-items-center mt-4">
           <!-- Logo -->
@@ -20,7 +20,7 @@
           <div class="col">
             <label for="nome" class="form-label fw-semibold">Nome</label>
             <input type="text" class="form-control" id="nome" name="nome" required />        
-            <div class="form-text" style="font-size: 0.7rem;">Escolha um nome que represente bem o seu negócio.</div>
+            <div class="lead form-text" style="font-size: 0.7rem;">Escolha um nome que represente bem o seu negócio.</div>
           </div>
 
 
@@ -51,7 +51,7 @@
           <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
           <textarea class="form-control" id="descricao" name="descricao" rows="4" placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais." required></textarea>
         </div>
-        
+        <!--
         <div class="col-12">
           <label class="form-label" style="font-weight: 600;">Horário de funcionamento</label>
           <div class="row g-3">
@@ -155,7 +155,21 @@
               <input name="numeroCasa" type="text" class="form-control" id="numeroCasa" />
             </div>
           </div>
+        </div>-->
+
+        <div class="col-12">
+          <label class="form-label fw-bold mb-2">Participa de algum evento?</label>
+          <div class="d-flex gap-3">
+            <div class="card p-3 selectable" data-event="">
+              Não participa
+            </div>
+            <div class="card p-3 selectable" data-event="Feira do Empreendedor">
+              Feira do Empreendedor
+            </div>
         </div>
+      </div>
+
+    <input type="hidden" name="evento" id="evento">
 
         <div class="d-grid mt-4">
           <button type="submit" class="btn btn-primary">Adicionar Negócio</button>
@@ -165,6 +179,31 @@
   </div>
 </div>
 
+<script>
+  const hiddenInput = document.getElementById('evento');
+
+  document.querySelectorAll('.selectable').forEach(card => {
+    card.addEventListener('click', () => {
+      // remove destaque dos outros
+      document.querySelectorAll('.selectable').forEach(c => c.classList.remove('active'));
+
+      // ativa o clicado
+      card.classList.add('active');
+
+      // seta valor no input hidden
+      hiddenInput.value = card.dataset.event;
+    });
+  });
+</script>
+
+<script>
+  const check = document.getElementById('participaEvento');
+  const select = document.getElementById('eventos');
+
+  check.addEventListener('change', () => {
+    select.disabled = !check.checked;
+  });
+</script>
 
 <script>
   function previewLogo(event) {
@@ -175,6 +214,7 @@
     }
   }
 </script>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const estadoSelect = document.getElementById("estado");
