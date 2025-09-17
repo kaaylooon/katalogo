@@ -117,8 +117,13 @@
       {% if horario and horario[0][3] and horario[0][4] %}
         <div class="card shadow-sm border-0 mb-4">
           <div class="card-body">
-            <h5 class="card-title">Horário de funcionamento <small>(hoje)</small></h5>
-            <p class="card-text">{{ horario[0][3] }} até {{ horario[0][4] }}</p>
+            <h5 class="card-title">Horário de funcionamento <small class="text-muted">(hoje)</small></h5>
+            
+            <ul class="list-unstyled">
+              <li>
+                <i class="bi bi-clock me-2"
+            ></i> {{ horario[0][3] }} até {{ horario[0][4] }}</li>
+            </ul>
           </div>
         </div>
       {% endif %}
@@ -149,10 +154,17 @@
       {%if business[15]%}
         <div class="card shadow-sm border-0 mb-4">
           <div class="card-body">
-            <h5 class="card-title">Eventos/Projetos </h5> 
+            <h5 class="card-title">Evento/Projeto </h5> 
             <ul class="list-unstyled">
-              <li><i class="bi bi-instagram me-2"
-              ></i><a href="#" target="_blank">{{ business[15] }} <span class="text-muted">(clique)</span></a></li>
+              <li><img
+                class="rounded-circle me-3"
+                src="{{ url_for('static', filename='FeiraDoEmpreendedor_logo.jpeg') }}"
+                style="width: 35px; height: 35px;">
+                <a href="#"
+                target="_blank">
+                {{ business[15] }} 
+                <span class="text-muted">(Saiba mais)</span>
+                </a></li>
             </ul>
           </div>
         </div>
@@ -241,7 +253,7 @@
 </div>
 
 {% if session_id == business.by_user %}
-<div class="position-fixed bottom-0 end-0 m-4 d-flex flex-column gap-2 z-1050" data-aos="fade-left">
+<div class="position-fixed bottom-0 end-0 m-4 d-flex flex-column gap-3 ">
   {% if not business[13] %}
   <a href="{{ url_for('routes.upgrade', business_id=business[0]) }}" 
      class="btn text-warning rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button"
@@ -260,6 +272,7 @@
 {% endif %}
 
 <script>
+
 function initMap() {
     var lat = {{ business.lat }};
     var lon = {{ business.lon }};

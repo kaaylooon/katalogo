@@ -144,7 +144,7 @@ a {
 }
 
 .spacing-button{
-  width: 60px; height: 60px;
+  width: 60px; height: 60px; z-index: 1055;
 }
 .spacing-button-icon{
 font-size: 28px; line-height: 1;
