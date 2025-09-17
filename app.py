@@ -22,9 +22,6 @@ DEPLOY = True
 
 if __name__ == "__main__":
 	init_db()
-	if not DEPLOY:
-		seed_db(full=True)
-	else:
-		seed_db(full=False)
+	seed_db(full=True)
 
 	app.run(host="0.0.0.0", debug=not DEPLOY)
