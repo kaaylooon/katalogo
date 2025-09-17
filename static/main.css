@@ -143,6 +143,13 @@ a {
  color: var(--COLOR3);
 }
 
+.spacing-button{
+  width: 60px; height: 60px;
+}
+.spacing-button-icon{
+font-size: 28px; line-height: 1;
+}
+
 /*PRIMARY*/
 
 .bg-primary {

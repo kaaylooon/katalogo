@@ -50,17 +50,21 @@
 
  <!-- Carousel -->
   {% if business[13] %}
-  <div id="carouselExampleControls" class="carousel slide mt-3 mb-3" data-bs-ride="carousel">
-  <div class="carousel-inner">
+  <div id="carouselExampleControls" class="carousel slide mt-3 mb-3 w-100" data-bs-ride="carousel" data-aos="zoom-in">
+  <div class="carousel-inner text-center">
    {% if images_urls %}
   {% for image in images_urls %}
     <div class="carousel-item {% if loop.first %}active{% endif %}">
-      <img class="d-block w-100" src="{{ url_for('static', filename='uploads/carousel/' + image.image_path) }}" alt="Imagem do carrossel">
+      <img
+        class="img-fluid mx-auto d-block w-100"
+        src="{{ url_for('static', filename='uploads/' + image.image_path) }}"
+        alt="{{ business[1] }}"
+        style="max-height: 50%;">
     </div>
   {% endfor %}
 {% else %}
   <div class="carousel-item active">
-    <img class="d-block w-100" src="https://placehold.co/1200x400?text=Vazio..." alt="Sem imagens">
+    <img class="img-fluid mx-auto d-block" src="https://placehold.co/1200x400?text=Vazio..." alt="Sem imagens">
   </div>
 {% endif %}
 
@@ -108,6 +112,8 @@
         </div>
       </div>
       
+      {% if business[13]%}
+
       {% if horario and horario[0][3] and horario[0][4] %}
         <div class="card shadow-sm border-0 mb-4">
           <div class="card-body">
@@ -137,7 +143,25 @@
       </div>
       {% endif %}
 
+
+      {%endif%}
+
+      {%if business[15]%}
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Eventos/Projetos </h5> 
+            <ul class="list-unstyled">
+              <li><i class="bi bi-instagram me-2"
+              ></i><a href="#" target="_blank">{{ business[15] }} <span class="text-muted">(clique)</span></a></li>
+            </ul>
+          </div>
+        </div>
+        {%endif%}
+
+
+      {%if business[13]%}
       {% if business.lat and business.lon %}
+
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
           <h5 class="card-title">Localização</h5> 
@@ -145,14 +169,9 @@
         </div>
       </div>
       {% endif %}
-      {% if business[15] %}
-    <div class="card shadow-sm border-0 mb-4">
-          <div class="card-body">
-            <h5 class="card-title">Eventos  <small></small></h5>
-            <p class="card-text">{{ business[15]}}</p>
-          </div>
-        </div>
-      {% endif%}
+
+      {%endif%}
+
 
     <div class="border-0"> <div class="text-center"> <h5 class="">Compartilhar</h5> <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ request.url }}" alt="QR code" class="border p-1 rounded"> </div> </div>
     </div>
@@ -192,7 +211,7 @@
       {% for c in comentarios %}
       <div class="card glass-card mb-4 shadow-sm">
         <div class="card-body">
-          <div class="d-flex align-items-center mb-2"><a href="{{ url_for('routes.perfil', user_id=c['user_id']) }}">
+          <div class="d-flex align-items-center mb-2"><a href="{{ url_for('routes.perfil', user_id=c['by_user']) }}">
             <img src="{{ c['pfp_path'] or url_for('static', filename='user.png') }}" 
                  alt="foto" class="rounded-circle me-3" 
                  style="width: 50px; height: 50px; object-fit: cover;">
@@ -211,10 +230,9 @@
     {% endif %}
 
 
-    <a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm "
-       style="width: 60px; height: 60px; z-index: 1050;"
+    <a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button z-1050"
        data-bs-toggle="modal" data-bs-target="#add_comment">
-       <span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">
+       <span class="material-symbols-outlined spacing-button-icon">
     add_comment
     </span>
     </a>
@@ -223,19 +241,23 @@
 </div>
 
 {% if session_id == business.by_user %}
-  <footer class="text-center bg-white shadow-sm fixed-bottom mt-5 p-2 m-4 mb-0 rounded" style="opacity: 0.7;" data-aos="zoom-up">
-    <div class="d-flex justify-content-center gap-5 text-muted " style="font-size: 2rem;">
-      <a href="{{url_for('routes.edit', business_id=business[0])}}">
-        <i class="bi bi-pencil-square" style="cursor:pointer;" title="Editar"></i>
-      </a>
+<div class="position-fixed bottom-0 end-0 m-4 d-flex flex-column gap-2 z-1050" data-aos="fade-left">
+  {% if not business[13] %}
+  <a href="{{ url_for('routes.upgrade', business_id=business[0]) }}" 
+     class="btn text-warning rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button"
+     style=""
+     title="Upgrade">
+    <i class="bi bi-gem spacing-button-icon"></i>
+  </a>
+  {% endif %}
 
-      <a href="{{url_for('routes.upgrade', business_id=business[0])}}">
-        <i class="bi bi-gem" style="cursor:pointer;" title="Upgrade"></i>
-      </a>
-    </div>
-  </footer>
+  <a href="{{ url_for('routes.edit', business_id=business[0]) }}" 
+     class="btn btn-primary rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button"
+     title="Editar">
+    <i class="bi bi-pencil-square spacing-button-icon"></i>
+  </a>
+</div>
 {% endif %}
-
 
 <script>
 function initMap() {

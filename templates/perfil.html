@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block content %} {% if session_id == user[0] %}
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow" style="width: 60px; height: 60px; z-index: 1050;"
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow spacing-button z-1050"
 href="{{url_for('routes.perfiledit', user_id=user[0])}}">
- <span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">
+ <span class="material-symbols-outlined spacing-button-icon">
   manage_accounts
  </span>
 </a>

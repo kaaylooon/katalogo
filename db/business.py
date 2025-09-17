@@ -11,15 +11,26 @@ def adicionar_business(nome, descricao, categoria, filename, by_user, evento):
 	conn.close()
 	return business_id
 
-def edit_business(nome, descricao, categoria, instagram, numero, email, filename, lat, lon, business_id):
-	with get_connection() as conn:
-		cur = conn.cursor()
-		cur.execute("""
-			UPDATE business
-			SET nome = ?, categoria = ?, descricao = ?, instagram = ?, numero = ?, email = ?, logo_path = ?, lat = ?, lon = ?
-			WHERE id = ?
-		""", (nome, categoria, descricao, instagram, numero, email, filename, lat, lon, business_id))
-		conn.commit()
+def edit_business(business_id, **kwargs):
+    allowed_fields = ['nome', 'categoria', 'descricao', 'instagram', 'numero', 'email', 'logo_path', 'lat', 'lon']
+    set_clause = []
+    params = []
+
+    for field in allowed_fields:
+        if field in kwargs and kwargs[field] not in [None, '']:
+            set_clause.append(f"{field} = ?")
+            params.append(kwargs[field])
+
+    if not set_clause:
+        return  # nada pra atualizar
+
+    params.append(business_id)
+    query = f"UPDATE business SET {', '.join(set_clause)} WHERE id = ?"
+
+    with get_connection() as conn:
+        conn.execute(query, tuple(params))
+        conn.commit()
+
 
 def del_business(business_id):
 	conn = get_connection()

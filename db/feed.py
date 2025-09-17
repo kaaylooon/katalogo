@@ -30,9 +30,9 @@ def mostrar_feed_business(business_id):
 	conn.close()
 	return feeds
 
-def add_feed(business_id, description, by_user, image_path):
+def add_feed(business_id, description, user_id, image_path):
 	conn = get_connection()
 	cur = conn.cursor()
-	cur.execute("INSERT OR IGNORE INTO feed (business_id,description, by_user, image_path) VALUES (?, ?, ?, ?)", (business_id, description, by_user, image_path))
+	cur.execute("INSERT OR IGNORE INTO feed (business_id, description, user_id, image_path) VALUES (?, ?, ?, ?)", (business_id, description, user_id, image_path))
 	conn.commit()
 	conn.close()

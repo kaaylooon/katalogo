@@ -5,12 +5,12 @@
     <div class="card-header bg-primary text-white text-center py-3 px-3">
       <h4 class="mb-0">Editar Negócio</h4>
     </div>
-    <div class="card-body p-4">
-      <form class="row g-4" action="{{ url_for('routes.edit', business_id=business['id']) }}" method="POST" enctype="multipart/form-data">
+    <div class="card-body p-4 d-flex justify-content-center">
+      <form class="row g-4 w-100" action="{{ url_for('routes.edit', business_id=business['id']) }}" method="POST" enctype="multipart/form-data">
         
-        <div class="row align-items-center mt-3">
+        <div class="row align-items-center mt-4">
           
-          <div class="col-12 col-md-auto text-center mb-3 mb-md-0">
+          <div class="col-auto text-center">
             <input
               class="form-control d-none"
               type="file"
@@ -28,12 +28,13 @@
             />
           </div>
 
-          <div class="col-12 col-md mb-3 mb-md-0">
+          <div class="col">
             <label for="nome" class="form-label" style="font-weight: 600;">Nome</label>
             <input type="text" class="form-control" id="nome" name="nome" value="{{ business.nome }}" required />
           </div>
+        </div>
 
-          <div class="col-12 col-md">
+          <div class="col-12 col-md-12">
             <label for="categoria" class="form-label" style="font-weight: 600;">Categoria</label>
             <select class="form-select" name="categoria" required>
               <option value="" selected disabled>Escolha...</option>
@@ -52,7 +53,6 @@
               <option value="Diversos" {% if business.categoria == "Diversos" %}selected{% endif %}>Diversos</option>
             </select>
           </div>
-        </div>
 
         <div class="col-12">
           <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
@@ -164,7 +164,7 @@
             </div>
           </div>
         </div>
-        
+                
         <div class="col-12">
           <label for="imageUpload" class="form-label d-block" style="font-weight: 600;">
             Imagens <small>(opcional)</small>
@@ -175,11 +175,132 @@
             id="imageUpload"
             name="images[]"
             accept="image/*"
-            onchange="previewImages(event)"
             multiple
           />
-          <div id="previewContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
+          <div id="previewContainer" class="d-flex flex-wrap gap-2 mt-2">
+            <!-- imagens já existentes -->
+            {% for image in images_urls %}
+              <div class="position-relative" data-existing="true" data-filename="{{ image.image_path }}">
+                <img src="{{ url_for('static', filename='uploads/' + image.image_path) }}" 
+                     class="rounded border" 
+                     style="width:120px;height:120px;object-fit:cover;">
+                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                        style="transform: translate(50%, -50%);"
+                        onclick="removeExistingImage(this)">×</button>
+              </div>
+            {% endfor %}
+          </div>
         </div>
+
+        <script>
+        const previewContainer = document.getElementById("previewContainer");
+        const imageInput = document.getElementById("imageUpload");
+        let selectedFiles = [];
+
+        // Remove nova imagem selecionada
+        function updatePreviews() {
+          previewContainer.innerHTML = ""; // limpa previews
+
+          // imagens existentes que ainda não foram marcadas para remoção
+          existingImages.forEach(img => {
+            const div = document.createElement("div");
+            div.className = "row position-relative g-1";
+            div.dataset.existing = "true";
+            div.dataset.filename = img;
+            
+            const imageElem = document.createElement("img");
+            imageElem.src = `/static/uploads/${img}`;
+            imageElem.className = "rounded";
+            imageElem.style.width = "7rem";
+            imageElem.style.height = "7rem";
+            imageElem.style.objectFit = "cover";
+
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.innerHTML = "&times;";
+            btn.className = "btn btn-sm btn-danger position-absolute top-0 end-0";
+            btn.onclick = () => removeExistingImage(btn);
+
+            div.appendChild(imageElem);
+            div.appendChild(btn);
+            previewContainer.appendChild(div);
+          });
+
+          //imagens novas selecionadas
+          selectedFiles.forEach((file, index) => {
+            const div = document.createElement("div");
+            div.className = "position-relative";
+
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.className = "rounded border";
+            img.style.width = "7rem";
+            img.style.height = "7rem";
+            img.style.objectFit = "cover";
+
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.innerHTML = "&times;";
+            btn.className = "btn btn-sm btn-danger position-absolute top-0 end-0 p-0 m-0";
+            btn.style.transform = "translate(-50%, -50%)";
+            btn.onclick = () => {
+              selectedFiles.splice(index, 1);
+              updatePreviews();
+              updateInputFiles();
+            };
+
+            div.appendChild(img);
+            div.appendChild(btn);
+            previewContainer.appendChild(div);
+          });
+        }
+
+        // Função para remover imagens existentes
+        function removeExistingImage(btn) {
+          const div = btn.closest("div");
+          div.remove();
+          const filename = div.dataset.filename;
+
+          // adiciona a um array escondido que será enviado para backend excluir
+          let input = document.getElementById("removedImages");
+          if (!input) {
+            input = document.createElement("input");
+            input.type = "hidden";
+            input.id = "removedImages";
+            input.name = "removed_images";
+            document.querySelector("form").appendChild(input);
+            input.value = filename;
+          } else {
+            const current = input.value.split(",");
+            current.push(filename);
+            input.value = current.join(",");
+          }
+        }
+
+        // Atualiza input file para enviar apenas arquivos selecionados
+        function updateInputFiles() {
+          const dataTransfer = new DataTransfer();
+          selectedFiles.forEach(file => dataTransfer.items.add(file));
+          imageInput.files = dataTransfer.files;
+        }
+
+        imageInput.addEventListener("change", (e) => {
+          const files = Array.from(e.target.files);
+          selectedFiles = selectedFiles.concat(files);
+          updatePreviews();
+          updateInputFiles();
+        });
+
+        // Inicialmente, você pode criar um array de imagens existentes
+        let existingImages = [
+          {% for image in images_urls %}
+            "{{ image.image_path }}",
+          {% endfor %}
+        ];
+        updatePreviews();
+        </script>
+
+
         {%endif%}
 
         <div class="d-grid mt-4">

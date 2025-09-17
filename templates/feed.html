@@ -2,16 +2,14 @@
 {% block content %}
 
 
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm "
-   style="width: 60px; height: 60px; z-index: 1050;"
-
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button z-1050"
   {% if 'user_id' in session %}
     data-bs-target="#add_feed"
     data-bs-toggle="modal"
   {% else %}
     href="{{ url_for('auth.login')}}"
   {% endif %}>
-   <span class="material-symbols-outlined" style="font-size: 28px; line-height: 1;">post_add</span>
+   <span class="material-symbols-outlined spacing-button-icon">post_add</span>
 </a>
 
 <div class="modal fade" id="add_feed" tabindex="-1" aria-labelledby="addFeedLabel" aria-hidden="true">
@@ -21,7 +19,7 @@
         <h5 class="modal-title" id="addFeedLabel">Novo Post</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{ url_for('routes.feed') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+      <form action="{{ url_for('routes.add_feed_route') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
         <div class="modal-body">
           <div class="mb-3">
 
