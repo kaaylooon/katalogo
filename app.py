@@ -20,8 +20,12 @@ app.jinja_env.filters['humandate'] = humanize_datetime
 
 DEPLOY = True
 
-if __name__ == "__main__":
+if DEPLOY:
 	init_db()
 	seed_db(full=True)
+else:
+	if __name__ == "__main__":
+		init_db()
+		seed_db(full=True)
 
-	app.run(host="0.0.0.0", debug=not DEPLOY)
+		app.run(host="0.0.0.0", debug=True)
