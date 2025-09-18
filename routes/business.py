@@ -113,6 +113,7 @@ def edit(business_id):
 
 		address = f'{ruaAvenida}, {numeroCasa}, {bairro}, {cidadeMunicipio}, {estado}'
 		
+		lat, lon = None, None
 		if address and address != 'Não informado':
 			lat, lon = get_coordenadas(address)
 
@@ -122,9 +123,8 @@ def edit(business_id):
 		if logo:
 			if allowed_file(logo.filename):
 				logo_filename  = save_image(logo)
-				return logo_filename
 			else:
-				logo_filename = business['logo_path'] if 'logo_path' in business.keys() else None
+				logo_filename = business.get('logo_path')
 
 
 		edit_business(business_id, nome=nome, categoria=categoria, descricao=descricao, instagram=instagram, numero=numero, email=email, logo_path=logo_filename, lat=lat, lon=lon)
@@ -144,14 +144,14 @@ def edit(business_id):
 			abre = request.form.get(f'{d}_abre')
 			fecha = request.form.get(f'{d}_fecha')
 			horarios[d] = (abre, fecha)
-			if abre and fecha:
-				for d, (abre, fecha) in horarios.items():
-					dias_num = dias_map[d]
-					update = update_horario(business_id, dias_num, abre, fecha)
 
-					if not update:
-						add_horario(business_id, dias_num, abre, fecha)
-						logger.info(f"Horário modificado no negócio {business_id}, por {session['user_id']}")
+		for d, (abre, fecha) in horarios.items():
+			if abre and fecha:
+				dias_num = dias_map[d]
+				update = update_horario(business_id, dias_num, abre, fecha)
+				if not update:
+					add_horario(business_id, dias_num, abre, fecha)
+					logger.info(f"Horário modificado no negócio {business_id}, por {session['user_id']}")
 
 		removed_images = request.form.get('removed_images')
 		
