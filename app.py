@@ -15,9 +15,7 @@ from routes.checkout import routes as checkout_routes
 from routes.comment import routes as comment_routes
 from routes.home import routes as home_routes
 
-
 load_dotenv()
-
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY')
@@ -31,15 +29,13 @@ app.register_blueprint(comment_routes)
 app.register_blueprint(home_routes)
 app.register_blueprint(auth) 
 
-
 def humanize_datetime(value):
 	if not value:
 		return ""
 	return arrow.get(value, "YYYY-MM-DD HH:mm:ss").humanize(locale="pt_br")
 app.jinja_env.filters['humandate'] = humanize_datetime
 
-
-DEPLOY = False
+DEPLOY = True
 
 if DEPLOY:
 	init_db()
