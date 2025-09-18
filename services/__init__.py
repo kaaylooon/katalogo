@@ -4,3 +4,4 @@ from .location_service import *
 from .logger import *
 from .time_utils import *
 from .upload import *
+from .serialize import *

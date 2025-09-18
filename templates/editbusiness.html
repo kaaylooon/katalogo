@@ -7,9 +7,7 @@
     </div>
     <div class="card-body p-4 d-flex justify-content-center">
       <form class="row g-4 w-100" action="{{ url_for('business.edit', business_id=business['id']) }}" method="POST" enctype="multipart/form-data">
-        
         <div class="row align-items-center mt-4">
-          
           <div class="col-auto text-center">
             <input
               class="form-control d-none"
@@ -18,45 +16,51 @@
               name="logo"
               accept="image/*"
               onchange="previewLogo(event)"
-            />
+              />
             <img
               src="{{ url_for('static', filename='uploads/' ~ business[7]) if business[7] else 'https://placehold.co/150' }}"
               alt="{{ business[1] }}"
               class="rounded-circle border"
               style="width: 75px; height: 75px; object-fit: cover; cursor: pointer;"
               onclick="document.getElementById('logoUpload').click();"
-            />
+              />
           </div>
-
           <div class="col">
             <label for="nome" class="form-label" style="font-weight: 600;">Nome</label>
             <input type="text" class="form-control" id="nome" name="nome" value="{{ business.nome }}" required />
           </div>
         </div>
-
-          <div class="col-12 col-md-12">
-            <label for="categoria" class="form-label" style="font-weight: 600;">Categoria</label>
-            <select class="form-select" name="categoria" required>
-              <option value="" selected disabled>Escolha...</option>
-              <option value="Alimentação" {% if business.categoria == "Alimentação" %}selected{% endif %}>Alimentação</option>
-              <option value="Livros e Educação" {% if business.categoria == "Livros e Educação" %}selected{% endif %}>Livros e Educação</option>
-              <option value="Tecnologia e Informática" {% if business.categoria == "Tecnologia e Informática" %}selected{% endif %}>Tecnologia e Informática</option>
-              <option value="Serviços" {% if business.categoria == "Serviços" %}selected{% endif %}>Serviços</option>
-              <option value="Arte e Cultura" {% if business.categoria == "Arte e Cultura" %}selected{% endif %}>Arte e Cultura</option>
-              <option value="Moda e Beleza" {% if business.categoria == "Moda e Beleza" %}selected{% endif %}>Moda e Beleza</option>
-              <option value="Esportes e Lazer" {% if business.categoria == "Esportes e Lazer" %}selected{% endif %}>Esportes e Lazer</option>
-              <option value="Eventos e Entretenimento" {% if business.categoria == "Eventos e Entretenimento" %}selected{% endif %}>Eventos e Entretenimento</option>
-              <option value="Comércio de segunda mão" {% if business.categoria == "Comércio de segunda mão" %}selected{% endif %}>Comércio de segunda mão</option>
-              <option value="Pets e Animais" {% if business.categoria == "Pets e Animais" %}selected{% endif %}>Pets e Animais</option>
-              <option value="Saúde e Bem-estar" {% if business.categoria == "Saúde e Bem-estar" %}selected{% endif %}>Saúde e Bem-estar</option>
-              <option value="Turismo e Viagens" {% if business.categoria == "Turismo e Viagens" %}selected{% endif %}>Turismo e Viagens</option>
-              <option value="Diversos" {% if business.categoria == "Diversos" %}selected{% endif %}>Diversos</option>
-            </select>
-          </div>
-
+        <div class="col-12 col-md-12">
+          <label for="categoria" class="form-label" style="font-weight: 600;">Categoria</label>
+          <select class="form-select" name="categoria" required>
+            <option value="" selected disabled>Escolha...</option>
+            <option value="Alimentação" {% if business.categoria == "Alimentação" %}selected{% endif %}>Alimentação</option>
+            <option value="Livros e Educação" {% if business.categoria == "Livros e Educação" %}selected{% endif %}>Livros e Educação</option>
+            <option value="Tecnologia e Informática" {% if business.categoria == "Tecnologia e Informática" %}selected{% endif %}>Tecnologia e Informática</option>
+            <option value="Serviços" {% if business.categoria == "Serviços" %}selected{% endif %}>Serviços</option>
+            <option value="Arte e Cultura" {% if business.categoria == "Arte e Cultura" %}selected{% endif %}>Arte e Cultura</option>
+            <option value="Moda e Beleza" {% if business.categoria == "Moda e Beleza" %}selected{% endif %}>Moda e Beleza</option>
+            <option value="Esportes e Lazer" {% if business.categoria == "Esportes e Lazer" %}selected{% endif %}>Esportes e Lazer</option>
+            <option value="Eventos e Entretenimento" {% if business.categoria == "Eventos e Entretenimento" %}selected{% endif %}>Eventos e Entretenimento</option>
+            <option value="Comércio de segunda mão" {% if business.categoria == "Comércio de segunda mão" %}selected{% endif %}>Comércio de segunda mão</option>
+            <option value="Pets e Animais" {% if business.categoria == "Pets e Animais" %}selected{% endif %}>Pets e Animais</option>
+            <option value="Saúde e Bem-estar" {% if business.categoria == "Saúde e Bem-estar" %}selected{% endif %}>Saúde e Bem-estar</option>
+            <option value="Turismo e Viagens" {% if business.categoria == "Turismo e Viagens" %}selected{% endif %}>Turismo e Viagens</option>
+            <option value="Diversos" {% if business.categoria == "Diversos" %}selected{% endif %}>Diversos</option>
+          </select>
+        </div>
         <div class="col-12">
           <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
-          <textarea class="form-control" id="descricao" name="descricao" rows="4" placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais." required>{{ business.descricao }}</textarea>
+          <textarea
+            class="form-control limiteDeChar"
+            id="descricao"
+            name="descricao"
+            rows="5"
+            placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais."
+            required
+            maxlength="{{ 1200 if business[13] else 350 }}">{{ business.descricao }}
+          </textarea>
+          <div id="charCount">0 / 350</div>
         </div>
         {%if business[13]%}
         <div class="col-12">
@@ -73,8 +77,6 @@
             {% endfor %}
           </div>
         </div>
-        
-        
         <div class="col-12">
           <label for="contato" class="form-label" style="font-weight: 600;">Contato <small>(opcional)</small></label>
           <div class="row g-3">
@@ -101,7 +103,6 @@
             </div>
           </div>
         </div>
-        
         <div class="col-12">
           <label class="form-label" style="font-weight: 600;">Localização (opcional)</label>
           <div class="row g-3">
@@ -164,10 +165,9 @@
             </div>
           </div>
         </div>
-                
         <div class="col-12">
           <label for="imageUpload" class="form-label d-block" style="font-weight: 600;">
-            Imagens <small>(opcional)</small>
+          Imagens <small>(opcional)</small>
           </label>
           <input
             class="form-control"
@@ -176,142 +176,136 @@
             name="images[]"
             accept="image/*"
             multiple
-          />
+            />
           <div id="previewContainer" class="d-flex flex-wrap gap-2 mt-2">
             <!-- imagens já existentes -->
             {% for image in images_urls %}
-              <div class="position-relative" data-existing="true" data-filename="{{ image.image_path }}">
-                <img src="{{ url_for('static', filename='uploads/' + image.image_path) }}" 
-                     class="rounded border" 
-                     style="width:120px;height:120px;object-fit:cover;">
-                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
-                        style="transform: translate(50%, -50%);"
-                        onclick="removeExistingImage(this)">×</button>
-              </div>
+            <div class="position-relative" data-existing="true" data-filename="{{ image.image_path }}">
+              <img src="{{ url_for('static', filename='uploads/' + image.image_path) }}" 
+                class="rounded border" 
+                style="width:120px;height:120px;object-fit:cover;">
+              <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                style="transform: translate(50%, -50%);"
+                onclick="removeExistingImage(this)">×</button>
+            </div>
             {% endfor %}
           </div>
         </div>
-
         <script>
-        const previewContainer = document.getElementById("previewContainer");
-        const imageInput = document.getElementById("imageUpload");
-        let selectedFiles = [];
-
-        // Remove nova imagem selecionada
-        function updatePreviews() {
-          previewContainer.innerHTML = ""; // limpa previews
-
-          // imagens existentes que ainda não foram marcadas para remoção
-          existingImages.forEach(img => {
-            const div = document.createElement("div");
-            div.className = "row position-relative g-1";
-            div.dataset.existing = "true";
-            div.dataset.filename = img;
-            
-            const imageElem = document.createElement("img");
-            imageElem.src = `/static/uploads/${img}`;
-            imageElem.className = "rounded";
-            imageElem.style.width = "7rem";
-            imageElem.style.height = "7rem";
-            imageElem.style.objectFit = "cover";
-
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.innerHTML = "&times;";
-            btn.className = "btn btn-sm btn-danger position-absolute top-0 end-0";
-            btn.onclick = () => removeExistingImage(btn);
-
-            div.appendChild(imageElem);
-            div.appendChild(btn);
-            previewContainer.appendChild(div);
-          });
-
-          //imagens novas selecionadas
-          selectedFiles.forEach((file, index) => {
-            const div = document.createElement("div");
-            div.className = "position-relative";
-
-            const img = document.createElement("img");
-            img.src = URL.createObjectURL(file);
-            img.className = "rounded border";
-            img.style.width = "7rem";
-            img.style.height = "7rem";
-            img.style.objectFit = "cover";
-
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.innerHTML = "&times;";
-            btn.className = "btn btn-sm btn-danger position-absolute top-0 end-0 p-0 m-0";
-            btn.style.transform = "translate(-50%, -50%)";
-            btn.onclick = () => {
-              selectedFiles.splice(index, 1);
-              updatePreviews();
-              updateInputFiles();
-            };
-
-            div.appendChild(img);
-            div.appendChild(btn);
-            previewContainer.appendChild(div);
-          });
-        }
-
-        // Função para remover imagens existentes
-        function removeExistingImage(btn) {
-          const div = btn.closest("div");
-          div.remove();
-          const filename = div.dataset.filename;
-
-          // adiciona a um array escondido que será enviado para backend excluir
-          let input = document.getElementById("removedImages");
-          if (!input) {
-            input = document.createElement("input");
-            input.type = "hidden";
-            input.id = "removedImages";
-            input.name = "removed_images";
-            document.querySelector("form").appendChild(input);
-            input.value = filename;
-          } else {
-            const current = input.value.split(",");
-            current.push(filename);
-            input.value = current.join(",");
+          const previewContainer = document.getElementById("previewContainer");
+          const imageInput = document.getElementById("imageUpload");
+          let selectedFiles = [];
+          
+          // Remove nova imagem selecionada
+          function updatePreviews() {
+            previewContainer.innerHTML = ""; // limpa previews
+          
+            // imagens existentes que ainda não foram marcadas para remoção
+            existingImages.forEach(img => {
+              const div = document.createElement("div");
+              div.className = "row position-relative g-1";
+              div.dataset.existing = "true";
+              div.dataset.filename = img;
+              
+              const imageElem = document.createElement("img");
+              imageElem.src = `/static/uploads/${img}`;
+              imageElem.className = "rounded";
+              imageElem.style.width = "7rem";
+              imageElem.style.height = "7rem";
+              imageElem.style.objectFit = "cover";
+          
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.innerHTML = "&times;";
+              btn.className = "btn btn-sm btn-danger position-absolute top-0 end-0";
+              btn.onclick = () => removeExistingImage(btn);
+          
+              div.appendChild(imageElem);
+              div.appendChild(btn);
+              previewContainer.appendChild(div);
+            });
+          
+            //imagens novas selecionadas
+            selectedFiles.forEach((file, index) => {
+              const div = document.createElement("div");
+              div.className = "position-relative";
+          
+              const img = document.createElement("img");
+              img.src = URL.createObjectURL(file);
+              img.className = "rounded border";
+              img.style.width = "7rem";
+              img.style.height = "7rem";
+              img.style.objectFit = "cover";
+          
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.innerHTML = "&times;";
+              btn.className = "btn btn-sm btn-danger position-absolute top-0 end-0 p-0 m-0";
+              btn.style.transform = "translate(-50%, -50%)";
+              btn.onclick = () => {
+                selectedFiles.splice(index, 1);
+                updatePreviews();
+                updateInputFiles();
+              };
+          
+              div.appendChild(img);
+              div.appendChild(btn);
+              previewContainer.appendChild(div);
+            });
           }
-        }
-
-        // Atualiza input file para enviar apenas arquivos selecionados
-        function updateInputFiles() {
-          const dataTransfer = new DataTransfer();
-          selectedFiles.forEach(file => dataTransfer.items.add(file));
-          imageInput.files = dataTransfer.files;
-        }
-
-        imageInput.addEventListener("change", (e) => {
-          const files = Array.from(e.target.files);
-          selectedFiles = selectedFiles.concat(files);
+          
+          // Função para remover imagens existentes
+          function removeExistingImage(btn) {
+            const div = btn.closest("div");
+            div.remove();
+            const filename = div.dataset.filename;
+          
+            // adiciona a um array escondido que será enviado para backend excluir
+            let input = document.getElementById("removedImages");
+            if (!input) {
+              input = document.createElement("input");
+              input.type = "hidden";
+              input.id = "removedImages";
+              input.name = "removed_images";
+              document.querySelector("form").appendChild(input);
+              input.value = filename;
+            } else {
+              const current = input.value.split(",");
+              current.push(filename);
+              input.value = current.join(",");
+            }
+          }
+          
+          // Atualiza input file para enviar apenas arquivos selecionados
+          function updateInputFiles() {
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => dataTransfer.items.add(file));
+            imageInput.files = dataTransfer.files;
+          }
+          
+          imageInput.addEventListener("change", (e) => {
+            const files = Array.from(e.target.files);
+            selectedFiles = selectedFiles.concat(files);
+            updatePreviews();
+            updateInputFiles();
+          });
+          
+          // Inicialmente, você pode criar um array de imagens existentes
+          let existingImages = [
+            {% for image in images_urls %}
+              "{{ image.image_path }}",
+            {% endfor %}
+          ];
           updatePreviews();
-          updateInputFiles();
-        });
-
-        // Inicialmente, você pode criar um array de imagens existentes
-        let existingImages = [
-          {% for image in images_urls %}
-            "{{ image.image_path }}",
-          {% endfor %}
-        ];
-        updatePreviews();
         </script>
-
-
         {%endif%}
-
         <div class="d-grid mt-4">
           <button type="submit" class="btn btn-primary">Editar Negócio</button>
         </div>
-
       </form>
     </div>
   </div>
 </div>
-
 <script>
   function previewLogo(event) {
     const [file] = event.target.files;
@@ -320,18 +314,18 @@
       imgElement.src = URL.createObjectURL(file);
     }
   }
-
+  
   function previewImages(event) {
     const files = event.target.files;
     const previewContainer = document.getElementById("previewContainer");
-
+  
     // limpa previews antigos
     previewContainer.innerHTML = "";
-
+  
     // percorre todos os arquivos selecionados
     for (const file of files) {
       if (!file.type.startsWith("image/")) continue;
-
+  
       const img = document.createElement("img");
       img.src = URL.createObjectURL(file);
       img.className = "rounded border";

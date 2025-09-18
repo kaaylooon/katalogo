@@ -30,9 +30,24 @@ def mostrar_feed_business(business_id):
 	conn.close()
 	return feeds
 
+def mostrar_feed_by_id(feed_id):
+	conn = get_connection()
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM feed WHERE id = ?", (feed_id,))
+	feed = cur.fetchone()
+	conn.close()
+	return feed
+
 def add_feed(business_id, description, by_user, image_path):
 	conn = get_connection()
 	cur = conn.cursor()
 	cur.execute("INSERT OR IGNORE INTO feed (business_id, description, by_user, image_path) VALUES (?, ?, ?, ?)", (business_id, description, by_user, image_path))
+	conn.commit()
+	conn.close()
+
+def del_feed(feed_id):
+	conn = get_connection()
+	cur = conn.cursor()
+	cur.execute("DELETE FROM feed WHERE id = ?", (feed_id,))
 	conn.commit()
 	conn.close()

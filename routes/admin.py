@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, redirect, url_for, flash, jsonify,
 from auth import login_required, role_required
 from db import *
 from services import *
-from services.serialize import serialize_business, serialize_comment, serialize_user
 
 routes = Blueprint('admin', __name__)
 
@@ -48,6 +47,12 @@ def api_users():
 def api_comments():
 	comments = [serialize_comment(c) for c in mostrar_comentarios()]
 	return jsonify({"data": comments})
+
+# Endpoint para DataTables (Feeds)
+@routes.route("/api/feeds")
+def api_feeds():
+	feeds = [serialize_feed(f) for f in mostrar_feed()]
+	return jsonify({"data": feeds})
 
 @routes.route('/dashboard/business/<int:business_id>/premium', methods=['POST'])
 @login_required

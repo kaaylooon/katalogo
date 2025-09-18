@@ -1,4 +1,3 @@
-
 # third-party
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from auth import author_or_admin_required, login_required
@@ -35,10 +34,18 @@ def perfiledit(user_id):
 	if session['user_id'] != user[0]:
 		return redirect('/perfil/<int:user_id>')
 	if request.method == "POST":
+		
 		username = request.form.get("username")
 		descricao = request.form.get("descricao", "Sem descrição")
 
-		edit_user(username, descricao, user_id)
+
+		pfp = request.files['pfp']
+		if pfp and allowed_file(pfp.filename):
+			pfp_filename = save_image(pfp)
+		else:
+			pfp_filename = None
+
+		edit_user(username, descricao, pfp_filename, user_id)
 		
 		logger.info(f"Usuário editado: {username} (ID: {user_id}), pelo usuário de ID {session['user_id']}")
 		return redirect(url_for('user.perfil', user_id=user_id))

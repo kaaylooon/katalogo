@@ -8,14 +8,14 @@ def registrar_user(username, email, hashed, telephone):
 	conn.close()
 
 
-def edit_user(username, descricao, user_id):
+def edit_user(username, descricao, pfp_filename, user_id):
 	conn = get_connection()
 	cur = conn.cursor()
 	cur.execute("""
 		UPDATE users
-		SET username = ?, descricao = ?
+		SET username = ?, descricao = ?, pfp_path=pfp_filename
 		WHERE id = ?
-	""", (username, descricao, user_id))
+	""", (username, descricao, pfp_filename, user_id))
 	conn.commit()
 	conn.close()
 

@@ -33,7 +33,7 @@ def tabela_users():
 				email TEXT NOT NULL UNIQUE,
 				password TEXT NOT NULL,
 				telephone TEXT NOT NULL,
-				pfp_path TEXT,
+				pfp_path TEXT DEFAULT None,
 				role TEXT NOT NULL DEFAULT 'user',
 				joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 				descricao TEXT

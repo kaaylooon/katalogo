@@ -1,7 +1,4 @@
-
-
 from flask import url_for, session
-
 
 def serialize_business(b):
 	actions = f"""
@@ -33,6 +30,19 @@ def serialize_user(u):
 		"email": u[2],
 		"contact": u[4],
 		"role": u[6]
+	}
+
+def serialize_feed(f):
+	actions = f"""
+		<form method='POST' action='{url_for('feed.del_feed_route', feed_id=f[0])}' style='display:inline'>
+			<button class='btn btn-sm btn-outline-danger'>Excluir</button>
+		</form>
+	"""
+	return {
+		"id": f[0],
+		"business_id": f[1],
+		"created_at": f[5],
+		"actions": actions
 	}
 
 def serialize_comment(c):

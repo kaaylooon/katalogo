@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html">
+<html lang="pt-br">
 <head>
 	<title>{% block title %}Katálogo{% endblock %}</title>
   
@@ -28,11 +28,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Blinker:wght@100;200;300;400;600;700;800;900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
-  <script src="https://js.stripe.com/v3/"></script>
-
   <script src="https://js.stripe.com/basil/stripe.js"></script>
 
-  <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css"
+  rel="stylesheet"
+  />
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"
+  ></script>
+
+
+  <script src="{{ url_for('static', filename='main.js') }}"defer ></script>
 
 </head>
 <body>
@@ -120,11 +127,6 @@
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous"></script>
 
-<script type="module">
-  import { Collapse, Ripple, initMDB } from "mdb-ui-kit";
-  initMDB({ Collapse, Ripple });
-</script>
-
 <script>
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/static/sw.js")
@@ -147,6 +149,30 @@
 <div>
   {% block content %}{% endblock %}
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const textareas = document.querySelectorAll(".limiteDeChar");
+
+  textareas.forEach(textarea => {
+    const maxLength = textarea.maxLength;
+    const charCount = textarea.nextElementSibling; // contador logo depois
+
+    if (!charCount) return; // evita erro se não achar o contador
+
+    // inicializa
+    charCount.textContent = `${textarea.value.length} / ${maxLength}`;
+    charCount.style.color = textarea.value.length >= maxLength ? "red" : "black";
+
+    // atualiza enquanto digita
+    textarea.addEventListener("input", () => {
+      const length = textarea.value.length;
+      charCount.textContent = `${length} / ${maxLength}`;
+      charCount.style.color = length >= maxLength ? "red" : "black";
+    });
+  });
+});
+</script>
 
 </body>
 </html>

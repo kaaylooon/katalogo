@@ -41,3 +41,14 @@ def add():
 	)
 
 	return redirect(request.referrer or '/')
+	
+#excluir feed
+@routes.route('/feed/<int:feed_id>/del', methods=['POST'])
+@login_required
+def del_feed_route(feed_id):
+	feed = mostrar_feed_by_id(feed_id)
+	if feed:
+		del_feed(feed_id)
+		logger.warning(f"Feed do negócio de ID {feed[1]} excluído pelo usuário de ID {session['user_id']}. Conteúdo: {feed[2]}")
+
+	return redirect(request.referrer or '/')

@@ -22,10 +22,8 @@ def businesses():
 def addbusiness():
 	if request.method == "POST":
 		by_user = session.get('user_id')
-		nome = request.form.get('nome')
-		nome = nome.capitalize()
-		descricao = request.form.get('descricao', 'Sem descrição.')
-		descricao = descricao.capitalize()
+		nome = request.form.get('nome').capitalize()
+		descricao = request.form.get('descricao', 'Sem descrição.').capitalize()
 		categoria = request.form.get('categoria')
 		evento = request.form.get('evento') or None
 
@@ -33,12 +31,11 @@ def addbusiness():
 		logo = request.files['logo']
 		if logo and allowed_file(logo.filename):
 			logo_filename = save_image(logo)
-			return image_filename
 		else:
-			image_filename = None
+			logo_filename = None
 
 
-		business_id = adicionar_business(nome, descricao, categoria, image_filename, by_user, evento)
+		business_id = adicionar_business(nome, descricao, categoria, logo_filename, by_user, evento)
 
 		if business_id:
 			logger.info(f'Novo negócio: {nome}, criado por {by_user}')

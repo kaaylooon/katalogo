@@ -22,7 +22,6 @@
       <form action="{{ url_for('feed.add') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
         <div class="modal-body">
           <div class="mb-3">
-
             <label for="business" class="form-label">Negócio</label>
                     <select class="form-select" name="business_id" required>
                         {% if meusbusinesses %}
@@ -33,10 +32,13 @@
                           <option disabled>Nenhum negócio disponível</option>
                         {% endif %}
                     </select>
+            </div>
 
+            <div class="mb-3">
 
             <label for="postText" class="form-label">Conteúdo</label>
-            <textarea class="form-control" id="postText" name="content" rows="3" placeholder="O que você quer compartilhar?" required></textarea>
+            <textarea class="form-control limiteDeChar" id="postText" name="content" rows="5" placeholder="O que você quer compartilhar?" required maxlength="750"></textarea>
+            <div id="charCount">0 / 750</div>
             <div class="invalid-feedback">
               Por favor, escreva algo antes de enviar.
             </div>

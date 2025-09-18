@@ -46,13 +46,15 @@
         <div class="col-12">
           <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
           <textarea
-            class="form-control"
+            class="form-control limiteDeChar"
             id="descricao"
             name="descricao"
-            rows="4"
+            rows="5"
             placeholder="Fale um pouco sobre você."
             required
+            maxlength="300"
           >{{ user[8] }}</textarea>
+          <div id="charCount">0 / 300</div>
         </div>
 
         <div class="col-12 d-grid">
