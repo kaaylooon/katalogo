@@ -1,0 +1,43 @@
+
+# third-party
+from flask import Blueprint, redirect, render_template, request, session, url_for
+
+# local
+from auth import allowed_file, login_required
+from db import *
+from services import *
+
+routes = Blueprint('feed', __name__)
+
+
+#atividades
+@routes.route('/feed', methods=['GET'])
+def feed():
+	feed = mostrar_feed()
+	meusbusinesses = []
+	if 'user_id' in session:
+		meusbusinesses = mostrar_businesses_user(session['user_id'])
+	return render_template("feed.html", feed=feed, meusbusinesses=meusbusinesses)
+
+#adicionar feed
+@routes.route('/feed/add', methods=['POST'])
+@login_required
+def add():
+	business_id = request.form.get('business_id')
+	content = request.form.get('content')
+	image = request.files.get('image')
+
+	if image and allowed_file(image.filename):
+		image_filename = save_image(image)
+		return image_filename
+	else:
+		image_filename = None
+
+	add_feed(business_id, content, session['user_id'], image_filename)
+
+	logger.info(
+		f"Novo feed adicionado. ID do negócio: {business_id}; "
+		f"ID do usuário: {session['user_id']}"
+	)
+
+	return redirect(request.referrer or '/')

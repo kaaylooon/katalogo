@@ -150,6 +150,23 @@ a {
 font-size: 28px; line-height: 1;
 }
 
+@keyframes green-glow {
+  0% {
+    box-shadow: 0 0 2px rgba(175, 220, 178, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 5px rgba(175, 220, 178, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 2px rgba(175, 220, 178, 0.4);
+  }
+}
+
+.premium-glow {
+  animation: green-glow 5s infinite;
+  transition: transform 0.3s ease-in-out;
+}
+
 /*PRIMARY*/
 
 .bg-primary {

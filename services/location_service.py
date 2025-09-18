@@ -1,8 +1,18 @@
+
 import requests
 
-
+ESTADO_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
 CEP_URL = "https://cep.awesomeapi.com.br/"
 GEOAPI_URL = "https://nominatim.openstreetmap.org/search"
+
+
+def get_munipicios(uf):
+	url = f"{ESTADO_URL}/{uf}/municipios"
+	response = requests.get(url)
+	if response.status_code == 200:
+		return response.json()
+	else:
+		return response.status_code
 
 def get_coordenadas(address):
     params = {"q": address, "format": "json"}

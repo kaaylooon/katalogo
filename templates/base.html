@@ -57,14 +57,14 @@
           <a class="nav-link" href="/">Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('routes.feed') }}">Atividades</a>
+          <a class="nav-link" href="{{ url_for('feed.feed') }}">Atividades</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('routes.businesses') }}">Negócios</a>
+          <a class="nav-link" href="{{ url_for('business.businesses') }}">Negócios</a>
         </li>
         {% if session.get('role') == 'admin' %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('routes.dashboard') }}">Painel</a>
+          <a class="nav-link" href="{{ url_for('admin.dashboard') }}">Painel</a>
         </li>
         {% endif %}
       </ul>
@@ -76,7 +76,7 @@
             <a class="nav-link btn me-3" href="{{ url_for('auth.logout') }}">
                 Sair
             </a>
-            <a class="btn btn-primary ms-auto" href="{{ url_for('routes.perfil', user_id=session['user_id']) }}">
+            <a class="btn btn-primary ms-auto" href="{{ url_for('user.perfil', user_id=session['user_id']) }}">
                 Perfil
             </a>
           </div>

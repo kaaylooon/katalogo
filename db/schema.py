@@ -1,3 +1,4 @@
+
 from .connection import get_connection
 
 from db.users import tornar_admin, registrar_user
@@ -67,7 +68,8 @@ def tabela_comentarios():
 				user_id INTEGER,
 				content TEXT,
 				business_id INTEGER,
-				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				edited BOOLEAN DEFAULT FALSE
 			)
 		""")
 

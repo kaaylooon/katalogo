@@ -2,7 +2,14 @@ from flask import Flask
 
 import arrow
 
-from routes import routes
+from routes.feed import routes as feed_routes
+from routes.business import routes as business_routes
+from routes.user import routes as user_routes
+from routes.admin import routes as admin_routes
+from routes.checkout import routes as checkout_routes
+from routes.comment import routes as comment_routes
+from routes.home import routes as home_routes
+
 from auth import auth
 
 from db import init_db, seed_db
@@ -11,11 +18,19 @@ app = Flask(__name__)
 
 app.secret_key = "secret_key"
 
-app.register_blueprint(routes) 
+app.register_blueprint(feed_routes)
+app.register_blueprint(business_routes)
+app.register_blueprint(user_routes)
+app.register_blueprint(admin_routes)
+app.register_blueprint(checkout_routes)
+app.register_blueprint(comment_routes)
+app.register_blueprint(home_routes)
 app.register_blueprint(auth) 
 
 def humanize_datetime(value):
-		return arrow.get(value, "YYYY-MM-DD HH:mm:ss").humanize(locale="pt_br")
+	if not value:
+		return ""
+	return arrow.get(value, "YYYY-MM-DD HH:mm:ss").humanize(locale="pt_br")
 app.jinja_env.filters['humandate'] = humanize_datetime
 
 DEPLOY = True

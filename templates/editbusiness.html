@@ -6,7 +6,7 @@
       <h4 class="mb-0">Editar Negócio</h4>
     </div>
     <div class="card-body p-4 d-flex justify-content-center">
-      <form class="row g-4 w-100" action="{{ url_for('routes.edit', business_id=business['id']) }}" method="POST" enctype="multipart/form-data">
+      <form class="row g-4 w-100" action="{{ url_for('business.edit', business_id=business['id']) }}" method="POST" enctype="multipart/form-data">
         
         <div class="row align-items-center mt-4">
           

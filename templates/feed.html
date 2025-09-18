@@ -19,7 +19,7 @@
         <h5 class="modal-title" id="addFeedLabel">Novo Post</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{ url_for('routes.add_feed_route') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+      <form action="{{ url_for('feed.add') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
         <div class="modal-body">
           <div class="mb-3">
 
@@ -62,7 +62,7 @@
       <div class="card glass-card mb-4 shadow-sm" data-aos="fade-up">
         <div class="card-body">
           <div class="d-flex align-items-center mb-2">
-            <a href="{{ url_for('routes.business', business_id=f.business_id) }}">
+            <a href="{{ url_for('business.business', business_id=f.business_id) }}">
               <img src="{{ url_for('static', filename='uploads/' ~ f['logo_path']) if f['logo_path'] else 'https://placehold.co/150' }}" 
                    alt="{{ f['nome'] }}" 
                    class="rounded-circle me-3" 
