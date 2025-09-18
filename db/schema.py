@@ -1,4 +1,5 @@
 
+import sqlite3
 from .connection import get_connection
 
 from db.users import tornar_admin, registrar_user
@@ -7,6 +8,8 @@ from db.horarios import add_horario
 from db.images import add_business_images
 
 from werkzeug.security import generate_password_hash
+
+from services.logger import logger
 
 def tabela_feed():
 	with get_connection() as conn:
@@ -26,7 +29,7 @@ def tabela_users():
 		conn.execute("""
 			CREATE TABLE IF NOT EXISTS users (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				username TEXT NOT NULL UNIQUE,
+				username TEXT NOT NULL,
 				email TEXT NOT NULL UNIQUE,
 				password TEXT NOT NULL,
 				telephone TEXT NOT NULL,
@@ -99,27 +102,31 @@ def business_images_table():
 
 def seed_db(full):
 
-	registrar_user('Kaylon', 'kaylon.contact@outlook.com', generate_password_hash('adm123'), '(11) 12345-6789')
-
-	tornar_admin(1)
+	try:
+		registrar_user('Kaylon', 'kaylon.contact@outlook.com', generate_password_hash('adm123'), '(11) 12345-6789')
+		tornar_admin(1)
+	except sqlite3.IntegrityError:
+		pass 
 
 	if full:
-		adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', None, 1, 'Feira do Empreendedor')
+		try:
+			adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', None, 1, 'Feira do Empreendedor')
 
-		add_premium(True, 1)
+			add_premium(True, 1)
 
-		edit_business(1, instagram='@auriuminitium', numero='(11) 91659-1346', email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36)
+			edit_business(1, instagram='@auriuminitium', numero='(11) 91659-1346', email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36)
 
-		for dia_semana in range(7): add_horario(1, dia_semana, "08:00", "18:00")
+			for dia_semana in range(7): add_horario(1, dia_semana, "08:00", "18:00")
 
-		adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', None, 1, 'Feira do Empreendedor')
+			adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', None, 1, 'Feira do Empreendedor')
 
-		edit_business(2, instagram='@auriuminitium', numero='(11) 91659-1346', email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36)
+			edit_business(2, instagram='@auriuminitium', numero='(11) 91659-1346', email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36)
 
-		add_business_images(2, '7560eb2c5c984d66b0a02e6e07d9a8fa.jpeg')
+			add_business_images(2, '7560eb2c5c984d66b0a02e6e07d9a8fa.jpeg')
 
-		for dia_semana in range(7): add_horario(2, dia_semana, "08:00", "18:00")
-
+			for dia_semana in range(7): add_horario(2, dia_semana, "08:00", "18:00")
+		except Exception as e:
+			logger.error(str(e))
 
 def init_db():
 	tabela_feed()

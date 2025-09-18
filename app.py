@@ -20,7 +20,7 @@ load_dotenv()
 
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = os.environ.get('SECRET_KEY')
 
 app.register_blueprint(feed_routes)
 app.register_blueprint(business_routes)
@@ -39,7 +39,7 @@ def humanize_datetime(value):
 app.jinja_env.filters['humandate'] = humanize_datetime
 
 
-DEPLOY = True
+DEPLOY = False
 
 if DEPLOY:
 	init_db()

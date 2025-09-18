@@ -82,7 +82,7 @@
           </div>
         {% else %}
           <div class="d-flex align-items-center">
-            <a class="nav-link btn me-3" href="{{ url_for('auth.login') }}">
+            <a class="nav-link btn me-3" href="{{ url_for('auth.login', link=request.path) }}">
               Entrar
             </a>
             <a class="btn btn-primary ms-auto" href="{{ url_for('auth.signup') }}">

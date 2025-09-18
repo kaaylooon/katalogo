@@ -3,7 +3,7 @@ from .connection import get_connection
 def registrar_user(username, email, hashed, telephone):
 	conn = get_connection()
 	cur = conn.cursor()
-	cur.execute("INSERT OR IGNORE INTO users (username, email, password, telephone, descricao) VALUES (?, ?, ?, ?, ?)", (username, email, hashed, telephone, ''))
+	cur.execute("INSERT INTO users (username, email, password, telephone, descricao) VALUES (?, ?, ?, ?, ?)", (username, email, hashed, telephone, ''))
 	conn.commit()
 	conn.close()
 

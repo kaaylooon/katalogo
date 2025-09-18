@@ -1,6 +1,8 @@
 from flask import Blueprint, flash, render_template, request, redirect, session, url_for
+
 from apirequests import get_coordenadas
 from auth import author_or_admin_required, login_required
+
 from db import *
 from services import *
 
