@@ -2,6 +2,8 @@ db.db
 
 .env
 
+app.log
+
 # Cache do Python
 routes/__pycache__/
 db/__pycache__/

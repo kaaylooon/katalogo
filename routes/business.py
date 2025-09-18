@@ -192,7 +192,7 @@ def delbusiness(business_id):
 		return redirect(request.referrer or '/')
 
 
-@routes.route('/business/<int:business_id>/upgrade')
+@routes.route('/business/<int:business_id>/upgrade', methods=['GET'])
 @login_required
 @author_or_admin_required(buscar_id_business, "by_user")
 def upgrade(business_id):

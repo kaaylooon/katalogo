@@ -1,11 +1,10 @@
-from flask import Flask
+from flask import Flask, jsonify
 import arrow
-
-import os
-from dotenv import load_dotenv
 
 from auth import auth
 from db import init_db, seed_db
+
+app = Flask(__name__)
 
 from routes.feed import routes as feed_routes
 from routes.business import routes as business_routes
@@ -15,11 +14,6 @@ from routes.checkout import routes as checkout_routes
 from routes.comment import routes as comment_routes
 from routes.home import routes as home_routes
 
-load_dotenv()
-
-app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY')
-
 app.register_blueprint(feed_routes)
 app.register_blueprint(business_routes)
 app.register_blueprint(user_routes)
@@ -27,7 +21,25 @@ app.register_blueprint(admin_routes)
 app.register_blueprint(checkout_routes)
 app.register_blueprint(comment_routes)
 app.register_blueprint(home_routes)
-app.register_blueprint(auth) 
+
+app.register_blueprint(auth)
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+stripe_keys = {
+	"STRIPE_API_KEY": os.environ.get('STRIPE_API_KEY'),
+	"STRIPE_PUBLISHABLE_KEY": os.environ.get('STRIPE_PUBLISHABLE_KEY')
+}
+
+app.secret_key = os.environ.get('SECRET_KEY')
+
+@app.route("/config")
+def get_publishable_key():
+	stripe_config = {"publicKey": stripe_keys["STRIPE_PUBLISHABLE_KEY"]}
+	return jsonify(stripe_config)
+
+
 
 def humanize_datetime(value):
 	if not value:
@@ -35,7 +47,7 @@ def humanize_datetime(value):
 	return arrow.get(value, "YYYY-MM-DD HH:mm:ss").humanize(locale="pt_br")
 app.jinja_env.filters['humandate'] = humanize_datetime
 
-DEPLOY = True
+DEPLOY = False
 
 if DEPLOY:
 	init_db()

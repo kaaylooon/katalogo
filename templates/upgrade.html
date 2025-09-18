@@ -50,10 +50,16 @@
             <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Estatísticas de visitas</li>
             <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Postagem de atividades</li>
           </ul>
+
           <div class="text-center mt-4 d-grid">
-            <a href="{{ url_for('checkout.checkout_card', business_id=business[0]) }}" class="btn btn-primary shadow">
+            <form action="/create-checkout-session" method="POST">
+              <button type="submit" id="checkout-button">
               Desbloqueie agora por <strong>R$15/mês</strong>
-            </a>
+              </button>
+            </form>
+            <button id="submitBtn" data-business-id="{{ business[0] }}" class="btn btn-primary shadow">
+              Desbloqueie agora por <strong>R$15/mês</strong>
+            </button>
           </div>
         </div>
       </div>
