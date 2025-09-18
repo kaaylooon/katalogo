@@ -1,9 +1,8 @@
-# Ignorar o banco SQLite
 db.db
+.env
 
 # Cache do Python
-__pycache__/
-
-static/uploads/*
-!static/uploads/.gitkeep
+routes/__pycache__/
+db/__pycache__/
+services/__pycache__/
 

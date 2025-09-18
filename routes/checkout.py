@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 from flask import Blueprint, redirect, render_template, url_for
 import stripe
 from auth import author_or_admin_required, login_required
@@ -6,8 +9,8 @@ from services import *
 
 routes = Blueprint('checkout', __name__)
 
-
-stripe.api_key = "SUA_CHAVE_SECRETA"
+load_dotenv()
+stripe.api_key = os.getenv('STRIPE_API_KEY')
 
 
 @routes.route('/checkout/<int:business_id>')
