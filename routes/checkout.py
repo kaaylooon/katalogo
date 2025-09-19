@@ -19,6 +19,7 @@ stripe_keys = {
 routes = Blueprint("checkout", __name__)
 
 stripe.api_key = stripe_keys['STRIPE_API_KEY']
+endpoint_secret = os.environ.get("STRIPE_WEBHOOK_SECRET")
 
 YOUR_DOMAIN = "http://192.168.0.4:5000"
 
@@ -73,3 +74,44 @@ def cancelado(business_id):
 
 	return render_template('cancel.html')
 
+
+
+@routes.route("/webhook", methods=["POST"])
+def stripe_webhook():
+    payload = request.data
+    sig_header = request.headers.get("Stripe-Signature")
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Corpo inválido
+        return jsonify(success=False), 400
+    except stripe.error.SignatureVerificationError as e:
+        # Assinatura inválida
+        return jsonify(success=False), 400
+
+    # ------------------------------
+    # Tratamento dos eventos
+    # ------------------------------
+    if event["type"] == "checkout.session.completed":
+        session = event["data"]["object"]
+
+        # pega business_id que você passou no checkout
+        business_id = session.get("success_url", "").split("/")[-2]
+
+        logger.warning(f"Pagamento concluído para business_id={business_id}")
+
+        # chama sua função
+        add_premium(True, business_id)
+
+    elif event["type"] == "invoice.paid":
+        invoice = event["data"]["object"]
+        logger.info(f"Fatura paga: {invoice['id']}")
+
+    elif event["type"] == "invoice.payment_failed":
+        invoice = event["data"]["object"]
+        logger.warning(f"Pagamento falhou: {invoice['id']}")
+
+    return jsonify(success=True), 200
