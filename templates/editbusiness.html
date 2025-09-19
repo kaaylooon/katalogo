@@ -77,6 +77,9 @@
             {% endfor %}
           </div>
         </div>
+
+        {%endif%}
+
         <div class="col-12">
           <label for="contato" class="form-label" style="font-weight: 600;">Contato <small>(opcional)</small></label>
           <div class="row g-3">
@@ -103,6 +106,9 @@
             </div>
           </div>
         </div>
+
+        {%if business[13]%}
+
         <div class="col-12">
           <label class="form-label" style="font-weight: 600;">Localização (opcional)</label>
           <div class="row g-3">
@@ -336,4 +342,54 @@
     }
   }
 </script>
+
+<script>
+  
+// Condição para premium: contatos
+const canAddContacts = {{business[13]}}
+
+// Input fields
+const instagramInput = document.getElementById("inputInsta");
+const phoneInput = document.getElementById("inputNumber");
+const emailInput = document.getElementById("inputEmail");
+
+// Array
+const contactInputs = [instagramInput, phoneInput, emailInput];
+
+// Gerenciar 
+function handleInputBehavior(){
+  // Se premium, não é preciso decidir um contato.
+  if (canAddContacts) {
+    return;
+  }
+
+  const filledInput = contactInputs.find(input => input.value.trim() !== '');
+
+  //Se um dos contatos tem algum valor, desativa os outros
+  if (filledInput) {
+    contactInputs.forEach(input => {
+      if (input !== filledInput) {
+        input.disabled = true;
+        input.classList.add('disabled');
+      }
+    });
+  } else{
+    //Se não tem nenhum valor, re-ativa todos.
+    contactInputs.forEach(input => {
+      input.disabled = false;
+      input.classList.remove('disabled');
+    })
+  }
+}
+
+//Adiciona event listeners para cada input
+contactInputs.forEach(input => {
+  input.addEventListener('input', handleInputBehavior);
+});
+
+//Run a função ao carregar a página
+document.addEventListener('DOMContentLoaded', handleInputBehavior)
+
+</script>
+
 {% endblock %}

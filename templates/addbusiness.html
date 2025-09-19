@@ -50,7 +50,30 @@
         <div class="col-12"> <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label> <textarea class="form-control limiteDeChar" id="descricao" name="descricao" rows="5" placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais." maxlength="350"></textarea> <div id="charCount">0 / 350</div> </div>
 
         <div class="col-12">
-          <label class="form-label fw-bold mb-2">Participa de algum evento?</label>
+          <label for="contato" class="form-label" style="font-weight: 600;">Contato <small>(opcional)</small></label>
+
+          <fieldset>
+          <div class="row g-3">
+            <div class="col-6">
+              <label for="inputInsta" class="form-label">Instagram</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text"><i class="bi bi-instagram"></i></span>
+                <input name="insta" type="text" class="form-control" id="inputInsta" placeholder="@examplo"/>
+              </div>
+            </div>
+            <div class="col-6">
+              <label for="inputNumber" class="form-label">Telefone</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                <input name="number" type="text" class="form-control" id="inputNumber" placeholder="(XX) XXXXX-XXXX" />
+              </div>
+            </div>
+
+        <div class="lead form-text mt-1 mb-3" style="font-size: 0.7rem;">O plano inicial permite somente escolher um dos dois meios de contato disponíveis.</div>
+          </div>
+
+        <div class="col-12">
+          <label class="form-label fw-bold mb-2">Participa de algum evento? <small>(opcional)</small></label>
           <div class="d-flex gap-3">
             <div class="card p-3 selectable" data-event="">
               Não participa
@@ -133,6 +156,46 @@
         });
     });
   });
+</script>
+
+<script>
+// Input fields
+const instagramInput = document.getElementById("inputInsta");
+const phoneInput = document.getElementById("inputNumber");
+
+// Array
+const contactInputs = [instagramInput, phoneInput, emailInput];
+
+// Gerenciar 
+function handleInputBehavior(){
+
+  const filledInput = contactInputs.find(input => input.value.trim() !== '');
+
+  //Se um dos contatos tem algum valor, desativa os outros
+  if (filledInput) {
+    contactInputs.forEach(input => {
+      if (input !== filledInput) {
+        input.disabled = true;
+        input.classList.add('disabled');
+      }
+    });
+  } else{
+    //Se não tem nenhum valor, re-ativa todos.
+    contactInputs.forEach(input => {
+      input.disabled = false;
+      input.classList.remove('disabled');
+    })
+  }
+}
+
+//Adiciona event listeners para cada input
+contactInputs.forEach(input => {
+  input.addEventListener('input', handleInputBehavior);
+});
+
+//Run a função ao carregar a página
+document.addEventListener('DOMContentLoaded', handleInputBehavior)
+
 </script>
 
 {% endblock %}

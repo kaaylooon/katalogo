@@ -79,6 +79,10 @@ html{
   z-index: auto;
 }
 
+.disabled{
+  
+}
+
 .dropdown-menu {
   z-index: 2000 !important;
 }

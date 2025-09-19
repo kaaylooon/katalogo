@@ -52,7 +52,7 @@
           </ul>
 
           <div class="text-center mt-2 d-grid">
-            <form action="/create-checkout-session" method="POST">
+            <form action="{{url_for('checkout.create_checkout_session', business_id=business[0])}}" method="POST">
             <button id="checkout-button" type="submit" data-business-id="{{ business[0] }}" class="btn btn-primary shadow">
               Desbloqueie agora por <strong>R$15/mês</strong>
             </button>

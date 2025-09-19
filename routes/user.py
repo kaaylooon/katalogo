@@ -28,16 +28,10 @@ def perfil(user_id):
 @author_or_admin_required(buscar_id_business, "by_user")
 def perfiledit(user_id):
 	user = mostrar_user(user_id)
-	if not user:
-		flash('Usuário não encontrado.', 'warning')
-		return redirect('/')
-	if session['user_id'] != user[0]:
-		return redirect('/perfil/<int:user_id>')
 	if request.method == "POST":
 		
 		username = request.form.get("username")
 		descricao = request.form.get("descricao", "Sem descrição")
-
 
 		pfp = request.files['pfp']
 		if pfp and allowed_file(pfp.filename):

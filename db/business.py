@@ -1,10 +1,10 @@
 import sqlite3
 from .connection import get_connection
 
-def adicionar_business(nome, descricao, categoria, filename, by_user, evento):
+def adicionar_business(nome, descricao, categoria, instagram, numero, filename, by_user, evento):
 	conn = get_connection()
 	cur = conn.cursor()
-	cur.execute("INSERT INTO business (nome, descricao, categoria, instagram, numero, email, logo_path, by_user, lat, lon, evento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (nome, descricao, categoria, '', '', '', filename, by_user, '', '', evento))
+	cur.execute("INSERT INTO business (nome, descricao, categoria, instagram, numero, email, logo_path, by_user, lat, lon, evento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (nome, descricao, categoria, instagram, numero, '', filename, by_user, '', '', evento))
 
 	business_id = cur.lastrowid
 	conn.commit()
