@@ -54,6 +54,7 @@ def api_feeds():
 	feeds = [serialize_feed(f) for f in mostrar_feed()]
 	return jsonify({"data": feeds})
 
+
 @routes.route('/dashboard/business/<int:business_id>/premium', methods=['POST'])
 @login_required
 @role_required('admin')

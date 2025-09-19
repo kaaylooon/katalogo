@@ -74,6 +74,15 @@ html{
  border-radius: 1rem;
 }
 
+.card, .glass-card{
+  position: relative;
+  z-index: auto;
+}
+
+.dropdown-menu {
+  z-index: 2000 !important;
+}
+
  .selectable {
     cursor: pointer;
     transition: 0.2s;
@@ -144,10 +153,10 @@ a {
 }
 
 .spacing-button{
-  width: 60px; height: 60px; z-index: 1055;
+  width: 60px; height: 60px; z-index: 50555;
 }
 .spacing-button-icon{
-font-size: 28px; line-height: 1;
+font-size: 28px; line-height: 1; z-index: 5056;
 }
 
 @keyframes green-glow {
@@ -161,12 +170,12 @@ font-size: 28px; line-height: 1;
     box-shadow: 0 0 2px rgba(175, 220, 178, 0.4);
   }
 }
-
+/*
 .premium-glow {
   animation: green-glow 5s infinite;
   transition: transform 0.3s ease-in-out;
 }
-
+*/
 /*PRIMARY*/
 
 .bg-primary {
@@ -209,6 +218,7 @@ option {
  background-color: var(--inputcolor) !important;
  color: #0a1f44 !important;
  border: 1px solid var(--inputcolorborder) !important;
+ z-index: 5000 !important;
 }
 .form-control:focus,
 .form-select:focus,

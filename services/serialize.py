@@ -33,17 +33,12 @@ def serialize_user(u):
 	}
 
 def serialize_feed(f):
-	actions = f"""
-		<form method='POST' action='{url_for('feed.del_feed_route', feed_id=f[0])}' style='display:inline'>
-			<button class='btn btn-sm btn-outline-danger'>Excluir</button>
-		</form>
-	"""
 	return {
 		"id": f[0],
 		"business_id": f[1],
 		"created_at": f[5],
-		"actions": actions
-	}
+		"feed_id": f[0]
+    }
 
 def serialize_comment(c):
 	actions = f"""

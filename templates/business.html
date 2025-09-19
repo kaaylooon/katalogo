@@ -1,34 +1,35 @@
+
 {% extends "base.html" %}
 {% block content %}
-
 <!-- Modal -->
 <div class="modal fade" id="add_comment" tabindex="-1" aria-labelledby="addFeedLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addFeedLabel">Adicionar comentário</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="{{ url_for('comentario.comentar', business_id=business['id']) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-        <div class="modal-body">
-          <!-- Texto do post -->
-          <div class="mb-3">
+ <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+   <div class="modal-header">
+    <h5 class="modal-title" id="addFeedLabel">Adicionar comentário</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+   </div>
 
-            <label for="commentText" class="form-label">Conteúdo</label>
-            <textarea class="form-control limiteDeChar" id="commentText" name="content" rows="3" placeholder="O que você quer comentar?" required></textarea>
-            <div id="charCount">0 / 350</div>
-            <div class="invalid-feedback">
-              Por favor, escreva algo antes de enviar.
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-link" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Comentar</button>
-        </div>
-      </form>
+   <form action="{{ url_for('comentario.comentar', business_id=business['id']) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+    <div class="modal-body mb-3">
+     <label for="commentText" class="form-label">Conteúdo</label>
+
+     <textarea class="form-control limiteDeChar" id="commentText" name="content" rows="3" placeholder="O que você quer comentar?" required></textarea>
+     <div id="charCount">0 / 350</div>
+     <div class="invalid-feedback">
+      Por favor, escreva algo antes de enviar.
+     </div>
     </div>
+
+    <div class="modal-footer">
+     <button type="button" class="btn btn-link" data-bs-dismiss="modal">Cancelar</button>
+     <button type="submit" class="btn btn-primary">Comentar</button>
+    </div>
+   </form>
   </div>
+ </div>
 </div>
+
 
 <div class="container p-4 pt-0" data-aos="fade-up">
   <div class="border-0">

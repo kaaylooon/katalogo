@@ -17,12 +17,12 @@ href="addbusiness">
     <div class="">
      <input type="text" class="form-control" name="q" placeholder="Nome do negócio" id="exampleDataList" />
     </div>
-
+    <!-- FILTRAR CATEGORIA (FICA EMBAIXO DO CARD, ENTAO TIREI)
     <div class="filter-dropdown">
-     <div class="dropdown">
-      <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-       Escolha a categoria
-      </button>
+  <div class="dropdown">
+    <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" data-bs-display="dynamic" data-bs-toggle="dropdown" data-bs-display="static">
+      Escolha a categoria
+    </button>
       <ul class="dropdown-menu w-100">
        <li><a class="dropdown-item" href="?categoria=Alimentação">Alimentação</a></li>
        <li><a class="dropdown-item" href="?categoria=Livros%20e%20Educação">Livros e Educação</a></li>
@@ -40,6 +40,7 @@ href="addbusiness">
       </ul>
      </div>
     </div>
+    --->
    </div>
   </form>
  </div>
@@ -48,7 +49,7 @@ href="addbusiness">
 <div class="container mt-4">
  <div class="row">
   {% for b in businesses %}
-  <div class="col-md-4 mb-4" data-aos="fade-up">
+  <div class="col-md-4 mb-4 p-4 pt-0 pb-0" data-aos="fade-up">
    <div class="card h-100 glass-card {% if b[13] %} premium-glow border border-primary border-1{%else%}shadow-sm{% endif %}">
 
      {% if b[13] %}
@@ -89,4 +90,7 @@ href="addbusiness">
 <div class="text-center">
  <p class="line-clamp-3 card-text text-muted small flex-grow-1">Nenhum business encontrado. Desculpe pela incoveniência</p>
 </div>
-{% endif %} {% endblock %}
+
+{% endif %}{% endblock %}
+
+

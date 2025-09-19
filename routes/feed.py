@@ -3,12 +3,11 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
 # local
-from auth import allowed_file, login_required
+from auth import allowed_file, author_or_admin_required, login_required
 from db import *
 from services import *
 
 routes = Blueprint('feed', __name__)
-
 
 #atividades
 @routes.route('/feed', methods=['GET'])
@@ -16,7 +15,8 @@ def feed():
 	feed = mostrar_feed()
 	meusbusinesses = []
 	if 'user_id' in session:
-		meusbusinesses = mostrar_businesses_user(session['user_id'])
+		meusbusinesses = [b for b in mostrar_businesses_user(session['user_id']) if b[5]]
+
 	return render_template("feed.html", feed=feed, meusbusinesses=meusbusinesses)
 
 #adicionar feed
@@ -29,11 +29,10 @@ def add():
 
 	if image and allowed_file(image.filename):
 		image_filename = save_image(image)
-		return image_filename
 	else:
 		image_filename = None
 
-	add_feed(business_id, content, session['user_id'], image_filename)
+		add_feed(business_id, content, session['user_id'], image_filename)
 
 	logger.info(
 		f"Novo feed adicionado. ID do negócio: {business_id}; "
@@ -45,6 +44,7 @@ def add():
 #excluir feed
 @routes.route('/feed/<int:feed_id>/del', methods=['POST'])
 @login_required
+@author_or_admin_required
 def del_feed_route(feed_id):
 	feed = mostrar_feed_by_id(feed_id)
 	if feed:
