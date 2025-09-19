@@ -1,7 +1,6 @@
 {% extends "base.html" %} {% block content %}
 
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow spacing-button"
-href="addbusiness">
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow spacing-button" href="addbusiness">
  <span class="material-symbols-outlined spacing-button-icon">
   add_business
  </span>
@@ -11,7 +10,7 @@ href="addbusiness">
 
 <div class="container p-5 pt-4 pb-5" data-aos="zoom-out">
  <div class="row">
-      <h5>Buscar / Filtrar</h5>
+  <h5>Buscar / Filtrar</h5>
   <form action="{{ url_for('business.businesses') }}" method="get" class="card-body">
    <div class="d-grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
     <div class="">
@@ -51,15 +50,18 @@ href="addbusiness">
   {% for b in businesses %}
   <div class="col-md-4 mb-0 p-3 pt-0" data-aos="fade-up">
    <div class="card h-100 glass-card {% if b[13] %} premium-glow border border-primary border-1{%else%}shadow-sm{% endif %}">
+    {% if b[13] %}
+    <div
+     class="position-absolute top-0 end-0 m-2 badge rounded-pill text-white d-flex align-items-center gap-1 shadow-sm"
+     style="padding: 0.3rem 0.8rem; font-size: 0.75rem; background: linear-gradient(45deg, var(--COLOR6), var(--COLOR7));"
+     title="Premium"
+     data-aos="zoom-in"
+    >
+     <i class="bi bi-star-fill"></i>
+    </div>
+    {% endif %}
 
-     {% if b[13] %}
-<div class="position-absolute top-0 end-0 m-2 badge rounded-pill text-white d-flex align-items-center gap-1 shadow-sm"
-     style="padding:0.3rem 0.8rem; font-size: 0.75rem; background: linear-gradient(45deg, var(--COLOR6), var(--COLOR7));" title="Premium" data-aos="zoom-in">
-    <i class="bi bi-star-fill"></i>
-</div>
-{% endif %}
-
-    <div class="card-body d-flex flex-column" >
+    <div class="card-body d-flex flex-column">
      <div class="d-flex align-items-center mb-2">
       <img src="{{ url_for('static', filename='uploads/' ~ b[7]) if b[7] else 'https://placehold.co/150' }}" alt="{{ b[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
       <h5 class="card-title mb-0">
@@ -78,7 +80,6 @@ href="addbusiness">
      </p>
 
      <a href="/business/{{ b[0] }}" class="btn btn-sm btn-primary mt-auto">Ver mais</a>
-
     </div>
    </div>
   </div>
@@ -92,5 +93,3 @@ href="addbusiness">
 </div>
 
 {% endif %}{% endblock %}
-
-

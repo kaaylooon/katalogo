@@ -1,6 +1,5 @@
 {% extends "base.html" %} {% block content %} {% if session_id == user[0] %}
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow spacing-button z-1050"
-href="{{url_for('user.perfiledit', user_id=user[0])}}">
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow spacing-button z-1050" href="{{url_for('user.perfiledit', user_id=user[0])}}">
  <span class="material-symbols-outlined spacing-button-icon">
   manage_accounts
  </span>
@@ -53,47 +52,48 @@ href="{{url_for('user.perfiledit', user_id=user[0])}}">
    </div>
   </div>
 
- <div class="tab-pane fade" id="negocios" role="tabpanel" aria-labelledby="negocios-tab">
-  <div class="row">
-   {% if business %} {% for b in business %}
-   <div class="col-md-6 mb-3">
-    <div class="card shadow-sm p-2 d-flex" data-aos="fade-up">
-     <div class="d-flex align-items-center flex-grow-1">
-      <img src="{{ url_for('static', filename='uploads/' ~ b[2]) if b[2] else 'https://placehold.co/50' }}" alt="{{ b[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
-      <a href="{{ url_for('business.business', business_id=b[0]) }}" class="fw-bold text-decoration-none">{{ b[1] }}</a>
-      {% if session_id == user[0] %}
-      <div class="ms-auto">
-       <a class="btn btn-link" href="{{url_for('business.delbusiness', business_id=b[0], next=request.path)}}">Excluir</a>
-       <a class="btn btn-secondary" href="{{url_for('business.edit', business_id=b[0])}}">Editar</a>
+  <div class="tab-pane fade" id="negocios" role="tabpanel" aria-labelledby="negocios-tab">
+   <div class="row">
+    {% if business %} {% for b in business %}
+    <div class="col-md-6 mb-3">
+     <div class="card shadow-sm p-2 d-flex" data-aos="fade-up">
+      <div class="d-flex align-items-center flex-grow-1">
+       <img src="{{ url_for('static', filename='uploads/' ~ b[2]) if b[2] else 'https://placehold.co/50' }}" alt="{{ b[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+       <a href="{{ url_for('business.business', business_id=b[0]) }}" class="fw-bold text-decoration-none">{{ b[1] }}</a>
+       {% if session_id == user[0] %}
+       <div class="ms-auto">
+        <a class="btn btn-link" href="{{url_for('business.delbusiness', business_id=b[0], next=request.path)}}">Excluir</a>
+        <a class="btn btn-secondary" href="{{url_for('business.edit', business_id=b[0])}}">Editar</a>
+       </div>
+       {% endif %}
       </div>
-      {% endif %}
      </div>
+    </div>
+    {% endfor %} {% else %}
+    <p class="text-center text-muted">Nenhum negócio ainda</p>
+    {% endif %}
+   </div>
+  </div>
+
+  <div class="tab-pane fade" id="comentarios" role="tabpanel" aria-labelledby="comentarios-tab">
+   {% if comentarios %} {% for c in comentarios %}
+   <div class="card glass-card mb-4 shadow-sm">
+    <div class="card-body">
+     <div class="d-flex align-items-center mb-2">
+      <img src="{{ c['pfp_path'] if c['pfp_path'] else url_for('static', filename='user.png') }}" alt="foto" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+      <div>
+       <a href="{{ url_for('user.perfil', user_id=c['user_id']) }}"><b>{{ c['username'] }}</b></a><br />
+       <small class="text-muted">{{ c['created_at']|humandate }}</small>
+      </div>
+     </div>
+     <p class="mb-0">{{ c['content'] }}</p>
     </div>
    </div>
    {% endfor %} {% else %}
-   <p class="text-center text-muted">Nenhum negócio ainda</p>
+   <p class="text-center text-muted">Nenhum comentário ainda</p>
    {% endif %}
   </div>
  </div>
 
- <div class="tab-pane fade" id="comentarios" role="tabpanel" aria-labelledby="comentarios-tab">
-  {% if comentarios %} {% for c in comentarios %}
-  <div class="card glass-card mb-4 shadow-sm">
-   <div class="card-body">
-    <div class="d-flex align-items-center mb-2">
-     <img src="{{ c['pfp_path'] or url_for('static', filename='user.png') }}" alt="foto" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
-     <div>
-      <a href="{{ url_for('user.perfil', user_id=c['user_id']) }}"><b>{{ c['username'] }}</b></a><br />
-      <small class="text-muted">{{ c['created_at']|humandate }}</small>
-     </div>
-    </div>
-    <p class="mb-0">{{ c['content'] }}</p>
-   </div>
-  </div>
-  {% endfor %} {% else %}
-  <p class="text-center text-muted">Nenhum comentário ainda</p>
-  {% endif %}
- </div>
+ {% endblock %}
 </div>
-
-{% endblock %}
