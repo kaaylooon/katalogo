@@ -1,32 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
 
-
 <!-- Modal de pagamento -->
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="paymentModalLabel">Escolha sua forma de pagamento</h5>
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold" id="paymentModalLabel">Escolha sua forma de pagamento</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
-      <div class="modal-body">
+
+      <div class="modal-body py-4">
         <!-- Form Cartão -->
-        <form action="{{ url_for('checkout.create_checkout_session_card', business_id=business[0]) }}" method="POST">
-          <button type="submit" class="btn btn-primary w-100 mb-2">
-            Pagar com Cartão
+        <form action="{{ url_for('checkout.create_checkout_session_card', business_id=business[0]) }}" method="POST" class="mb-3">
+          <button type="submit" class="btn btn-primary w-100 btn-lg shadow-sm">
+            <i class="bi bi-credit-card me-2"></i> Pagar com Cartão
           </button>
         </form>
 
-        <!-- Form PIX -->
+        <!-- Form PIX/Boleto -->
         <form action="{{ url_for('checkout.create_checkout_session_pix', business_id=business[0]) }}" method="POST">
-          <button type="submit" class="btn btn-success w-100">
-            Pagar com PIX
+          <button type="submit" class="btn btn-primary w-100 btn-lg shadow-sm">
+            <i class="bi bi-wallet2 me-2"></i> Pagar com Boleto
           </button>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+      <div class="modal-footer border-0 pt-0 d-flex flex-column align-items-center">
+        <small class="text-muted">
+          Pagamento seguro via <strong>Stripe</strong>. Nenhum dado sensível (cartão ou CPF) passa pelo Katálogo>, evitando riscos de vazamento. Você pode cancelar a assinatura quando desejar.
+        </small>
       </div>
     </div>
   </div>

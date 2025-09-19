@@ -79,14 +79,15 @@ def create_checkout_session_pix(business_id):
 						'price_data': {
 							"currency": "brl",
 							"product_data": {
-								"name": "Plano Premium (30 dias)",
+								"name": "Plano Premium",
 							},
 							"unit_amount": 1500,
+							"recurring": {"interval": "month"}
 						},
 						'quantity': 1,
 					}
 				],
-				mode='payment',
+				mode='subscription',
 				payment_method_types=["boleto"],
 				success_url=f'{YOUR_DOMAIN}/business/{business_id}/checkout/sucesso',
 				cancel_url=f'{YOUR_DOMAIN}/business/{business_id}/checkout/cancelado',
