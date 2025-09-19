@@ -21,7 +21,7 @@ routes = Blueprint("checkout", __name__)
 stripe.api_key = stripe_keys['STRIPE_API_KEY']
 endpoint_secret = os.environ.get("STRIPE_WEBHOOK_SECRET")
 
-YOUR_DOMAIN = "http://192.168.0.4:5000"
+YOUR_DOMAIN = "https://katalogo-1.onrender.com"
 
 @routes.route('/business/<int:business_id>/checkout', methods=['POST'])
 @author_or_admin_required(buscar_id_business, "by_user")
@@ -46,7 +46,10 @@ def create_checkout_session(business_id):
 				],
 				mode='subscription',
 				success_url=f'{YOUR_DOMAIN}/business/{business_id}/checkout/sucesso',
-				cancel_url=f'{YOUR_DOMAIN}/business/{business_id}/checkout/cancelado'
+				cancel_url=f'{YOUR_DOMAIN}/business/{business_id}/checkout/cancelado',
+				metadata={
+					"business_id": str(business_id),
+				}
 			)
 			return redirect(session.url, code=303)
 		except Exception as e:
@@ -78,40 +81,26 @@ def cancelado(business_id):
 
 @routes.route("/webhook", methods=["POST"])
 def stripe_webhook():
-    payload = request.data
-    sig_header = request.headers.get("Stripe-Signature")
+	payload = request.data
+	sig_header = request.headers.get('Stripe-Signature')
 
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
-        )
-    except ValueError as e:
-        # Corpo inválido
-        return jsonify(success=False), 400
-    except stripe.error.SignatureVerificationError as e:
-        # Assinatura inválida
-        return jsonify(success=False), 400
+	try:
+		event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+	except Exception as e:
+		logger.warning('Stripe webhook error:', str(e))
+		return str(e), 400
 
-    # ------------------------------
-    # Tratamento dos eventos
-    # ------------------------------
-    if event["type"] == "checkout.session.completed":
-        session = event["data"]["object"]
+	# Assinatura criada / paga
+	if event['type'] == 'checkout.session.completed':
+		session = event['data']['object']
+		business_id = session["metadata"]["business_id"]
 
-        # pega business_id que você passou no checkout
-        business_id = session.get("success_url", "").split("/")[-2]
+		business = mostrar_business_by_id(int(business_id))
 
-        logger.warning(f"Pagamento concluído para business_id={business_id}")
+		logger.warning(f'Assinatura criada/paga: negócio de ID {business_id}')
 
-        # chama sua função
-        add_premium(True, business_id)
+		premium = True
 
-    elif event["type"] == "invoice.paid":
-        invoice = event["data"]["object"]
-        logger.info(f"Fatura paga: {invoice['id']}")
+		add_premium(premium, business_id)
 
-    elif event["type"] == "invoice.payment_failed":
-        invoice = event["data"]["object"]
-        logger.warning(f"Pagamento falhou: {invoice['id']}")
-
-    return jsonify(success=True), 200
+	return '', 200
