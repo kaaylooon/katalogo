@@ -162,5 +162,11 @@ def stripe_webhook():
 		if payment_type == "boleto":
 			add_premium(True, business_id, dias=30)
 
+	elif event['type'] == 'customer.subscription.created':
+		intent = event['data']['object']
+		business_id = intent["metadata"]["business_id"]
+
+		logger.warning(f"O negócio de ID {business_id} passou com sucesso pelo checkout.")
+
 	return '', 200
 
