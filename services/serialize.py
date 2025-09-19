@@ -18,19 +18,29 @@ def serialize_business(b):
 		"categoria": b[3],
 		"owner": b[9],
 		"premium": bool(b[13]),
+		"premium_valid_until": b[14],
+		"evento": b[15],
 		"created_at": b[8],
 		"actions": actions
 	}
-
-
+	
 def serialize_user(u):
+	actions = f"""
+		<a href='{url_for('user.perfiledit', user_id=u[0])}' class='btn btn-sm btn-outline-secondary'>Editar</a>
+
+		<form method='POST' action='{url_for('user.excluir', user_id=u[0])}' style='display:inline'>
+			<button class='btn btn-sm btn-outline-danger'>Excluir</button>
+		</form>
+	"""
 	return {
 		"id": u[0],
 		"nome": u[1],
 		"email": u[2],
 		"contact": u[4],
-		"role": u[6]
+		"role": u[6],
+		"actions": actions
 	}
+
 
 def serialize_feed(f):
 	return {
@@ -38,7 +48,7 @@ def serialize_feed(f):
 		"business_id": f[1],
 		"created_at": f[5],
 		"feed_id": f[0]
-    }
+	}
 
 def serialize_comment(c):
 	actions = f"""

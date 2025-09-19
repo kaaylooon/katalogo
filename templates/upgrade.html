@@ -1,8 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
 
+
+<!-- Modal de pagamento -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentModalLabel">Escolha sua forma de pagamento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Form Cartão -->
+        <form action="{{ url_for('checkout.create_checkout_session_card', business_id=business[0]) }}" method="POST">
+          <button type="submit" class="btn btn-primary w-100 mb-2">
+            Pagar com Cartão
+          </button>
+        </form>
+
+        <!-- Form PIX -->
+        <form action="{{ url_for('checkout.create_checkout_session_pix', business_id=business[0]) }}" method="POST">
+          <button type="submit" class="btn btn-success w-100">
+            Pagar com PIX
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {%if business[13]%}
 <h1 class="title-2 text-center mb-1">PREMIUM</h1>
+
   <p class="lead text-center mb-4">Este negócio já tem o plano premium!</p>
 {%else%}
   <h1 class="title-2 text-center mb-1">PREMIUM</h1>
@@ -52,11 +84,9 @@
           </ul>
 
           <div class="text-center mt-2 d-grid">
-            <form action="{{url_for('checkout.create_checkout_session', business_id=business[0])}}" method="POST">
-            <button id="checkout-button" type="submit" data-business-id="{{ business[0] }}" class="btn btn-primary shadow">
+            <button type="button" class="btn btn-primary shadow" data-bs-toggle="modal" data-bs-target="#paymentModal">
               Desbloqueie agora por <strong>R$15/mês</strong>
             </button>
-            </form>
           </div>
         </div>
       </div>

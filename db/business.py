@@ -1,5 +1,6 @@
 import sqlite3
 from .connection import get_connection
+import datetime
 
 def adicionar_business(nome, descricao, categoria, instagram, numero, filename, by_user, evento):
 	conn = get_connection()
@@ -12,24 +13,24 @@ def adicionar_business(nome, descricao, categoria, instagram, numero, filename, 
 	return business_id
 
 def edit_business(business_id, **kwargs):
-    allowed_fields = ['nome', 'categoria', 'descricao', 'instagram', 'numero', 'email', 'logo_path', 'lat', 'lon']
-    set_clause = []
-    params = []
+	allowed_fields = ['nome', 'categoria', 'descricao', 'instagram', 'numero', 'email', 'logo_path', 'lat', 'lon']
+	set_clause = []
+	params = []
 
-    for field in allowed_fields:
-        if field in kwargs and kwargs[field] not in [None, '']:
-            set_clause.append(f"{field} = ?")
-            params.append(kwargs[field])
+	for field in allowed_fields:
+		if field in kwargs and kwargs[field] not in [None, '']:
+			set_clause.append(f"{field} = ?")
+			params.append(kwargs[field])
 
-    if not set_clause:
-        return  # nada pra atualizar
+	if not set_clause:
+		return  # nada pra atualizar
 
-    params.append(business_id)
-    query = f"UPDATE business SET {', '.join(set_clause)} WHERE id = ?"
+	params.append(business_id)
+	query = f"UPDATE business SET {', '.join(set_clause)} WHERE id = ?"
 
-    with get_connection() as conn:
-        conn.execute(query, tuple(params))
-        conn.commit()
+	with get_connection() as conn:
+		conn.execute(query, tuple(params))
+		conn.commit()
 
 
 def del_business(business_id):
@@ -81,14 +82,28 @@ def buscar_nome_business(nome):
 	conn.close()
 	return business[0] if business else None
 
-def mostrar_business_by_id(business_id):
-	conn = get_connection()
-	cur = conn.cursor()
-	cur.execute("SELECT * FROM business WHERE id = ?", (business_id,))
-	business = cur.fetchone()
-	conn.close()
-	return business
 
+def desativar_premium_expirado():
+	hoje = datetime.date.today()
+	with get_connection() as conn:
+		conn.execute("""
+			UPDATE business
+			SET premium = FALSE
+			WHERE premium = TRUE AND premium_valid_until IS NOT NULL AND premium_valid_until < ?
+		""", (hoje,))
+	
+def mostrar_business_by_id(business_id):
+	with get_connection() as conn:
+		business = conn.execute("SELECT * FROM business WHERE id = ?", (business_id,)).fetchone()
+		if business and business[13] and business[14]:
+			if business[14] < datetime.date.today():
+				conn.execute("""
+					UPDATE business SET premium = FALSE WHERE id = ?
+				""", (business_id,))
+				business = dict(business)  # converte para dict
+				business["premium"] = False
+		return business
+		
 def mostrar_businesses_user(user_id):
 	conn = get_connection()
 	cur = conn.cursor()
@@ -97,13 +112,17 @@ def mostrar_businesses_user(user_id):
 	conn.close()
 	return meusbusinesses
 
-def add_premium(premium, business_id):
-	conn = get_connection()
-	cur = conn.cursor()
-	cur.execute("""
-		UPDATE business
-		SET premium = ?
-		WHERE id = ?
-	""", (premium, business_id))
-	conn.commit()
-	conn.close()
+
+def add_premium(premium, business_id, dias=None):
+	with get_connection() as conn:
+		if dias:
+			valid_until = (datetime.date.today() + datetime.timedelta(days=dias))
+		else:
+			valid_until = None  # para assinatura recorrente
+
+		conn.execute("""
+			UPDATE business
+			SET premium = ?,
+				premium_valid_until = ?
+			WHERE id = ?
+		""", (premium, valid_until, business_id))

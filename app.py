@@ -40,7 +40,6 @@ def get_publishable_key():
 	return jsonify(stripe_config)
 
 
-
 def humanize_datetime(value):
 	if not value:
 		return ""

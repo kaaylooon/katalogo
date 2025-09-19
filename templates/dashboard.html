@@ -51,6 +51,8 @@
                             <th>Categoria</th>
                             <th>Dono</th>
                             <th>Premium</th>
+                            <th>Premium até</th>
+                            <th>Evento</th>
                             <th>Data</th>
                             <th>Ações</th>
                         </tr>
@@ -70,6 +72,7 @@
                             <th>Email</th>
                             <th>Contato</th>
                             <th>Cargo</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                 </table>
@@ -130,6 +133,8 @@ $(document).ready(function() {
             { data: 'categoria' },
             { data: 'owner' },
             { data: 'premium' },
+            { data: "premium_valid_until" },
+            { data: "evento" },
             { data: 'created_at' },
             { data: 'actions', orderable: false, searchable: false }
         ]
@@ -143,7 +148,8 @@ $(document).ready(function() {
             { data: 'nome' },
             { data: 'email' },
             { data: 'contact' },
-            { data: 'role' }
+            { data: 'role' },
+            { data: 'actions' }
         ]
     });
 

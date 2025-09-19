@@ -1,3 +1,37 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container text-center py-5" data-aos="fade-up">
+  <div class="mb-4">
+    <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+  </div>
+
+  <h1 class="title-2 mb-3">Parabéns!</h1>
+  <p class="lead mb-4">O seu negócio agora é <strong class="text-primary">Premium</strong></p>
+
+  <div class="card shadow-sm border-0 mx-auto p-3" style="max-width: 600px;" data-aos="zoom-in">
+    <div class="card-body">
+      <h4 class="fw-bold text-primary mb-3">O que você desbloqueou:</h4>
+      <ul class="list-unstyled text-start">
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Logo do negócio customizada</li>
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Descrição completa</li>
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Horários de funcionamento</li>
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Contatos múltiplos</li>
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Destaque na listagem</li>
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Estatísticas de visitas</li>
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Postagem de atividades</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <a href="{{ url_for('business.business', business_id=business_id) }}" class="btn btn-primary btn-lg shadow">
+      Editar negócio
+    </a>
+    <a href="/" class="btn btn-outline-secondary btn-lg ms-3">
+      Voltar para início
+    </a>
+  </div>
+</div>
 
 {% endblock %}

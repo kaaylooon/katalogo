@@ -1,3 +1,30 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container text-center py-5" data-aos="fade-up">
+  <div class="mb-4">
+    <i class="bi bi-x-circle-fill text-danger" style="font-size: 5rem;"></i>
+  </div>
+
+  <h1 class="title-2 mb-3">Pagamento Cancelado</h1>
+  <p class="lead mb-4">Sua assinatura não foi concluída. Mas não se preocupe — você pode tentar novamente a qualquer momento.</p>
+
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 600px;" data-aos="zoom-in">
+    <div class="card-body">
+      <h4 class="fw-bold text-danger mb-3">Plano Premium não ativado</h4>
+      <p class="mb-0">Sem o plano Premium, seu negócio permanece no plano gratuito, com recursos limitados. 
+        Refaça o checkout quando estiver pronto para desbloquear todos os benefícios.</p>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <a href="{{ url_for('checkout.create_checkout_session', business_id=business_id) }}" class="btn btn-primary btn-lg shadow">
+      Tentar novamente
+    </a>
+    <a href="/" class="btn btn-outline-secondary btn-lg ms-3">
+      Voltar para início
+    </a>
+  </div>
+</div>
 
 {% endblock %}
