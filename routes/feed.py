@@ -44,7 +44,11 @@ def add():
 #excluir feed
 @routes.route('/feed/<int:feed_id>/del', methods=['POST'])
 @login_required
-@author_or_admin_required
+@author_or_admin_required(
+    mostrar_feed_by_id,   
+    author_field="by_user",
+    arg_name="feed_id"
+)
 def del_feed_route(feed_id):
 	feed = mostrar_feed_by_id(feed_id)
 	if feed:

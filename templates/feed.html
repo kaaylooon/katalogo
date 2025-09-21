@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-
+{% if meusbusinesses %}
 <a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button z-1050"
   {% if 'user_id' in session %}
     data-bs-target="#add_feed"
@@ -11,6 +11,7 @@
   {% endif %}>
    <span class="material-symbols-outlined spacing-button-icon">post_add</span>
 </a>
+{% endif %}
 
 <div class="modal fade" id="add_feed" tabindex="-1" aria-labelledby="addFeedLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -28,8 +29,6 @@
                           {% for b in meusbusinesses %}
                             <option value="{{ b[0] }}">{{ b[1] }}</option>
                           {% endfor %}
-                        {% else %}
-                          <option disabled>Nenhum negócio disponível</option>
                         {% endif %}
                     </select>
             </div>

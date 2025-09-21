@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+
 from services.location_service import get_municipios
 
 routes = Blueprint("location", __name__)

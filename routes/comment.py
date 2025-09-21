@@ -21,7 +21,11 @@ def comentar(business_id: int):
 
 @routes.route('/business/<int:business_id>/comentario/<int:comment_id>/excluir', methods=['POST'])
 @login_required
-@author_or_admin_required(mostrar_comentario_by_id, "user_id")
+@author_or_admin_required(
+    mostrar_comentario_by_id,   
+    author_field="user_id",
+    arg_name="comment_id"
+)
 def excluir(comment_id: int, business_id: int):
 
     del_comentario(comment_id)
@@ -30,7 +34,11 @@ def excluir(comment_id: int, business_id: int):
 
 @routes.route('/business/<int:business_id>/comentario/<int:comment_id>/editar', methods=['POST'])
 @login_required
-@author_or_admin_required(mostrar_comentario_by_id, "user_id")
+@author_or_admin_required(
+    mostrar_comentario_by_id,   
+    author_field="user_id",
+    arg_name="comment_id"
+)
 def editar(business_id: int, comment_id: int):
     business = buscar_id_business(business_id)
     if not business:

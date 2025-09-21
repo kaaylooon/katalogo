@@ -10,7 +10,7 @@ def add_business_images(business_id, image_filename):
 def delete_business_image(business_id, image_filename):
 	conn = get_connection()
 	cur = conn.cursor()
-	cur.execute("DELETE FROM business_images WHERE image_filename=?", (image_filename))
+	cur.execute("DELETE FROM business_images WHERE image_filename=?", (image_filename,))
 	conn.commit()
 	conn.close()
 

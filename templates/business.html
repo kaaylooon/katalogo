@@ -14,7 +14,7 @@
     <div class="modal-body mb-3">
      <label for="commentText" class="form-label">Conteúdo</label>
 
-     <textarea class="form-control limiteDeChar" id="commentText" name="content" rows="3" placeholder="O que você quer comentar?" required></textarea>
+     <textarea class="form-control limiteDeChar" id="commentText" name="content" rows="3" placeholder="O que você quer comentar?" maxlength="300" required></textarea>
      <div id="charCount">0 / 350</div>
      <div class="invalid-feedback">
       Por favor, escreva algo antes de enviar.
@@ -66,7 +66,7 @@
   {% endfor %}
 {% else %}
   <div class="carousel-item active">
-    <img class="img-fluid mx-auto d-block" src="https://placehold.co/1200x400?text=Vazio..." alt="Sem imagens">
+    <img class="img-fluid mx-auto d-block" src="https://placehold.co/1200x400?text=?" alt="Sem imagens">
   </div>
 {% endif %}
 
@@ -116,19 +116,22 @@
       
       {% if business[13]%}
 
-      {% if horario and horario[0][3] and horario[0][4] %}
-        <div class="card shadow-sm border-0 mb-4">
-          <div class="card-body">
-            <h5 class="card-title">Horário de funcionamento <small class="text-muted">(hoje)</small></h5>
-            
-            <ul class="list-unstyled">
-              <li>
-                <i class="bi bi-clock me-2"
-            ></i> {{ horario[0][3] }} até {{ horario[0][4] }}</li>
-            </ul>
+        {% if horario and horario[0][3] and horario[0][4] %}
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Horário de funcionamento <small class="text-muted">(hoje)</small></h5>
+              
+              <ul class="list-unstyled">
+                <li>
+                  <i class="bi bi-clock me-2"
+              ></i> {{ horario[0][3] }} até {{ horario[0][4] }}</li>
+              </ul>
+            </div>
           </div>
-        </div>
-      {% endif %}
+
+        {% endif %}
+
+      {%endif%}
 
       {%if business[4] or business[4] or business[6] %}
       <div class="card shadow-sm border-0 mb-4">
@@ -150,22 +153,19 @@
       </div>
       {% endif %}
 
-
-      {%endif%}
-
       {%if business[15]%}
         <div class="card shadow-sm border-0 mb-4">
           <div class="card-body">
             <h5 class="card-title">Evento/Projeto </h5> 
             <ul class="list-unstyled">
               <li><img
-                class="rounded-circle me-3"
+                class="rounded-circle me-1"
                 src="{{ url_for('static', filename='FeiraDoEmpreendedor_logo.jpeg') }}"
                 style="width: 35px; height: 35px;">
                 <a href="#"
                 target="_blank">
                 {{ business[15] }} 
-                <span class="text-muted">(Saiba mais)</span>
+                <span class="text-muted">(saiba mais)</span>
                 </a></li>
             </ul>
           </div>
@@ -174,12 +174,13 @@
 
 
       {%if business[13]%}
-      {% if business.lat and business.lon %}
+      {% if business.lat and business.lon and business[16] %}
 
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
           <h5 class="card-title">Localização</h5> 
-          <div id="map" style="height: 300px;"></div>
+          <!--<div class="card-text">{{business[16]}}</div>-->
+          <div id="map" style="height: 300px; z-index: 0;"></div>
         </div>
       </div>
       {% endif %}
@@ -226,7 +227,7 @@
       <div class="card glass-card mb-4 shadow-sm">
         <div class="card-body">
           <div class="d-flex align-items-center mb-2"><a href="{{ url_for('user.perfil', user_id=c['user_id']) }}">
-            <img src="{{ c['pfp_path'] or url_for('static', filename='user.png') }}" 
+            <img src="{{ url_for('static', filename='uploads/' ~ c['pfp_filename']) if c['pfp_filename'] else url_for('static', filename='user.png') }}" 
                  alt="foto" class="rounded-circle me-3" 
                  style="width: 50px; height: 50px; object-fit: cover;">
             <div>

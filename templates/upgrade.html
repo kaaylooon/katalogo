@@ -1,33 +1,5 @@
 {% extends "base.html" %} {% block content %}
 
-<!-- Modal de pagamento -->
-<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
- <div class="modal-dialog modal-dialog-centered modal-sm">
-  <div class="modal-content border-0 shadow-lg rounded-4">
-   <div class="modal-header border-0 pb-0">
-    <h5 class="modal-title fw-bold" id="paymentModalLabel">Escolha sua forma de pagamento</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-   </div>
-
-   <div class="modal-body py-4">
-    <!-- Form Cartão -->
-    <form action="{{ url_for('checkout.create_checkout_session_card', business_id=business[0]) }}" method="POST" class="mb-3">
-     <button type="submit" class="btn btn-primary w-100 btn-lg shadow-sm"><i class="bi bi-credit-card me-2"></i> Pagar com Cartão</button>
-    </form>
-
-    <!-- Form PIX/Boleto -->
-    <form action="{{ url_for('checkout.create_checkout_session_pix', business_id=business[0]) }}" method="POST">
-     <button type="submit" class="btn btn-primary w-100 btn-lg shadow-sm"><i class="bi bi-wallet2 me-2"></i> Pagar com Boleto</button>
-    </form>
-   </div>
-
-   <div class="modal-footer border-0 pt-0 d-flex flex-column align-items-center">
-    <small class="text-muted"> Pagamento seguro via <strong>Stripe</strong>. Nenhum dado sensível (cartão ou CPF) passa pelo Katálogo, evitando riscos de vazamento. Você pode cancelar a assinatura quando desejar. </small>
-   </div>
-  </div>
- </div>
-</div>
-
 {%if business[13]%}
 <h1 class="title-2 text-center mb-1">PREMIUM</h1>
 
@@ -78,7 +50,12 @@
      </ul>
 
      <div class="text-center mt-2 d-grid">
-      <button type="button" class="btn btn-primary shadow" data-bs-toggle="modal" data-bs-target="#paymentModal">Desbloqueie agora por <strong>R$15/mês</strong></button>
+        <form action="{{ url_for('checkout.create_checkout_session', business_id=business[0]) }}" method="POST">
+      <button type="submit" class="btn btn-primary shadow">Desbloqueie agora por <strong>R$15/mês</strong></button>
+        </form>
+
+
+    
      </div>
     </div>
    </div>

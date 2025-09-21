@@ -27,7 +27,7 @@ def mostrar_comentarios_business(business_id):
 	cur = conn.cursor()
 
 	cur.execute("""
-		SELECT c.*, u.username, u.pfp_path
+		SELECT c.*, u.username, u.pfp_filename
 		FROM comentarios c 
 		JOIN users u ON c.user_id = u.id
 		JOIN business b ON c.business_id = b.id
@@ -45,7 +45,7 @@ def mostrar_comentarios():
 	cur = conn.cursor()
 
 	cur.execute("""
-		SELECT c.*, u.username, u.pfp_path
+		SELECT c.*, u.username, u.pfp_filename
 		FROM comentarios c 
 		JOIN users u ON c.user_id = u.id
 		JOIN business b ON c.business_id = b.id
@@ -62,7 +62,7 @@ def mostrar_comentarios_user(user_id):
 	cur = conn.cursor()
 
 	cur.execute("""
-		SELECT c.*, u.username, u.pfp_path
+		SELECT c.*, u.username, u.pfp_filename
 		FROM comentarios c 
 		JOIN users u ON c.user_id = u.id
 		JOIN business b ON c.business_id = b.id

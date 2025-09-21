@@ -6,7 +6,7 @@
       <h4 class="mb-0">Editar Negócio</h4>
     </div>
     <div class="card-body p-4 d-flex justify-content-center">
-      <form class="row g-4 w-100" action="{{ url_for('business.edit', business_id=business['id']) }}" method="POST" enctype="multipart/form-data">
+      <form class="row g-4 w-100" action="{{ url_for('business.edit', business_id=business['id']) }}" method="POST" enctype="multipart/form-data" id="form_geral">
         <div class="row align-items-center mt-4">
           <div class="col-auto text-center">
             <input
@@ -62,6 +62,9 @@
           </textarea>
           <div id="charCount">0 / 350</div>
         </div>
+
+        
+        
         {%if business[13]%}
         <div class="col-12">
           <label class="form-label" style="font-weight: 600;">Horário de funcionamento <small>(opcional)</small></label>
@@ -83,6 +86,7 @@
         <div class="col-12">
           <label for="contato" class="form-label" style="font-weight: 600;">Contato <small>(opcional)</small></label>
           <div class="row g-3">
+            {%if business.instagram or business[13]%}
             <div class="col-6">
               <label for="inputInsta" class="form-label">Instagram</label>
               <div class="input-group has-validation">
@@ -90,6 +94,9 @@
                 <input name="insta" type="text" class="form-control" id="inputInsta" placeholder="@examplo" value="{{business.instagram}}"/>
               </div>
             </div>
+            {%endif%}
+
+          {%if business.numero or business[13]%}
             <div class="col-6">
               <label for="inputNumber" class="form-label">Telefone</label>
               <div class="input-group has-validation">
@@ -97,6 +104,8 @@
                 <input name="number" type="text" class="form-control" id="inputNumber" placeholder="(XX) XXXXX-XXXX" value="{{business.numero}}" />
               </div>
             </div>
+            {%endif%}
+            {%if business.email or business[13]%}
             <div class="col-md-6">
               <label for="inputEmail" class="form-label">E-mail</label>
               <div class="input-group has-validation">
@@ -104,70 +113,86 @@
                 <input name="email" type="email" class="form-control" id="inputEmail" placeholder="email@exemplo.com" value="{{business.email}}"/>
               </div>
             </div>
+            {%endif%}
           </div>
         </div>
 
         {%if business[13]%}
 
         <div class="col-12">
-          <label class="form-label" style="font-weight: 600;">Localização (opcional)</label>
+          <label class="form-label" style="font-weight: 600;">Localização <small>(opcional)</small></label>
           <div class="row g-3">
             <div class="col-6">
-              <label for="inputCep" class="form-label">CEP</label>
-              <input name="cep" type="integer" class="form-control" id="inputCep" placeholder="XXXXX-XXX" />
+              <label for="inputCep" class="form-label disabled">CEP <small>(opcional)</small></label>
+              <input name="cep" type="integer" class="form-control" id="inputCep" placeholder="XXXXX-XXX" disabled />
             </div>
             <div class="col-6">
-              <label for="estado" class="form-label">Estado</label>
-              <select class="form-select" name="estado" id="estado">
-                <option value="" selected disabled>Escolha...</option>
-                <option value="AC">Acre</option>
-                <option value="AL">Alagoas</option>
-                <option value="AP">Amapá</option>
-                <option value="AM">Amazonas</option>
-                <option value="BA">Bahia</option>
-                <option value="CE">Ceará</option>
-                <option value="DF">Distrito Federal</option>
-                <option value="ES">Espírito Santo</option>
-                <option value="GO">Goiás</option>
-                <option value="MA">Maranhão</option>
-                <option value="MT">Mato Grosso</option>
-                <option value="MS">Mato Grosso do Sul</option>
-                <option value="MG">Minas Gerais</option>
-                <option value="PA">Pará</option>
-                <option value="PB">Paraíba</option>
-                <option value="PR">Paraná</option>
-                <option value="PE">Pernambuco</option>
-                <option value="PI">Piauí</option>
-                <option value="RJ">Rio de Janeiro</option>
-                <option value="RN">Rio Grande do Norte</option>
-                <option value="RS">Rio Grande do Sul</option>
-                <option value="RO">Rondônia</option>
-                <option value="RR">Roraima</option>
-                <option value="SC">Santa Catarina</option>
-                <option value="SP">São Paulo</option>
-                <option value="SE">Sergipe</option>
-                <option value="TO">Tocantins</option>
+              <label for="inputEstado" class="form-label">Estado</label>
+              <select class="form-select" name="estado" id="inputEstado">
+                 <option value="" selected disabled>Escolha...</option>
+                  <option value="12">Acre (AC)</option>
+                  <option value="27">Alagoas (AL)</option>
+                  <option value="16">Amapá (AP)</option>
+                  <option value="13">Amazonas (AM)</option>
+                  <option value="29">Bahia (BA)</option>
+                  <option value="23">Ceará (CE)</option>
+                  <option value="53">Distrito Federal (DF)</option>
+                  <option value="32">Espírito Santo (ES)</option>
+                  <option value="52">Goiás (GO)</option>
+                  <option value="21">Maranhão (MA)</option>
+                  <option value="51">Mato Grosso (MT)</option>
+                  <option value="50">Mato Grosso do Sul (MS)</option>
+                  <option value="31">Minas Gerais (MG)</option>
+                  <option value="15">Pará (PA)</option>
+                  <option value="25">Paraíba (PB)</option>
+                  <option value="41">Paraná (PR)</option>
+                  <option value="26">Pernambuco (PE)</option>
+                  <option value="22">Piauí (PI)</option>
+                  <option value="33">Rio de Janeiro (RJ)</option>
+                  <option value="24">Rio Grande do Norte (RN)</option>
+                  <option value="43">Rio Grande do Sul (RS)</option>
+                  <option value="11">Rondônia (RO)</option>
+                  <option value="14">Roraima (RR)</option>
+                  <option value="42">Santa Catarina (SC)</option>
+                  <option value="35">São Paulo (SP)</option>
+                  <option value="28">Sergipe (SE)</option>
+                  <option value="17">Tocantins (TO)</option>
               </select>
+              <div class="invalid-feedback">
+      Por favor, escolha o EStado.
+     </div>
             </div>
             <div class="col-md-6">
-              <label for="municipio" class="form-label">Cidade / Município</label>
-              <select id="municipio" class="form-select" name="municipio">
-                <option value="" selected disabled>Escolha...</option>
+              <label for="inputMunicipio" class="form-label">Cidade / Município</label>
+              <select id="inputMunicipio" class="form-select" name="municipio">
+                <option value="" selected disabled>Escolha o Estado...</option>
               </select>
+              <div class="invalid-feedback">
+      Por favor, escolha o município.
+     </div>
             </div>
             <div class="col-md-6">
-              <label for="bairro" class="form-label">Bairro</label>
-              <input name="bairro" type="text" class="form-control" id="bairro" />
+              <label for="inputBairro" class="form-label">Bairro</label>
+              <input name="bairro" type="text" class="form-control" id="inputBairro" />
+              <div class="invalid-feedback">
+      Por favor, digite o bairro.
+     </div>
             </div>
             <div class="col-9">
-              <label for="ruaAvenida" class="form-label">Rua / Avenida</label>
+              <label for="inputRuaAvenida" class="form-label">Rua / Avenida</label>
               <div class="input-group has-validation">
-                <input name="ruaAvenida" type="text" class="form-control" id="ruaAvenida" />
+                <input name="ruaAvenida" type="text" class="form-control" id="inputRuaAvenida" />
               </div>
+              <div class="invalid-feedback">
+      Por favor, digite a rua/avenida.
+     </div>
             </div>
             <div class="col-3">
               <label for="numeroCasa" class="form-label">Número</label>
-              <input name="numeroCasa" type="text" class="form-control" id="numeroCasa" />
+              <input name="numeroCasa" type="text" class="form-control" id="inputNumeroCasa" />
+              <div class="invalid-feedback">
+      Por favor, digite o número.
+     </div>
             </div>
           </div>
         </div>
@@ -197,6 +222,7 @@
             {% endfor %}
           </div>
         </div>
+        
         <script>
           const previewContainer = document.getElementById("previewContainer");
           const imageInput = document.getElementById("imageUpload");
@@ -233,31 +259,30 @@
           
             //imagens novas selecionadas
             selectedFiles.forEach((file, index) => {
-              const div = document.createElement("div");
-              div.className = "position-relative";
-          
-              const img = document.createElement("img");
-              img.src = URL.createObjectURL(file);
-              img.className = "rounded border";
-              img.style.width = "7rem";
-              img.style.height = "7rem";
-              img.style.objectFit = "cover";
-          
-              const btn = document.createElement("button");
-              btn.type = "button";
-              btn.innerHTML = "&times;";
-              btn.className = "btn btn-sm btn-danger position-absolute top-0 end-0 p-0 m-0";
-              btn.style.transform = "translate(-50%, -50%)";
-              btn.onclick = () => {
-                selectedFiles.splice(index, 1);
-                updatePreviews();
-                updateInputFiles();
-              };
-          
-              div.appendChild(img);
-              div.appendChild(btn);
-              previewContainer.appendChild(div);
-            });
+  const div = document.createElement("div");
+  div.className = "row position-relative g-1";
+
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(file);
+  img.className = "rounded";
+  img.style.width = "7rem";
+  img.style.height = "7rem";
+  img.style.objectFit = "cover";
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.innerHTML = "&times;";
+  btn.className = "btn btn-sm btn-danger position-absolute top-0 start-0 w-100";
+  btn.onclick = () => {
+    selectedFiles.splice(index, 1);
+    updatePreviews();
+    updateInputFiles();
+  };
+
+  div.appendChild(img);
+  div.appendChild(btn);
+  previewContainer.appendChild(div);
+});
           }
           
           // Função para remover imagens existentes
@@ -344,52 +369,90 @@
 </script>
 
 <script>
-  
-// Condição para premium: contatos
-const canAddContacts = {{business[13]}}
 
 // Input fields
-const instagramInput = document.getElementById("inputInsta");
-const phoneInput = document.getElementById("inputNumber");
-const emailInput = document.getElementById("inputEmail");
+const cepInput = document.getElementById("inputCep");
+const estadoInput = document.getElementById("inputEstado");
+const municipioInput = document.getElementById("inputMunicipio");
+const bairroInput = document.getElementById("inputBairro");
+const ruaAvenidaInput = document.getElementById("inputRuaAvenida");
+const numeroCasaInput = document.getElementById("inputNumeroCasa");
 
 // Array
-const contactInputs = [instagramInput, phoneInput, emailInput];
+const localizacaoInputs = [cepInput, estadoInput, municipioInput, bairroInput, ruaAvenidaInput, numeroCasaInput];
 
 // Gerenciar 
 function handleInputBehavior(){
-  // Se premium, não é preciso decidir um contato.
-  if (canAddContacts) {
-    return;
-  }
 
-  const filledInput = contactInputs.find(input => input.value.trim() !== '');
+  const filledInput = localizacaoInputs.find(input => input.value.trim() !== '');
 
   //Se um dos contatos tem algum valor, desativa os outros
   if (filledInput) {
-    contactInputs.forEach(input => {
+    localizacaoInputs.forEach(input => {
       if (input !== filledInput) {
-        input.disabled = true;
-        input.classList.add('disabled');
+        input.required = true;
+        input.classList.add('required');
       }
     });
   } else{
     //Se não tem nenhum valor, re-ativa todos.
-    contactInputs.forEach(input => {
-      input.disabled = false;
-      input.classList.remove('disabled');
+    localizacaoInputs.forEach(input => {
+      input.required = false;
+      input.classList.remove('required');
     })
   }
 }
 
 //Adiciona event listeners para cada input
-contactInputs.forEach(input => {
+localizacaoInputs.forEach(input => {
   input.addEventListener('input', handleInputBehavior);
 });
 
-//Run a função ao carregar a página
-document.addEventListener('DOMContentLoaded', handleInputBehavior)
+
+(() => {
+  const form = document.getElementById('form_geral');
+  form.addEventListener('submit', event => {
+    handleInputBehavior();
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    form.classList.add('needs-validation');
+  }, false);
+})();
 
 </script>
+
+<script>
+const estadoInput = document.getElementById("inputEstado");
+const municipioInput = document.getElementById("inputMunicipio");
+
+estadoInput.addEventListener("change", async function () {
+  const uf = this.value;
+  
+  municipioInput.innerHTML = '<option value="" disabled selected>Carregando...</option>';
+
+  try {
+    const response = await fetch(`/get_municipios/${uf}`);
+    if (!response.ok) throw new Error("Erro ao buscar municípios");
+    
+    const municipios = await response.json();
+    
+    municipioInput.innerHTML = '<option value="" disabled selected>Escolha o município...</option>';  
+    municipios.forEach(m => {
+      const option = document.createElement("option");
+      option.value = m.id;   // ou m.nome se preferir
+      option.textContent = m.nome;
+      municipioInput.appendChild(option);
+    });
+  } catch (err) {
+    municipioInput.innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
+    console.error(err);
+  }
+});
+
+</script>
+
 
 {% endblock %}

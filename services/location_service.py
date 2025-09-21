@@ -6,13 +6,13 @@ CEP_URL = "https://cep.awesomeapi.com.br/"
 GEOAPI_URL = "https://nominatim.openstreetmap.org/search"
 
 
-def get_munipicios(uf):
+def get_municipios(uf):
 	url = f"{ESTADO_URL}/{uf}/municipios"
 	response = requests.get(url)
 	if response.status_code == 200:
 		return response.json()
 	else:
-		return response.status_code
+		return []
 
 def get_coordenadas(address):
     params = {"q": address, "format": "json"}

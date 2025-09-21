@@ -33,7 +33,7 @@ def tabela_users():
 				email TEXT NOT NULL UNIQUE,
 				password TEXT NOT NULL,
 				telephone TEXT NOT NULL,
-				pfp_path TEXT DEFAULT None,
+				pfp_filename TEXT DEFAULT None,
 				role TEXT NOT NULL DEFAULT 'user',
 				joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 				descricao TEXT
@@ -59,7 +59,8 @@ def tabela_business():
 				lon REAL,
 				premium BOOLEAN DEFAULT FALSE,
 				premium_valid_until DATE,
-				evento TEXT
+				evento TEXT,
+				address TEXT
 			)
 		""")
 
@@ -110,19 +111,15 @@ def seed_db(full):
 
 	if full:
 		try:
-			adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', '@auriuminitium', None, None, 1, 'Feira do Empreendedor')
+			adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', '@auriuminitium', '', '', 1, 'Feira do Empreendedor')
 
 			add_premium(True, 1)
-
-			edit_business(1, instagram='@auriuminitium', numero='(11) 91659-1346', email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36)
-
+		
+			edit_business(1, instagram='@auriuminitium', numero='(11) 91659-1346', email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36, address="Rua Planalto, 405, Macajuba, BA")
+			add_business_images(1, '7560eb2c5c984d66b0a02e6e07d9a8fa.jpeg')
 			for dia_semana in range(7): add_horario(1, dia_semana, "08:00", "18:00")
 
-			adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', '@auriuminitium', None, None, 1, 'Feira do Empreendedor')
-
-			edit_business(2, instagram='@auriuminitium', numero='(11) 91659-1346', email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36)
-
-			add_business_images(2, '7560eb2c5c984d66b0a02e6e07d9a8fa.jpeg')
+			adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', '@auriuminitium', '', '', 1, 'Feira do Empreendedor')
 
 			for dia_semana in range(7): add_horario(2, dia_semana, "08:00", "18:00")
 		except Exception as e:

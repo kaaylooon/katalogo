@@ -4,7 +4,7 @@ import sqlite3
 def registrar_user(username, email, hashed, telephone):
 	conn = get_connection()
 	cur = conn.cursor()
-	cur.execute("INSERT INTO users (username, email, password, telephone, descricao) VALUES (?, ?, ?, ?, ?)", (username, email, hashed, telephone, ''))
+	cur.execute("INSERT INTO users (username, email, password, telephone, descricao, pfp_filename) VALUES (?, ?, ?, ?, ?, ?)", (username, email, hashed, telephone, None, None))
 	conn.commit()
 	conn.close()
 
@@ -14,7 +14,7 @@ def edit_user(username, descricao, pfp_filename, user_id):
 	cur = conn.cursor()
 	cur.execute("""
 		UPDATE users
-		SET username = ?, descricao = ?, pfp_path=pfp_filename
+		SET username = ?, descricao = ?, pfp_filename=?
 		WHERE id = ?
 	""", (username, descricao, pfp_filename, user_id))
 	conn.commit()
@@ -33,7 +33,7 @@ def mostrar_user(user_id):
 	conn = get_connection()
 	conn.row_factory = sqlite3.Row
 	cur = conn.cursor()
-	cur.execute("SELECT id, username, role, joined_at, email, pfp_path FROM users WHERE id = ?", (user_id,))
+	cur.execute("SELECT id, username, role, joined_at, email, pfp_filename, descricao FROM users WHERE id = ?", (user_id,))
 	user_dados = cur.fetchone()
 	conn.close()
 	return user_dados

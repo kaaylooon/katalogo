@@ -22,10 +22,9 @@ def perfil(user_id):
 		return "Usuário não encontrado", 404
 	return render_template("perfil.html", user=user, business=business, comentarios=comentarios, session_id=session_id)
 
-
 @routes.route("/perfil/<int:user_id>/edit", methods=["GET", "POST"])
 @login_required
-@author_or_admin_required(mostrar_user, "id")
+@author_or_admin_required(mostrar_user, author_field="id", arg_name="user_id")
 def perfiledit(user_id):
 	user = mostrar_user(user_id)
 	if request.method == "POST":
@@ -34,13 +33,24 @@ def perfiledit(user_id):
 
 		pfp = request.files.get('pfp')
 		pfp_filename = None
-		if pfp and allowed_file(pfp.filename):
-			pfp_filename = save_image(pfp)
+
+		if pfp:
+			if allowed_file(pfp.filename):
+				pfp_filename = save_image(pfp)
+			else:
+				flash("Formato não permitido.", "danger")
+				logger.info(
+					f"Erro ao enviar imagem: {pfp};"
+					f"Extensão não permitida."
+				)
 
 		# Só passa pfp se existir
 		edit_user(username, descricao, pfp_filename, user_id)
 
-		logger.info(f"Usuário editado: {username} (ID: {user_id}) pelo usuário de ID {session['user_id']}")
+		logger.info(
+			f"Usuário editado: {username} (ID: {user_id})"
+			f"pelo usuário de ID {session['user_id']}"
+			)
 		return redirect(url_for('user.perfil', user_id=user_id))
 
 	return render_template("editperfil.html", user=user)
@@ -53,6 +63,8 @@ def excluir(user_id):
 	user = mostrar_user(user_id)
 	if user:
 		del_user(user_id)
-		logger.warning(f"Usuário de ID {user_id} excluído.")
+		logger.warning(
+			f"Usuário de ID {user_id} excluído."
+		)
 
 	return redirect(request.referrer or '/')

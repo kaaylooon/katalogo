@@ -77,7 +77,11 @@ def business(business_id):
 
 @routes.route('/business/<int:business_id>/edit', methods=['GET', 'POST'])
 @login_required
-@author_or_admin_required(buscar_id_business, "by_user")
+@author_or_admin_required(
+    buscar_id_business,   
+    author_field="by_user",
+    arg_name="business_id"
+)
 def edit(business_id):
 	dias = [
 		("dom", "Domingo"),
@@ -112,12 +116,14 @@ def edit(business_id):
 		bairro = request.form.get('bairro')
 		cidadeMunicipio = request.form.get('municipio')
 		estado = request.form.get('estado')
-
-		address = f'{ruaAvenida}, {numeroCasa}, {bairro}, {cidadeMunicipio}, {estado}'
 		
+		address = f'{ruaAvenida}, {cidadeMunicipio}, {estado}, Brasil'
+
 		lat, lon = None, None
-		if address and address != 'Não informado':
+		if address and bairro and ruaAvenida and cidadeMunicipio and bairro and estado:
 			lat, lon = get_coordenadas(address)
+		else:
+			address = None
 
 		logo = request.files.get('logo')
 		logo_filename = business['logo_path']
@@ -129,7 +135,7 @@ def edit(business_id):
 				logo_filename = business.get('logo_path')
 
 
-		edit_business(business_id, nome=nome, categoria=categoria, descricao=descricao, instagram=instagram, numero=numero, email=email, logo_path=logo_filename, lat=lat, lon=lon)
+		edit_business(business_id, nome=nome, categoria=categoria, descricao=descricao, instagram=instagram, numero=numero, email=email, logo_path=logo_filename, lat=lat, lon=lon, address=address)
 
 		images = request.files.getlist('images[]') or None
 
@@ -161,7 +167,7 @@ def edit(business_id):
 			filenames = removed_images.split(",")
 			for filename in filenames:
 				# Remove do DB
-				delete_business_image(business_id, image_filename=filename)
+				delete_business_image(business_id, filename)
 				
 				# Remove do filesystem
 				filepath = os.path.join(UPLOAD_FOLDER, filename)
@@ -175,28 +181,26 @@ def edit(business_id):
 	return render_template('editbusiness.html', business_id=business_id, business=business, images_urls=images_urls, dias=dias)	
 
 
-@routes.route('/business/<int:business_id>/del')
+@routes.route('/business/<int:business_id>/del', methods=['GET', 'POST'])
 @login_required
-@author_or_admin_required(buscar_id_business, "by_user")
+@author_or_admin_required(
+    buscar_id_business,   
+    author_field="by_user",
+    arg_name="business_id"
+)
 def delbusiness(business_id):
-	business = mostrar_business_by_id(business_id)
-	user_id = session.get('user_id')
-	next_url = request.args.get('next') or url_for('default_page')
-
-	if user_id == business[9]:
-		del_business(business_id)
-		flash('Négócio excluído com sucesso', 'sucess')
-		logger.info(f"Negócio excluído: {business_id}, por {user_id}")
-		return redirect(request.referrer or '/')
-	else:
-		flash('Não foi possível excluir o negócio', 'danger')
-		logger.warning(f"Erro ao tentar excluir negócio: {business_id}, por {user_id}")
-		return redirect(request.referrer or '/')
-
+	del_business(business_id)
+	flash('Négócio excluído com sucesso', 'sucess')
+	logger.info(f"Negócio excluído: {business_id}, por {session['user_id']}")
+	return redirect(request.referrer or '/')
 
 @routes.route('/business/<int:business_id>/upgrade', methods=['GET'])
 @login_required
-@author_or_admin_required(buscar_id_business, "by_user")
+@author_or_admin_required(
+    buscar_id_business,   
+    author_field="by_user",
+    arg_name="business_id"
+)
 def upgrade(business_id):
 	business = mostrar_business_by_id(business_id)
 	return render_template('upgrade.html', business=business)

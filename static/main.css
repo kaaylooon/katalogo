@@ -66,6 +66,12 @@ html{
  --COLOR10: rgba(255, 255, 255, 0.5); /*branco transparente*/
 }
 
+.carousel-item img {
+  height: 300px;     /* altura fixa */
+  object-fit: cover; /* corta/encaixa mantendo proporção */
+  width: 100%;
+}
+
 .glass-card {
  background: var(--COLOR10);
  backdrop-filter: blur(15px);

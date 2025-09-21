@@ -13,7 +13,7 @@ def adicionar_business(nome, descricao, categoria, instagram, numero, filename, 
 	return business_id
 
 def edit_business(business_id, **kwargs):
-	allowed_fields = ['nome', 'categoria', 'descricao', 'instagram', 'numero', 'email', 'logo_path', 'lat', 'lon']
+	allowed_fields = ['nome', 'categoria', 'descricao', 'instagram', 'numero', 'email', 'logo_path', 'lat', 'lon', 'address']
 	set_clause = []
 	params = []
 

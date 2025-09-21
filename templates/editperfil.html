@@ -10,7 +10,7 @@
      <div class="col-auto text-center">
       <input class="form-control d-none" type="file" id="pfpUpload" name="pfp" accept="image/*" onchange="previewPfp(event)" />
       <img
-       src="{{ url_for('static', filename='uploads/' ~ user[6]) if user[6] else 'https://placehold.co/150' }}"
+       src="{{ url_for('static', filename='uploads/' ~ user[5]) if user[5] else 'https://placehold.co/150' }}"
        alt="{{ user[1] }}"
        class="mt-2 rounded-circle border"
        style="width: 75px; height: 75px; object-fit: cover; cursor: pointer;"
@@ -25,7 +25,7 @@
 
     <div class="col-12">
      <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
-     <textarea class="form-control limiteDeChar" id="descricao" name="descricao" rows="5" placeholder="Fale um pouco sobre você." required maxlength="300">{{ user[8] }}</textarea>
+     <textarea class="form-control limiteDeChar" id="descricao" name="descricao" rows="5" placeholder="Fale um pouco sobre você." required maxlength="300">{{ user[6] }}</textarea>
      <div id="charCount">0 / 300</div>
     </div>
 

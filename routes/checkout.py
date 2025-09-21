@@ -25,9 +25,13 @@ YOUR_DOMAIN = "https://katalogo-1.onrender.com"
 # -------------------------
 # Checkout com CARTÃO (recorrente)
 # -------------------------
-@routes.route('/business/<int:business_id>/checkout/card', methods=['POST'])
-@author_or_admin_required(buscar_id_business, "by_user")
-def create_checkout_session_card(business_id):
+@routes.route('/business/<int:business_id>/checkout', methods=['POST'])
+@author_or_admin_required(
+    buscar_id_business,   
+    author_field="by_user",
+    arg_name="business_id"
+)
+def create_checkout_session(business_id):
 	business = mostrar_business_by_id(business_id)
 	if business:
 		try:
@@ -46,12 +50,11 @@ def create_checkout_session_card(business_id):
 					}
 				],
 				mode='subscription',
-				payment_method_types=["card"],
+				payment_method_types=["card", "boleto"],
 				success_url=f'{YOUR_DOMAIN}/business/{business_id}/checkout/sucesso',
 				cancel_url=f'{YOUR_DOMAIN}/business/{business_id}/checkout/cancelado',
 				metadata={
 					"business_id": str(business_id),
-					"payment_type": "card"
 				},
 				locale='pt-BR'
 			)
@@ -68,7 +71,11 @@ def create_checkout_session_card(business_id):
 # Checkout com PIX (avulso, 30 dias)
 # -------------------------
 @routes.route('/business/<int:business_id>/checkout/pix', methods=['POST'])
-@author_or_admin_required(buscar_id_business, "by_user")
+@author_or_admin_required(
+    buscar_id_business,   
+    author_field="by_user",
+    arg_name="business_id"
+)
 def create_checkout_session_pix(business_id):
 	business = mostrar_business_by_id(business_id)
 	if business:
@@ -110,7 +117,11 @@ def create_checkout_session_pix(business_id):
 # Sucesso / Cancelado
 # -------------------------
 @routes.route('/business/<int:business_id>/checkout/sucesso')
-@author_or_admin_required(buscar_id_business, "by_user")
+@author_or_admin_required(
+    buscar_id_business,   
+    author_field="by_user",
+    arg_name="business_id"
+)
 def sucesso(business_id):
 	logger.warning(f'Checkout com sucesso: negócio de ID {business_id}')
 	return render_template('sucess.html', business_id=business_id)
@@ -118,7 +129,11 @@ def sucesso(business_id):
 
 @routes.route('/business/<int:business_id>/checkout/cancelado')
 @login_required
-@author_or_admin_required(buscar_id_business, "by_user")
+@author_or_admin_required(
+    buscar_id_business,   
+    author_field="by_user",
+    arg_name="business_id"
+)
 def cancelado(business_id):
 	logger.warning(f'Checkout cancelado: negócio de ID {business_id}.')
 	return render_template('cancel.html')

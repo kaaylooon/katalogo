@@ -92,22 +92,18 @@ def role_required(role):
 			return f(*args, **kwargs)
 		return decorated
 	return decorator
-
-def author_or_admin_required(model_getter, author_field="by_user"):
-	def decorator(f):
-		@wraps(f)
-		def decorated(*args, **kwargs):
-			obj_id = kwargs.get("business_id")
-			obj = model_getter(obj_id)
-			if not obj:
-				return redirect('/')
-			if obj[author_field] != session.get("user_id") and session.get("role") != "admin":
-				flash("Permissão negada.", "danger")
-
-				logger.warning(f"O usuário {session.get('user_id')} tentou acessar uma área não permitida.")
-
-				return redirect(request.referrer or '/')
-			return f(*args, **kwargs)
-		return decorated
-	return decorator
-
+	
+def author_or_admin_required(model_getter, author_field="by_user", arg_name="id"):
+    def decorator(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            obj_id = kwargs.get(arg_name)
+            obj = model_getter(obj_id)
+            if not obj:
+                return redirect('/')
+            if obj[author_field] != session.get("user_id") and session.get("role") != "admin":
+                flash("Permissão negada.", "danger")
+                return redirect(request.referrer or '/')
+            return f(*args, **kwargs)
+        return decorated
+    return decorator
