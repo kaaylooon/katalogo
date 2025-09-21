@@ -72,6 +72,14 @@ html{
   width: 100%;
 }
 
+.navbar-toggler{
+  border: None;
+}
+
+.navbar-toggler:active, .navbar-toggler:hover{
+  border: None;
+}
+
 .glass-card {
  background: rgba(255, 255, 255, 0.6);
  backdrop-filter: blur(8px);

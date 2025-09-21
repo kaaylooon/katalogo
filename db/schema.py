@@ -1,129 +1,154 @@
-
-import sqlite3
 from .connection import get_connection
-
 from db.users import tornar_admin, registrar_user
 from db.business import adicionar_business, edit_business, add_premium
 from db.horarios import add_horario
 from db.images import add_business_images
-
 from werkzeug.security import generate_password_hash
-
 from services.logger import logger
 
 def tabela_feed():
-	with get_connection() as conn:
-		conn.execute("""
-			CREATE TABLE IF NOT EXISTS feed (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				business_id TEXT,
-				description TEXT NOT NULL,
-				by_user TEXT,
-				image_path TEXT,
-				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-			)
-		""")
+	conn = get_connection()
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS feed (
+			id SERIAL PRIMARY KEY,
+			business_id INTEGER,
+			description TEXT NOT NULL,
+			by_user INTEGER,
+			image_path TEXT,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)
+	""")
+	conn.commit()
+	cur.close()
+	conn.close()
 
 def tabela_users():
-	with get_connection() as conn:
-		conn.execute("""
-			CREATE TABLE IF NOT EXISTS users (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				username TEXT NOT NULL,
-				email TEXT NOT NULL UNIQUE,
-				password TEXT NOT NULL,
-				telephone TEXT NOT NULL,
-				pfp_filename TEXT DEFAULT None,
-				role TEXT NOT NULL DEFAULT 'user',
-				joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-				descricao TEXT
-			)
-		""")
+	conn = get_connection()
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS users (
+			id SERIAL PRIMARY KEY,
+			username TEXT NOT NULL,
+			email TEXT NOT NULL UNIQUE,
+			password TEXT NOT NULL,
+			telephone TEXT NOT NULL,
+			pfp_filename TEXT DEFAULT NULL,
+			role TEXT NOT NULL DEFAULT 'user',
+			joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			descricao TEXT
+		)
+	""")
+	conn.commit()
+	cur.close()
+	conn.close()
 
 def tabela_business():
-	with get_connection() as conn:
-		conn.execute("""
-			CREATE TABLE IF NOT EXISTS business (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				nome TEXT NOT NULL,
-				descricao TEXT,
-				categoria TEXT,
-				instagram TEXT,
-				numero TEXT,
-				email TEXT,
-				logo_path TEXT,
-				added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-				by_user INTEGER,
-				comments_count INTEGER DEFAULT 0,
-				lat REAL, 
-				lon REAL,
-				premium BOOLEAN DEFAULT FALSE,
-				premium_valid_until DATE,
-				evento TEXT,
-				address TEXT
-			)
-		""")
+	conn = get_connection()
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS business (
+			id SERIAL PRIMARY KEY,
+			nome TEXT NOT NULL,
+			descricao TEXT,
+			categoria TEXT,
+			instagram TEXT,
+			numero TEXT,
+			email TEXT,
+			logo_path TEXT,
+			added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			by_user INTEGER,
+			comments_count INTEGER DEFAULT 0,
+			lat REAL,
+			lon REAL,
+			premium BOOLEAN DEFAULT FALSE,
+			premium_valid_until DATE,
+			evento TEXT,
+			address TEXT
+		)
+	""")
+	conn.commit()
+	cur.close()
+	conn.close()
 
 def tabela_comentarios():
-	with get_connection() as conn:
-		conn.execute("""
-			CREATE TABLE IF NOT EXISTS comentarios (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				user_id INTEGER,
-				content TEXT,
-				business_id INTEGER,
-				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-				edited BOOLEAN DEFAULT FALSE
-			)
-		""")
+	conn = get_connection()
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS comentarios (
+			id SERIAL PRIMARY KEY,
+			user_id INTEGER,
+			content TEXT,
+			business_id INTEGER,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			edited BOOLEAN DEFAULT FALSE
+		)
+	""")
+	conn.commit()
+	cur.close()
+	conn.close()
 
 def tabela_horarios():
-	with get_connection() as conn:
-		conn.execute("""
-			CREATE TABLE IF NOT EXISTS horarios (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				business_id INTEGER NOT NULL,
-				dia_semana INTEGER NOT NULL,
-				abre TIME NOT NULL,
-				fecha TIME NOT NULL,
-				FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
-			)
-		""")
+	conn = get_connection()
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS horarios (
+			id SERIAL PRIMARY KEY,
+			business_id INTEGER NOT NULL,
+			dia_semana INTEGER NOT NULL,
+			abre TIME NOT NULL,
+			fecha TIME NOT NULL,
+			FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
+		)
+	""")
+	conn.commit()
+	cur.close()
+	conn.close()
 
 def business_images_table():
-	with get_connection() as conn:
-		conn.execute("""
-			CREATE TABLE IF NOT EXISTS business_images (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				business_id INTEGER NOT NULL,
-				image_filename TEXT NOT NULL,
-				FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
-			)
-		""")
+	conn = get_connection()
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS business_images (
+			id SERIAL PRIMARY KEY,
+			business_id INTEGER NOT NULL,
+			image_filename TEXT NOT NULL,
+			FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
+		)
+	""")
+	conn.commit()
+	cur.close()
+	conn.close()
+
 
 def seed_db(full):
-
 	try:
 		registrar_user('Kaylon', 'kaylon.contact@outlook.com', generate_password_hash('adm123'), '(11) 12345-6789')
 		tornar_admin(1)
-	except sqlite3.IntegrityError:
-		pass 
+	except Exception:
+		pass
 
 	if full:
 		try:
-			adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', '@auriuminitium', '', '', 1, 'Feira do Empreendedor')
-
-			add_premium(True, 1)
-		
-			edit_business(1, instagram='@auriuminitium', numero='(11) 91659-1346', email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36, address="Rua Planalto, 405, Macajuba, BA")
-			add_business_images(1, '7560eb2c5c984d66b0a02e6e07d9a8fa.jpeg')
-			for dia_semana in range(7): add_horario(1, dia_semana, "08:00", "18:00")
-
-			adicionar_business('Aurum Initium', 'Um curso voltado para construir uma base sólida em Matemática e Física, partindo do zero e avançando de forma estruturada. O foco é garantir compreensão profunda dos fundamentos, sem “atalhos”, para que o estudante tenha domínio real dos conceitos e esteja preparado para qualquer aprofundamento posterior — seja para vestibulares, olimpíadas ou estudos acadêmicos.', 'Livros e Educação', '@auriuminitium', '', '', 1, 'Feira do Empreendedor')
-
-			for dia_semana in range(7): add_horario(2, dia_semana, "08:00", "18:00")
+			business_id = adicionar_business(
+				'Aurum Initium',
+				'Um curso voltado para construir uma base sólida em Matemática e Física...',
+				'Livros e Educação',
+				'@auriuminitium',
+				'',
+				'',
+				1,
+				'Feira do Empreendedor'
+			)
+			add_premium(True, business_id)
+			edit_business(business_id, instagram='@auriuminitium', numero='(11) 91659-1346',
+						  email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36,
+						  address="Rua Planalto, 405, Macajuba, BA")
+			add_business_images(business_id, '7560eb2c5c984d66b0a02e6e07d9a8fa.jpeg')
+			for dia_semana in range(7):
+				add_horario(business_id, dia_semana, "08:00", "18:00")
 		except Exception as e:
-			logger.error(str(e))
+			logger.exception("Erro ao popular DB...")
 
 def init_db():
 	tabela_feed()
