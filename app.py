@@ -1,10 +1,12 @@
 from flask import Flask, jsonify
+from services.limiter import limiter
 import arrow
 
 from auth import auth
 from db import init_db, seed_db
 
 app = Flask(__name__)
+limiter.init_app(app)
 
 from routes.feed import routes as feed_routes
 from routes.business import routes as business_routes

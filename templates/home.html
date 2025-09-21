@@ -23,10 +23,10 @@
 </div>
 
 <!-- Cliente -->
-<div id="cliente" class="container-fluid d-flex flex-column justify-content-center align-items-center text-center py-5" style="min-height: 100vh;" data-aos="fade-down">
- <h1 class="fw-bold text-monospace mb-4" style="font-size: 3rem; color: var(--COLOR4);">Cliente</h1>
+<div id="cliente" class="container-fluid d-flex flex-column justify-content-center align-items-center text-center py-5" style="min-height: 100vh;">
+ <h1 class="fw-bold text-monospace mb-4" style="font-size: 3rem; color: var(--COLOR4);" data-aos="fade-down">Cliente</h1>
 
- <p class="lead text-muted px-2 px-md-5 mb-4" style="max-width: 80%; font-size: 1rem;">
+ <p class="lead text-muted px-2 px-md-5 mb-4" style="max-width: 80%; font-size: 1rem;" data-aos="fade-down">
   Explore os negócios recomendados e encontre o que precisa de forma prática.
  </p>
 
@@ -94,14 +94,14 @@
 
 <!-- Comerciante -->
 <div id="comerciante" class="container-fluid d-flex flex-column justify-content-center align-items-center text-center py-5" style="min-height: 100vh;" data-aos="fade-up">
- <h1 class="fw-bold text-monospace mb-4" style="font-size: 3rem; color: var(--COLOR4);">Comerciante</h1>
+ <h1 class="fw-bold text-monospace mb-4" style="font-size: 3rem; color: var(--COLOR4);"data-aos="fade-down">Comerciante</h1>
 
- <p class="lead text-muted px-2 px-md-5 mb-2" style="max-width: 80%; font-size: 1rem;">
+ <p class="lead text-muted px-2 px-md-5 mb-2" style="max-width: 80%; font-size: 1rem;" data-aos="fade-down">
   Tenha visibilidade, gerencie seus serviços e conquiste novos clientes com facilidade.
  </p>
 </div>
 
-<div id="carouselClientes" class="carousel slide p-2 py-4" data-bs-touch="false" data-bs-keyboard="false" data-bs-interval="3000" data-bs-ride="carousel" style="opacity: 0.5;">
+<div id="carouselClientes" class="carousel slide p-2 py-4" data-bs-touch="false" data-bs-keyboard="false" data-bs-interval="3000" data-bs-ride="carousel" style="opacity: 0.5;" data-aos="fade-in">
  <div class="carousel-inner">
   {% for i in range(0, businesses|length, 4) %}
   <div class="carousel-item {% if i == 0 %}active{% endif %}">

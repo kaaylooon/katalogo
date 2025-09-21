@@ -17,6 +17,7 @@ def businesses():
 	return render_template("businesses.html", businesses=businesses)
 
 #adicionar business
+@limiter.limit("3 per minute")
 @routes.route('/addbusiness', methods=['GET', 'POST'])
 @login_required
 def addbusiness():

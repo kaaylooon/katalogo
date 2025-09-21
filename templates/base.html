@@ -10,7 +10,7 @@
 
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
-  <!--<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">-->
+  <link rel="icon" href="{{ url_for('static', filename='logo.ico') }}">
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -35,14 +35,17 @@
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg shadow-sm bg-light rounded-4 mx-3 my-3 px-3 py-3">
+  <nav class="navbar navbar-expand-lg shadow-sm bg-light rounded-4 mx-3 my-3 px-1 py-1">
   <div class="container">
     <!-- Logo -->
-    <a class="navbar-brand me-2" href="/"><img src="{{ url_for('static', filename='logo.png') }}" alt="Katálogo" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;" /></a>
+    <a class="navbar-brand me-2" href="/">
+      <!--<img src="{{ url_for('static', filename='logo.png') }}" alt="Katálogo" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;" /> -->
+      Katálogo
+    </a>
 
     <!-- Botão hambúrguer -->
     <button
-      class="navbar-toggler"
+      class="btn"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#navbarButtonsExample"
@@ -50,7 +53,7 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon"></span>
+      <i class="bi bi-three-dots" style="font-size: 25px"></i>
     </button>
 
     <!-- Conteúdo colapsável -->
@@ -131,8 +134,8 @@
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
   AOS.init({
-    offset: 50,   // em px, quanto antes da tela ativar a animação
-    duration: 500,
+    offset: 40,   // em px, quanto antes da tela ativar a animação
+    duration: 300,
     easing: 'ease-out',
   });
 </script>

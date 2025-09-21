@@ -36,7 +36,7 @@
     <div class="d-flex align-items-center">
       <img src="{{ url_for('static', filename='uploads/' ~ business[7]) if business[7] else 'https://placehold.co/150' }}" 
            alt="{{ business[1] }}" 
-           class="rounded-circle me-3"
+           class="rounded-circle me-3 {'border-sucess border-3' if aberto else 'border-danger border-3'}"
            style="width: 50px; height: 50px; object-fit: cover;">
 
       <h2 class="card-title d-flex align-items-center flex-grow-1">
@@ -124,7 +124,7 @@
               <ul class="list-unstyled">
                 <li>
                   <i class="bi bi-clock me-2"
-              ></i> {{ horario[0][3] }} até {{ horario[0][4] }}</li>
+              ></i> Das {{ horario[0][3] }} às {{ horario[0][4] }}</li>
               </ul>
             </div>
           </div>
@@ -133,7 +133,7 @@
 
       {%endif%}
 
-      {%if business[4] or business[4] or business[6] %}
+      {%if business[4] or business[5] or business[6] %}
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
           <h5 class="card-title">Contato</h5> 
@@ -259,7 +259,7 @@
 <div class="position-fixed bottom-0 end-0 m-4 d-flex flex-column gap-3 ">
   {% if not business[13] %}
   <a href="{{ url_for('business.upgrade', business_id=business[0]) }}" 
-     class="btn text-warning rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button"
+     class="btn text-white rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button premium-bg"
      style=""
      title="Upgrade">
     <i class="bi bi-gem spacing-button-icon"></i>

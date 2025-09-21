@@ -45,19 +45,19 @@
  </div>
 </div>
 
-<div class="container mt-4">
+<div class="container mt-0 mb-4" id="businesses">
  <div class="row">
   {% for b in businesses %}
-  <div class="col-md-4 mb-0 p-3 pt-0" data-aos="fade-up">
-   <div class="card h-100 glass-card {% if b[13] %} premium-glow border border-primary border-1{%else%}shadow-sm{% endif %}">
+  <div class="col-md-4 mb-4 p-4 pt-0 pb-0" data-aos="zoom-in">
+   <div class="card h-100 glass-card shadow {% if b[13] %} premium-glow {% endif %}">
     {% if b[13] %}
     <div
-     class="position-absolute top-0 end-0 m-2 badge rounded-pill text-white d-flex align-items-center gap-1 shadow-sm"
-     style="padding: 0.3rem 0.8rem; font-size: 0.75rem; background: linear-gradient(45deg, var(--COLOR6), var(--COLOR7));"
+     class="position-absolute top-0 end-0 m-2 badge rounded-pill text-white d-flex align-items-center gap-1 shadow-sm premium-bg"
+     style="padding: 0.3rem 0.8rem; font-size: 0.75rem;"
      title="Premium"
      data-aos="zoom-in"
     >
-     <i class="bi bi-star-fill"></i>
+     <i class="bi bi-star-fill"></i> Premium
     </div>
     {% endif %}
 
@@ -66,7 +66,7 @@
       <img src="{{ url_for('static', filename='uploads/' ~ b[7]) if b[7] else 'https://placehold.co/150' }}" alt="{{ b[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
       <h5 class="card-title mb-0">
        {{ b[1] }} <br />
-       <span class="badge bg-primary" style="font-size: 0.5em; vertical-align: middle;">
+       <span class="badge bg-primary" style="font-size: 0.6rem; vertical-align: middle;">
         {{ b[3] }}
        </span>
        <!--<span class="badge {{ 'bg-secondary' if aberto else 'bg-danger' }}" style="font-size: 0.5em; vertical-align: middle;">
