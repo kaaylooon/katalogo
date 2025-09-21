@@ -1,14 +1,10 @@
 import datetime
-from typing import List, Tuple
+from typing import List, Dict
 
-def verificar_disponibilidade(horario: List[Tuple]) -> bool:
-	now = datetime.datetime.now()
-	now_str = now.strftime("%H:%M")
+def verificar_disponibilidade(horario: List[Dict]) -> bool:
+    now = datetime.datetime.now().time()  # pega o horário atual (time)
 
-	abre = horario[0][3]
-	fecha = horario[0][4]
+    abre = horario[0]["abre"]   
+    fecha = horario[0]["fecha"] 
 
-	if abre <= now_str <= fecha:
-		return True
-	else:
-		return False
+    return abre <= now <= fecha

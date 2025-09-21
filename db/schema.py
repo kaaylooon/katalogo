@@ -64,7 +64,9 @@ def tabela_business():
 			premium BOOLEAN DEFAULT FALSE,
 			premium_valid_until DATE,
 			evento TEXT,
-			address TEXT
+			address TEXT,
+			FOREIGN KEY (by_user) REFERENCES users(id) ON DELETE SET NULL
+
 		)
 	""")
 	conn.commit()
@@ -81,7 +83,10 @@ def tabela_comentarios():
 			content TEXT,
 			business_id INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			edited BOOLEAN DEFAULT FALSE
+			edited BOOLEAN DEFAULT FALSE,
+			FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+			FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE
+
 		)
 	""")
 	conn.commit()

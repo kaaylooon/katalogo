@@ -109,7 +109,7 @@
     {% for b in businesses[i:i+4] %}
     <div class="cards-wrapper" style="max-width: 400px;">
      <div class="card glass-card h-100 {% if b[13] %}premium-glow border border-primary{% else %}shadow-sm{% endif %}">
-      {% if b[13] %}
+      {% if b['premium'] %}
       <div
        class="position-absolute top-0 end-0 m-2 badge rounded-pill text-white d-flex align-items-center gap-1 shadow-sm"
        style="padding: 0.3rem 0.8rem; font-size: 0.75rem; background: linear-gradient(45deg, var(--COLOR6), var(--COLOR7));"

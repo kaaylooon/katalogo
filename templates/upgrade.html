@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 
-{%if business[13]%}
+{%if business['premium']%}
 <h1 class="title-2 text-center mb-1">PREMIUM</h1>
 
 <p class="lead text-center mb-4">Este negócio já tem o plano premium!</p>
@@ -50,7 +50,7 @@
      </ul>
 
      <div class="text-center mt-2 d-grid">
-        <form action="{{ url_for('checkout.create_checkout_session', business_id=business[0]) }}" method="POST">
+        <form action="{{ url_for('checkout.create_checkout_session', business_id=business['id']) }}" method="POST">
       <button type="submit" class="btn btn-primary shadow">Desbloqueie agora por <strong>R$15/mês</strong></button>
         </form>
 

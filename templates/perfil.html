@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% block content %} {% if session_id == user[0] %}
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow spacing-button z-1050" href="{{url_for('user.perfiledit', user_id=user[0])}}">
+{% extends "base.html" %} {% block content %} {% if session_id == user['id'] %}
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow spacing-button z-1050" href="{{url_for('user.perfiledit', user_id=user['id'])}}">
  <span class="material-symbols-outlined spacing-button-icon">
   manage_accounts
  </span>
@@ -10,12 +10,12 @@
  <div class="p-4">
   <div class="row align-items-center">
    <div class="d-flex align-items-center">
-    <img src="{{ url_for('static', filename='uploads/' ~ user[5]) if user[5] else url_for('static', filename='user.png') }}" alt="{{ user[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+    <img src="{{ url_for('static', filename='uploads/' ~ user['pfp_filename']) if user['pfp_filename'] else 'https://placehold.co/150' }}" alt="{{ user['username'] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
 
     <h2 class="card-title mb-0 d-flex align-items-center flex-grow-1">
-     {{ user[1] }}
-     <span class="badge {{ 'bg-primary' if user[2] == 'user' else 'bg-danger'}} ms-auto" style="font-size: 0.4em; height: fit-content;">
-      {% if user[2] == 'user' %} Membro {% else %} Admin {% endif %}
+     {{ user['username'] }}
+     <span class="badge {{ 'bg-primary' if user['role'] == 'user' else 'bg-danger'}} ms-auto" style="font-size: 0.4em; height: fit-content;">
+      {% if user['role'] == 'user' %} Membro {% else %} Admin {% endif %}
      </span>
     </h2>
    </div>
@@ -46,7 +46,7 @@
   <div class="tab-pane fade show active" id="sobre" role="tabpanel" aria-labelledby="sobre-tab">
    <div class="card shadow-sm border-0 mb-4 p-3">
     <h5>Descrição</h5>
-    <p> {{ user[6] if user[6] else 'Sem descrição...' }}
+    <p> {{ user['descricao'] if user['descricao'] else 'Sem descrição...' }}
     </p>
    </div>
   </div>
@@ -57,12 +57,12 @@
     <div class="col-md-6 mb-3">
      <div class="card shadow-sm p-2 d-flex" data-aos="fade-up">
       <div class="d-flex align-items-center flex-grow-1">
-       <img src="{{ url_for('static', filename='uploads/' ~ b[2]) if b[2] else 'https://placehold.co/50' }}" alt="{{ b[1] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
-       <a href="{{ url_for('business.business', business_id=b[0]) }}" class="fw-bold text-decoration-none">{{ b[1] }}</a>
-       {% if session_id == user[0] %}
+       <img src="{{ url_for('static', filename='uploads/' ~ b['logo_path']) if b['logo_path'] else 'https://placehold.co/50' }}" alt="{{ b['nome'] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+       <a href="{{ url_for('business.business', business_id=b['id']) }}" class="fw-bold text-decoration-none">{{ b['nome'] }}</a>
+       {% if session_id == user['id'] %}
        <div class="ms-auto">
-        <a class="btn btn-link" href="{{url_for('business.delbusiness', business_id=b[0], next=request.path)}}">Excluir</a>
-        <a class="btn btn-secondary" href="{{url_for('business.edit', business_id=b[0])}}">Editar</a>
+        <a class="btn btn-link" href="{{url_for('business.delbusiness', business_id=b['id'], next=request.path)}}">Excluir</a>
+        <a class="btn btn-secondary" href="{{url_for('business.edit', business_id=b['id'])}}">Editar</a>
        </div>
        {% endif %}
       </div>
@@ -94,5 +94,7 @@
   </div>
  </div>
 
- {% endblock %}
+
 </div>
+
+ {% endblock %}

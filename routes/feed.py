@@ -15,7 +15,7 @@ def feed():
 	feed = mostrar_feed()
 	meusbusinesses = []
 	if 'user_id' in session:
-		meusbusinesses = [b for b in mostrar_businesses_user(session['user_id']) if b[5]]
+		meusbusinesses = [b for b in mostrar_businesses_user(session['user_id']) if b['premium']]
 
 	return render_template("feed.html", feed=feed, meusbusinesses=meusbusinesses)
 
@@ -53,6 +53,6 @@ def del_feed_route(feed_id):
 	feed = mostrar_feed_by_id(feed_id)
 	if feed:
 		del_feed(feed_id)
-		logger.warning(f"Feed do negócio de ID {feed[1]} excluído pelo usuário de ID {session['user_id']}. Conteúdo: {feed[2]}")
+		logger.warning(f"Feed do negócio de ID {feed['id']} excluído pelo usuário de ID {session['user_id']}. Conteúdo: {feed['description']}")
 
 	return redirect(request.referrer or '/')

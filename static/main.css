@@ -88,6 +88,15 @@ html{
  border-radius: 10px;
 }
 
+
+.card-feed {
+ background: var(--COLOR10);
+ backdrop-filter: blur(15px);
+ -webkit-backdrop-filter: blur(15px);
+ border: 2px solid var(--COLOR10);
+ border-radius: 18px;
+}
+
 .premium-bg{
   background: linear-gradient(45deg, #f2c94e, #f78145, #f24e4e);
 }

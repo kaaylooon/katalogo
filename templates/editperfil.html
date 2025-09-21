@@ -5,13 +5,13 @@
    <h4 class="mb-0">Editar perfil</h4>
   </div>
   <div class="card-body p-4 d-flex justify-content-center">
-   <form class="row g-4" action="{{ url_for('user.perfiledit', user_id=user[0]) }}" method="POST" enctype="multipart/form-data">
+   <form class="row g-4" action="{{ url_for('user.perfiledit', user_id=user['id']) }}" method="POST" enctype="multipart/form-data">
     <div class="row align-items-center mt-4">
      <div class="col-auto text-center">
       <input class="form-control d-none" type="file" id="pfpUpload" name="pfp" accept="image/*" onchange="previewPfp(event)" />
       <img
-       src="{{ url_for('static', filename='uploads/' ~ user[5]) if user[5] else 'https://placehold.co/150' }}"
-       alt="{{ user[1] }}"
+       src="{{ url_for('static', filename='uploads/' ~ user['pfp_filename']) if user['pfp_filename'] else 'https://placehold.co/150' }}"
+       alt="{{ user['nome'] }}"
        class="mt-2 rounded-circle border"
        style="width: 75px; height: 75px; object-fit: cover; cursor: pointer;"
        onclick="document.getElementById('pfpUpload').click();"
@@ -19,13 +19,13 @@
      </div>
      <div class="col">
       <label for="nome" class="form-label" style="font-weight: 600;">Nome</label>
-      <input type="text" class="form-control" id="nome" name="username" value="{{ user[1] }}" required />
+      <input type="text" class="form-control" id="nome" name="username" value="{{ user['username'] }}" required />
      </div>
     </div>
 
     <div class="col-12">
      <label for="descricao" class="form-label" style="font-weight: 600;">Descrição</label>
-     <textarea class="form-control limiteDeChar" id="descricao" name="descricao" rows="5" placeholder="Fale um pouco sobre você." required maxlength="300">{{ user[6] }}</textarea>
+     <textarea class="form-control limiteDeChar" id="descricao" name="descricao" rows="5" placeholder="Fale um pouco sobre você." required maxlength="300">{{ user['descricao'] if user['descricao'] else 'Sem descrição...'}}</textarea>
      <div id="charCount">0 / 300</div>
     </div>
 

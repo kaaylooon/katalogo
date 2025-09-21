@@ -58,11 +58,12 @@ def get_publishable_key():
 	stripe_config = {"publicKey": stripe_keys["STRIPE_PUBLISHABLE_KEY"]}
 	return jsonify(stripe_config)
 
-
 def humanize_datetime(value):
 	if not value:
 		return ""
-	return arrow.get(value, "YYYY-MM-DD HH:mm:ss").humanize(locale="pt_br")
+	return arrow.get(value).humanize(locale="pt_br")
+
+	
 app.jinja_env.filters['humandate'] = humanize_datetime
 
 DEPLOY = True

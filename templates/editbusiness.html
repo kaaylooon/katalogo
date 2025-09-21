@@ -18,8 +18,8 @@
               onchange="previewLogo(event)"
               />
             <img
-              src="{{ url_for('static', filename='uploads/' ~ business[7]) if business[7] else 'https://placehold.co/150' }}"
-              alt="{{ business[1] }}"
+              src="{{ url_for('static', filename='uploads/' ~ business['logo_path']) if business['logo_path'] else 'https://placehold.co/150' }}"
+              alt="{{ business['nome'] }}"
               class="rounded-circle border"
               style="width: 75px; height: 75px; object-fit: cover; cursor: pointer;"
               onclick="document.getElementById('logoUpload').click();"
@@ -27,7 +27,7 @@
           </div>
           <div class="col">
             <label for="nome" class="form-label" style="font-weight: 600;">Nome do negócio</label>
-            <input type="text" class="form-control" id="nome" name="nome" value="{{ business.nome }}" required />
+            <input type="text" class="form-control" id="nome" name="nome" value="{{ business['nome'] }}" required />
           </div>
         </div>
         <div class="col-12 col-md-12">
@@ -58,7 +58,7 @@
             rows="5"
             placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais."
             required
-            maxlength="{{ 1200 if business[13] else 350 }}">{{ business.descricao }}
+            maxlength="{{ 1200 if business[13] else 350 }}">{{ business['descricao'] }}
           </textarea>
           <div id="charCount">0 / 350</div>
         </div>
@@ -86,31 +86,31 @@
         <div class="col-12">
           <label for="contato" class="form-label" style="font-weight: 600;">Contato <small>(opcional)</small></label>
           <div class="row g-3">
-            {%if business.instagram or business[13]%}
+            {%if business['instagram'] or business['premium']%}
             <div class="col-6">
               <label for="inputInsta" class="form-label">Instagram</label>
               <div class="input-group has-validation">
                 <span class="input-group-text"><i class="bi bi-instagram"></i></span>
-                <input name="insta" type="text" class="form-control" id="inputInsta" placeholder="@examplo" value="{{business.instagram}}"/>
+                <input name="insta" type="text" class="form-control" id="inputInsta" placeholder="@examplo" value="{{business['instagram']}}"/>
               </div>
             </div>
             {%endif%}
 
-          {%if business.numero or business[13]%}
+          {%if business['numero'] or business['premium']%}
             <div class="col-6">
               <label for="inputNumber" class="form-label">Telefone</label>
               <div class="input-group has-validation">
                 <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                <input name="number" type="text" class="form-control" id="inputNumber" placeholder="(XX) XXXXX-XXXX" value="{{business.numero}}" />
+                <input name="number" type="text" class="form-control" id="inputNumber" placeholder="(XX) XXXXX-XXXX" value="{{business['numero']}}" />
               </div>
             </div>
             {%endif%}
-            {%if business.email or business[13]%}
+            {%if business['email'] or business['premium']%}
             <div class="col-md-6">
               <label for="inputEmail" class="form-label">E-mail</label>
               <div class="input-group has-validation">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input name="email" type="email" class="form-control" id="inputEmail" placeholder="email@exemplo.com" value="{{business.email}}"/>
+                <input name="email" type="email" class="form-control" id="inputEmail" placeholder="email@exemplo.com" value="{{business['email']}}"/>
               </div>
             </div>
             {%endif%}
@@ -212,7 +212,7 @@
             <!-- imagens já existentes -->
             {% for image in images_urls %}
             <div class="position-relative" data-existing="true" data-filename="{{ image.image_path }}">
-              <img src="{{ url_for('static', filename='uploads/' + image.image_path) }}" 
+              <img src="{{ url_for('static', filename='uploads/' + image['image_path']) }}" 
                 class="rounded border" 
                 style="width:120px;height:120px;object-fit:cover;">
               <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
@@ -324,7 +324,7 @@
           // Inicialmente, você pode criar um array de imagens existentes
           let existingImages = [
             {% for image in images_urls %}
-              "{{ image.image_path }}",
+              "{{ image['image_path'] }}",
             {% endfor %}
           ];
           updatePreviews();
