@@ -1,8 +1,8 @@
 from flask import Blueprint, flash, render_template, request, redirect, session, url_for
+from flask_limiter import RateLimitExceeded
 
 from apirequests import get_coordenadas
 from auth import author_or_admin_required, login_required
-
 from db import *
 from services import *
 
@@ -17,38 +17,43 @@ def businesses():
 	return render_template("businesses.html", businesses=businesses)
 
 #adicionar business
-@limiter.limit("3 per minute")
 @routes.route('/addbusiness', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("3 per hour", methods=["POST"])
 def addbusiness():
-	if request.method == "POST":
-		by_user = session.get('user_id')
-		nome = request.form.get('nome').capitalize()
-		descricao = request.form.get('descricao', 'Sem descrição.').capitalize()
-		categoria = request.form.get('categoria')
-		evento = request.form.get('evento') or None
-		instagram = request.form.get('insta', None)
-		if instagram:
-			if '@' not in instagram:
-				instagram = f"@{instagram}"
+	try:
+		if request.method == "POST":
+			by_user = session.get('user_id')
+			nome = request.form.get('nome').capitalize()
+			descricao = request.form.get('descricao', 'Sem descrição.').capitalize()
+			categoria = request.form.get('categoria')
+			evento = request.form.get('evento') or None
+			instagram = request.form.get('insta', None)
+			if instagram:
+				if '@' not in instagram:
+					instagram = f"@{instagram}"
 
-		numero = request.form.get('number', None)
+			numero = request.form.get('number', None)
 
 
-		logo = request.files['logo']
-		if logo and allowed_file(logo.filename):
-			logo_filename = save_image(logo)
-		else:
-			logo_filename = None
+			logo = request.files['logo']
+			if logo and allowed_file(logo.filename):
+				logo_filename = save_image(logo)
+			else:
+				logo_filename = None
 
-		business_id = adicionar_business(nome, descricao, categoria, instagram, numero, logo_filename, by_user, evento)
+			business_id = adicionar_business(nome, descricao, categoria, instagram, numero, logo_filename, by_user, evento)
 
-		if business_id:
-			logger.info(f'Novo negócio: {nome}, criado por {by_user}')
-		else:
-			logger.error(f"Erro na criação do negócio {nome}, tentativa por {by_user}")
+			if business_id:
+				logger.info(f'Novo negócio: {nome}, criado por {by_user}')
+			else:
+				logger.error(f"Erro na criação do negócio {nome}, tentativa por {by_user}")
 
-		return redirect(f"/business/{business_id}")
+			return redirect(f"/business/{business_id}")
+
+	except RateLimitExceeded:
+		flash("Você atingiu o limite de envios. Tente novamente mais tarde.", "warning")
+		return redirect(url_for("business.businesses"))
 
 	return render_template("addbusiness.html")
 
@@ -79,9 +84,9 @@ def business(business_id):
 @routes.route('/business/<int:business_id>/edit', methods=['GET', 'POST'])
 @login_required
 @author_or_admin_required(
-    buscar_id_business,   
-    author_field="by_user",
-    arg_name="business_id"
+	buscar_id_business,   
+	author_field="by_user",
+	arg_name="business_id"
 )
 def edit(business_id):
 	dias = [
@@ -185,9 +190,9 @@ def edit(business_id):
 @routes.route('/business/<int:business_id>/del', methods=['GET', 'POST'])
 @login_required
 @author_or_admin_required(
-    buscar_id_business,   
-    author_field="by_user",
-    arg_name="business_id"
+	buscar_id_business,   
+	author_field="by_user",
+	arg_name="business_id"
 )
 def delbusiness(business_id):
 	del_business(business_id)
@@ -198,9 +203,9 @@ def delbusiness(business_id):
 @routes.route('/business/<int:business_id>/upgrade', methods=['GET'])
 @login_required
 @author_or_admin_required(
-    buscar_id_business,   
-    author_field="by_user",
-    arg_name="business_id"
+	buscar_id_business,   
+	author_field="by_user",
+	arg_name="business_id"
 )
 def upgrade(business_id):
 	business = mostrar_business_by_id(business_id)

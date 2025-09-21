@@ -1,4 +1,5 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, flash, redirect, url_for
+from flask_limiter import RateLimitExceeded
 from services.limiter import limiter
 import arrow
 
@@ -7,6 +8,12 @@ from db import init_db, seed_db
 
 app = Flask(__name__)
 limiter.init_app(app)
+
+@app.errorhandler(RateLimitExceeded)
+def handle_rate_limit(e):
+    flash("Você atingiu o limite de envios. Tente novamente mais tarde. Em caso de uma tentativa de spam, saiba que a sua atividade será analisada pela equipe Katálogo.", "warning")
+
+    return redirect(url_for("business.businesses"))
 
 from routes.feed import routes as feed_routes
 from routes.business import routes as business_routes
