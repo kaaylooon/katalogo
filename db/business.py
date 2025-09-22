@@ -3,14 +3,14 @@ from psycopg2.extras import DictCursor
 from .connection import get_connection
 import datetime
 
-def adicionar_business(nome, descricao, categoria, instagram, numero, filename, by_user, evento):
+def adicionar_business(nome, descricao, categoria, instagram, numero, filename, by_user, evento, integrantes=None):
     conn = get_connection()
     with conn.cursor(cursor_factory=DictCursor) as cur:
         cur.execute("""
-            INSERT INTO business (nome, descricao, categoria, instagram, numero, email, logo_path, by_user, lat, lon, evento)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO business (nome, descricao, categoria, instagram, numero, email, logo_path, by_user, lat, lon, evento, integrantes)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
-        """, (nome, descricao, categoria, instagram, numero, '', filename, by_user, None, None, evento))
+        """, (nome, descricao, categoria, instagram, numero, '', filename, by_user, None, None, evento, integrantes))
         business_id = cur.fetchone()['id']
     conn.commit()
     conn.close()

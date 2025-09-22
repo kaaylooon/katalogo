@@ -27,13 +27,14 @@ def addbusiness():
 			nome = request.form.get('nome').capitalize()
 			descricao = request.form.get('descricao', 'Sem descrição.').capitalize()
 			categoria = request.form.get('categoria')
-			evento = request.form.get('evento') or None
+			
 			instagram = request.form.get('insta', None)
 			if instagram:
 				if '@' not in instagram:
 					instagram = f"@{instagram}"
-
 			numero = request.form.get('number', None)
+			evento = request.form.get('evento') or None
+			integrantes = request.form.get('integrantes')
 
 
 			logo = request.files['logo']
@@ -42,7 +43,7 @@ def addbusiness():
 			else:
 				logo_filename = None
 
-			business_id = adicionar_business(nome, descricao, categoria, instagram, numero, logo_filename, by_user, evento)
+			business_id = adicionar_business(nome, descricao, categoria, instagram, numero, logo_filename, by_user, evento, integrantes)
 
 			if business_id:
 				logger.info(f'Novo negócio: {nome}, criado por {by_user}')

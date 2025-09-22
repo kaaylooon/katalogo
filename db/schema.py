@@ -65,6 +65,7 @@ def tabela_business():
 			premium_valid_until DATE,
 			evento TEXT,
 			address TEXT,
+			integrantes TEXT,
 			FOREIGN KEY (by_user) REFERENCES users(id) ON DELETE SET NULL
 
 		)
