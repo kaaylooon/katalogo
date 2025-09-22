@@ -2,7 +2,6 @@ from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 
 from werkzeug.security import generate_password_hash, check_password_hash
-import urllib
 
 from services import *
 from db import *
@@ -22,8 +21,8 @@ def login():
 		user = verificar_user(username)	
 
 		if user and check_password_hash(user[1], password):
-			session["user_id"] = user[0]
-			session["role"] = user[2]
+			session["user_id"] = user['id']
+			session["role"] = user['role']
 			session['username'] = username
 
 			logger.info(f"Login bem-sucedido para o usuário: {username}")

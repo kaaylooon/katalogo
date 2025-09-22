@@ -70,10 +70,10 @@ DEPLOY = True
 
 if DEPLOY:
 	init_db()
-	seed_db(full=True)
+	seed_db(full=False)
 else:
 	if __name__ == "__main__":
 		init_db()
-		seed_db(full=True)
+		seed_db(full=False)
 
 		app.run(host="0.0.0.0", debug=True)
