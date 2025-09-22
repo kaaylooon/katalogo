@@ -64,7 +64,7 @@
         <div class="card-body">
           <div class="d-flex align-items-center mb-2">
             <a href="{{ url_for('business.business', business_id=f.business_id) }}">
-              <img src="{{ url_for('static', filename='uploads/' ~ f['logo_path']) if f['logo_path'] else 'https://placehold.co/150' }}" 
+              <img src="{{ url_for('uploads', filename=f['logo_path']) if f['logo_path'] else 'https://placehold.co/150' }}" 
                    alt="{{ f['nome'] }}" 
                    class="rounded-circle me-3" 
                    style="width: 50px; height: 50px; object-fit: cover;">
@@ -78,7 +78,7 @@
           <p class="mb-2">{{ f['description'] }}</p>
 
           {% if f['image_path'] %}
-            <img src="{{ url_for('static', filename='uploads/' ~ f['image_path']) }}" class="img-fluid rounded mb-2" alt="Imagem do post">
+            <img src="{{ url_for('uploads', filename=f['image_path']) }}" class="img-fluid rounded mb-2" alt="Imagem do post">
           {% endif %}
 
           <div class="d-flex justify-content-between text-muted" style="font-size: 0.9rem;">

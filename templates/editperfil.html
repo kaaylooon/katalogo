@@ -10,7 +10,7 @@
      <div class="col-auto text-center">
       <input class="form-control d-none" type="file" id="pfpUpload" name="pfp" accept="image/*" onchange="previewPfp(event)" />
       <img
-       src="{{ url_for('static', filename='uploads/' ~ user['pfp_filename']) if user['pfp_filename'] else 'https://placehold.co/150' }}"
+       src="{{ url_for('uploads', filename=user['pfp_filename']) if user['pfp_filename'] else 'https://placehold.co/150' }}"
        alt="{{ user['nome'] }}"
        class="mt-2 rounded-circle border"
        style="width: 75px; height: 75px; object-fit: cover; cursor: pointer;"

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, flash, redirect, url_for
+from flask import Flask, jsonify, flash, redirect, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_limiter import RateLimitExceeded
@@ -6,20 +6,23 @@ from services.limiter import limiter
 from services.logger import logger
 
 import arrow
-
+import os
+from dotenv import load_dotenv
 
 from auth import auth
 from db import init_db, seed_db
 
-app = Flask(__name__)
 
+app = Flask(__name__)
 limiter.init_app(app)
+
 
 @app.errorhandler(RateLimitExceeded)
 def handle_rate_limit(e):
 	flash("Você atingiu o limite de envios. Tente novamente mais tarde. Em caso de uma tentativa de spam, saiba que a sua atividade será analisada pela equipe Katálogo.", "warning")
 
 	return redirect(url_for("business.businesses"))
+
 
 from routes.feed import routes as feed_routes
 from routes.business import routes as business_routes
@@ -39,9 +42,8 @@ app.register_blueprint(home_routes)
 
 app.register_blueprint(auth)
 
-import os
-from dotenv import load_dotenv
 load_dotenv()
+
 stripe_keys = {
 	"STRIPE_API_KEY": os.environ.get('STRIPE_API_KEY'),
 	"STRIPE_PUBLISHABLE_KEY": os.environ.get('STRIPE_PUBLISHABLE_KEY')
@@ -51,7 +53,15 @@ app.secret_key = os.environ.get('SECRET_KEY')
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config['UPLOAD_FOLDER'] = '/var/data/uploads'
+
 db = SQLAlchemy(app)
+
+UPLOAD_FOLDER = '/var/data/uploads'
+
+@app.route('/uploads/<filename>')
+def uploads(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 @app.route("/config")
 def get_publishable_key():

@@ -10,7 +10,7 @@
  <div class="p-4">
   <div class="row align-items-center">
    <div class="d-flex align-items-center">
-    <img src="{{ url_for('static', filename='uploads/' ~ user['pfp_filename']) if user['pfp_filename'] else 'https://placehold.co/150' }}" alt="{{ user['username'] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+    <img src="{{ url_for('uploads', filename=user['pfp_filename']) if user['pfp_filename'] else 'https://placehold.co/150' }}" alt="{{ user['username'] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
 
     <h2 class="card-title mb-0 d-flex align-items-center flex-grow-1">
      {{ user['username'] }}
@@ -57,7 +57,7 @@
     <div class="col-md-6 mb-3">
      <div class="card shadow-sm p-2 d-flex" data-aos="fade-up">
       <div class="d-flex align-items-center flex-grow-1">
-       <img src="{{ url_for('static', filename='uploads/' ~ b['logo_path']) if b['logo_path'] else 'https://placehold.co/50' }}" alt="{{ b['nome'] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+       <img src="{{ url_for('uploads', filename=b['logo_path']) if b['logo_path'] else 'https://placehold.co/50' }}" alt="{{ b['nome'] }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
        <a href="{{ url_for('business.business', business_id=b['id']) }}" class="fw-bold text-decoration-none">{{ b['nome'] }}</a>
        {% if session_id == user['id'] %}
        <div class="ms-auto">
@@ -79,7 +79,7 @@
    <div class="card glass-card mb-4 shadow-sm">
     <div class="card-body">
      <div class="d-flex align-items-center mb-2">
-      <img src="{{ url_for('static', filename='uploads/' ~ c['pfp_filename']) if c['pfp_filename'] else url_for('static', filename='user.png') }}" alt="foto" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+      <img src="{{ url_for('uploads', filename=c['pfp_filename']) if c['pfp_filename'] else url_for('static', filename='user.png') }}" alt="foto" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
       <div>
        <a href="{{ url_for('user.perfil', user_id=c['user_id']) }}"><b>{{ c['username'] }}</b></a><br />
        <small class="text-muted">{{ c['created_at']|humandate }}</small>

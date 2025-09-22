@@ -1,12 +1,11 @@
 import os, uuid
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
+UPLOAD_FOLDER = '/var/data/uploads' 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-#verifica se o arquivo tem uma extensão válida.
 def allowed_file(filename: str) -> bool:
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 

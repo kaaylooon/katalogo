@@ -18,7 +18,7 @@
               onchange="previewLogo(event)"
               />
             <img
-              src="{{ url_for('static', filename='uploads/' ~ business['logo_path']) if business['logo_path'] else 'https://placehold.co/150' }}"
+              src="{{ url_for('uploads', filename=business['logo_path']) if business['logo_path'] else 'https://placehold.co/150' }}"
               alt="{{ business['nome'] }}"
               class="rounded-circle border"
               style="width: 75px; height: 75px; object-fit: cover; cursor: pointer;"
@@ -212,7 +212,7 @@
             <!-- imagens já existentes -->
             {% for image in images_urls %}
             <div class="position-relative" data-existing="true" data-filename="{{ image.image_path }}">
-              <img src="{{ url_for('static', filename='uploads/' + image['image_path']) }}" 
+              <img src="{{ url_for('uploads', filename=image['image_path']) }}" 
                 class="rounded border" 
                 style="width:120px;height:120px;object-fit:cover;">
               <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0"
