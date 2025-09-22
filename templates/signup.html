@@ -1,17 +1,19 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block content %}
 
 <div class="container d-flex justify-content-center p-4 pt-0" data-aos="fade-up">
  <div class="" style="max-width: 800px; width: 100%;">
-  <form action="/signup" method="post" class="needs-validation p-3" novalidate>
+  <form action="/signup" method="post" class="needs-validation p-3" novalidate id="signupForm">
    <h1 class="title-2 mb-3 text-center" data-aos="zoom-in">REGISTRO</h1>
    <div class="row g-3">
+    
     <div class="col-6">
-     <label for="validationUsername2" class="form-label">Usuário</label>
+     <label for="username" class="form-label">Nome de usuário</label>
      <div class="input-group has-validation">
-      <span class="input-group-text" id="validationUsernamePrepend2">@</span>
-      <input name="username" type="text" class="form-control" id="validationUsername2" aria-describedby="validationUsernamePrepend2" required />
+      <span class="input-group-text">@</span>
+      <input name="username" type="text" class="form-control" id="username" required minlength="3" pattern="[A-Za-z0-9]+">
       <div class="invalid-feedback">
-       Por favor, digite um nome de usuário válido e único.
+       Nome de usuário inválido. Deve ter pelo menos 3 caracteres e apenas letras e números.
       </div>
      </div>
     </div>
@@ -20,18 +22,18 @@
      <label for="phoneNumber" class="form-label">Número de telefone</label>
      <div class="input-group has-validation">
       <span class="input-group-text">+55</span>
-      <input name="number" type="text" id="phoneNumber" class="form-control" required />
+      <input name="number" type="text" id="phoneNumber" class="form-control" pattern="\d+" required>
       <div class="invalid-feedback">
-       Por favor, digite um número válido.
+       Telefone inválido. Apenas números.
       </div>
      </div>
     </div>
 
     <div class="col-md-6">
      <label for="emailInput" class="form-label">Endereço de e-mail</label>
-     <input name="email" type="email" class="form-control" id="emailInput" placeholder="name@example.com" required />
+     <input name="email" type="email" class="form-control" id="emailInput" placeholder="name@example.com" required>
      <div class="invalid-feedback">
-      Por favor, digite um e-mail válido.
+      E-mail inválido.
      </div>
     </div>
 
@@ -39,22 +41,18 @@
 
     <div class="col-6">
      <label for="inputPassword2" class="form-label">Senha</label>
-     <input name="password" type="password" id="inputPassword2" class="form-control" required />
+     <input name="password" type="password" id="inputPassword2" class="form-control" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$">
      <div class="invalid-feedback">
-      Por favor, digite uma senha válida.
+      A senha deve ter 8–20 caracteres, letras e números, sem espaços ou caracteres especiais.
      </div>
     </div>
 
     <div class="col-6">
      <label for="inputPasswordConfirm" class="form-label">Confirme a senha</label>
-     <input type="password" id="inputPasswordConfirm" class="form-control" required />
+     <input type="password" id="inputPasswordConfirm" class="form-control" required>
      <div class="invalid-feedback">
       As senhas não coincidem.
      </div>
-    </div>
-
-    <div id="passwordHelpBlock2" class="form-text">
-     Sua senha deve ter 8–20 caracteres, conter letras e números, e não pode ter espaços, caracteres especiais ou emoji.
     </div>
 
     <div class="d-grid mt-4">
@@ -66,34 +64,41 @@
 </div>
 
 <script>
- (() => {
+(() => {
   "use strict";
-  const form = document.querySelector(".needs-validation");
+  const form = document.getElementById("signupForm");
   const password = document.getElementById("inputPassword2");
   const confirm = document.getElementById("inputPasswordConfirm");
 
+  // Checagem de senha e confirmação
+  const validatePassword = () => {
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+    if (!regex.test(password.value)) {
+      password.setCustomValidity("Senha inválida");
+    } else {
+      password.setCustomValidity("");
+    }
+
+    if (password.value !== confirm.value) {
+      confirm.setCustomValidity("Senhas diferentes");
+    } else {
+      confirm.setCustomValidity("");
+    }
+  };
+
   form.addEventListener("submit", (event) => {
-   if (password.value !== confirm.value) {
-    confirm.setCustomValidity("Senhas diferentes");
-   } else {
-    confirm.setCustomValidity("");
-   }
-
-   if (!form.checkValidity()) {
-    event.preventDefault();
-    event.stopPropagation();
-   }
-   form.classList.add("was-validated");
+    validatePassword();
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    form.classList.add("was-validated");
   });
 
-  confirm.addEventListener("input", () => {
-   if (password.value !== confirm.value) {
-    confirm.setCustomValidity("Senhas diferentes");
-   } else {
-    confirm.setCustomValidity("");
-   }
-  });
- })();
+  password.addEventListener("input", validatePassword);
+  confirm.addEventListener("input", validatePassword);
+
+})();
 </script>
 
 {% endblock %}

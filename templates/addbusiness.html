@@ -73,10 +73,10 @@
           </div>
 
         <div class="col-12">
-          <label class="form-label fw-bold mb-2">Participa de algum evento? <small>(opcional)</small></label>
+          <label class="form-label fw-bold mb-2">Está participando de algum evento/projeto? <small>(opcional)</small></label>
           <div class="d-flex gap-3">
             <div class="card p-3 selectable" data-event="">
-              Não participa
+              Não
             </div>
             <div class="card p-3 selectable" data-event="Feira do Empreendedor">
               Feira do Empreendedor
@@ -84,7 +84,9 @@
         </div>
       </div>
 
-    <input type="hidden" name="evento" id="evento">
+      <input type="hidden" name="evento" id="evento">
+
+      <div class="col-12" id="divEquipe" style="display:none;"> <label for="integrantes" class="form-label" style="font-weight: 600;">Equipe <small>(nome dos integrantes)</small></label> <textarea class="form-control limiteDeChar" id="integrantes" name="integrantes" rows="3"></textarea>
 
         <div class="d-grid mt-4">
           <button type="submit" class="btn btn-primary">Adicionar Negócio</button>
@@ -112,12 +114,24 @@
 </script>
 
 <script>
-  const check = document.getElementById('participaEvento');
-  const select = document.getElementById('eventos');
+  const cards = document.querySelectorAll('.selectable');
+  const divEquipe = document.getElementById('divEquipe');
 
-  check.addEventListener('change', () => {
-    select.disabled = !check.checked;
+  cards.forEach(card => {
+  card.addEventListener('click', () => {
+    // remove a classe 'active' de todos os cards
+    cards.forEach(c => c.classList.remove('active'));
+    // adiciona 'active' no card clicado
+    card.classList.add('active');
+
+    if (card.dataset.event === "Feira do Empreendedor") {
+      divEquipe.style.display = "block";
+    } else {
+      divEquipe.style.display = "none";
+    }
   });
+});
+
 </script>
 
 <script>
