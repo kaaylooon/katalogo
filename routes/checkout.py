@@ -19,7 +19,7 @@ routes = Blueprint("checkout", __name__)
 stripe.api_key = stripe_keys['STRIPE_API_KEY']
 endpoint_secret = os.environ.get("STRIPE_WEBHOOK_SECRET")
 
-YOUR_DOMAIN = "https://katalogo-1.onrender.com"
+YOUR_DOMAIN = "https://katalogo.work"
 
 
 # -------------------------
@@ -41,7 +41,7 @@ def create_checkout_session(business_id):
 						'price_data': {
 							"currency": "brl",
 							"product_data": {
-								"name": "Plano Premium",
+								"name": "PLANO PREMIUM",
 							},
 							"unit_amount": 1500,
 							"recurring": {"interval": "month"}
@@ -63,7 +63,7 @@ def create_checkout_session(business_id):
 			logger.warning(str(e))
 			return jsonify(error=str(e)), 403
 	else:
-		logger.info("Usuário tentou acessar checkout de business inválido.")
+		logger.info("O usuário de ID {session['user_id']} tentou acessar checkout de um business inválido.")
 		return redirect(request.referrer or '/')
 
 
