@@ -58,14 +58,14 @@
             rows="5"
             placeholder="Fale sobre seu negócio, produtos, serviços e diferenciais."
             required
-            maxlength="{{ 1200 if business[13] else 350 }}">{{ business['descricao'] }}
+            maxlength="{{ 1200 if business['premium'] else 350 }}">{{ business['descricao'] }}
           </textarea>
           <div id="charCount">0 / 350</div>
         </div>
 
         
         
-        {%if business[13]%}
+        {%if business['premium']%}
         <div class="col-12">
           <label class="form-label" style="font-weight: 600;">Horário de funcionamento <small>(opcional)</small></label>
           <div class="row g-3">
@@ -117,7 +117,7 @@
           </div>
         </div>
 
-        {%if business[13]%}
+        {%if business['premium']%}
 
         <div class="col-12">
           <label class="form-label" style="font-weight: 600;">Localização <small>(opcional)</small></label>
