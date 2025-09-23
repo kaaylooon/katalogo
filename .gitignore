@@ -8,3 +8,4 @@ app.log
 routes/__pycache__/
 db/__pycache__/
 services/__pycache__/
+__pycache__/

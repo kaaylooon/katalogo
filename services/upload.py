@@ -2,7 +2,7 @@ import os, uuid
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = '/var/data/uploads' 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 

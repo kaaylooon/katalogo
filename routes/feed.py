@@ -13,9 +13,7 @@ routes = Blueprint('feed', __name__)
 @routes.route('/feed', methods=['GET'])
 def feed():
 	feed = mostrar_feed()
-	meusbusinesses = []
-	if 'user_id' in session:
-		meusbusinesses = [b for b in mostrar_businesses_user(session['user_id']) if b['premium']]
+	meusbusinesses = mostrar_businesses_user(session['user_id'])
 
 	return render_template("feed.html", feed=feed, meusbusinesses=meusbusinesses)
 
@@ -32,7 +30,7 @@ def add():
 	else:
 		image_filename = None
 
-		add_feed(business_id, content, session['user_id'], image_filename)
+	add_feed(business_id, content, session['user_id'], image_filename)
 
 	logger.info(
 		f"Novo feed adicionado. ID do negócio: {business_id}; "

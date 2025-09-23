@@ -174,12 +174,14 @@
       </div>
       {% endif %}
 
-      {% if business['premium'] and business['lat'] and business['lon'] and business['address'] %}
+      {% if business['premium'] and business['address'] %}
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
           <h5 class="card-title">Localização</h5> 
-          <!--<div class="card-text">{{business['address']}}</div>-->
+          <div class="card-text">{{business['address']}}</div>
+          {% if business['lat'] and business['lon'] %}
           <div id="map" style="height: 300px; z-index: 0;"></div>
+          {% endif %}
         </div>
       </div>
       {% endif %}

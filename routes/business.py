@@ -122,10 +122,10 @@ def edit(business_id):
 		ruaAvenida = request.form.get('ruaAvenida')
 		numeroCasa = request.form.get('numeroCasa')
 		bairro = request.form.get('bairro')
-		cidadeMunicipio = request.form.get('municipio')
+		municipio = request.form.get('municipio')
 		estado = request.form.get('estado')
 		
-		address = f'{ruaAvenida}, {numeroCasa}, {cidadeMunicipio} - {estado}, Brasil'
+		address = f'{ruaAvenida}, {numeroCasa}, {municipio} - {estado}, Brasil'
 		lat, lon = None, None
 
 		if cep:

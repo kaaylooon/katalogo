@@ -133,33 +133,7 @@
               <label for="inputEstado" class="form-label">Estado</label>
               <select class="form-select" name="estado" id="inputEstado">
                  <option value="" selected disabled>Escolha...</option>
-                  <option value="AC">Acre (AC)</option>
-                  <option value="AL">Alagoas (AL)</option>
-                  <option value="AP">Amapá (AP)</option>
-                  <option value="AM">Amazonas (AM)</option>
-                  <option value="BA">Bahia (BA)</option>
-                  <option value="CE">Ceará (CE)</option>
-                  <option value="DF">Distrito Federal (DF)</option>
-                  <option value="ES">Espírito Santo (ES)</option>
-                  <option value="GO">Goiás (GO)</option>
-                  <option value="MA">Maranhão (MA)</option>
-                  <option value="MT">Mato Grosso (MT)</option>
-                  <option value="MS">Mato Grosso do Sul (MS)</option>
-                  <option value="MG">Minas Gerais (MG)</option>
-                  <option value="PA">Pará (PA)</option>
-                  <option value="PB">Paraíba (PB)</option>
-                  <option value="PR">Paraná (PR)</option>
-                  <option value="PE">Pernambuco (PE)</option>
-                  <option value="PI">Piauí (PI)</option>
-                  <option value="RJ">Rio de Janeiro (RJ)</option>
-                  <option value="RN">Rio Grande do Norte (RN)</option>
-                  <option value="RS">Rio Grande do Sul (RS)</option>
-                  <option value="RO">Rondônia (RO)</option>
-                  <option value="RR">Roraima (RR)</option>
-                  <option value="SC">Santa Catarina (SC)</option>
-                  <option value="SP">São Paulo (SP)</option>
-                  <option value="SE">Sergipe (SE)</option>
-                  <option value="TO">Tocantins (TO)</option>
+                  <option value="BA">Bahia</option>
 
               </select>
               <div class="invalid-feedback">
@@ -168,8 +142,23 @@
             </div>
             <div class="col-md-6">
               <label for="inputMunicipio" class="form-label">Cidade / Município</label>
-              <select id="inputMunicipio" class="form-select" name="municipio">
-                <option value="" selected disabled>Escolha o Estado...</option>
+               <select id="inputMunicipio" class="form-select" name="municipio">
+                <option value="" selected disabled>Escolha o município...</option>
+                <option value="Macajuba">Macajuba</option>
+                <option value="Andaraí">Andaraí</option>
+                <option value="Piatã">Piatã</option>
+                <option value="Bonito">Bonito</option>
+                <option value="Ibicoara">Ibicoara</option>
+                <option value="Capela do Alto Alegre">Capela do Alto Alegre</option>
+                <option value="Ruy Barbosa">Ruy Barbosa</option>
+                <option value="Itaberaba">Itaberaba</option>
+                <option value="Nova Cruz">Nova Cruz</option>
+                <option value="Salvador">Salvador</option>
+                <option value="Feira de Santana">Feira de Santana</option>
+                <option value="Vitória da Conquista">Vitória da Conquista</option>
+                <option value="Ilhéus">Ilhéus</option>
+                <option value="Camaçari">Camaçari</option>
+                <option value="Barreiras">Barreiras</option>
               </select>
               <div class="invalid-feedback">
       Por favor, escolha o município.
@@ -290,26 +279,30 @@
           }
           
           // Função para remover imagens existentes
-          function removeExistingImage(btn) {
-            const div = btn.closest("div");
-            div.remove();
+          function removeExistingImage(btn) {const div = btn.closest("div");
             const filename = div.dataset.filename;
-          
-            // adiciona a um array escondido que será enviado para backend excluir
+
+            // remove do array de existentes
+            existingImages = existingImages.filter(img => img !== filename);
+
+            // remove o elemento da tela
+            div.remove();
+
+            // adiciona a um input escondido para backend excluir
             let input = document.getElementById("removedImages");
             if (!input) {
-              input = document.createElement("input");
-              input.type = "hidden";
-              input.id = "removedImages";
-              input.name = "removed_images";
-              document.querySelector("form").appendChild(input);
-              input.value = filename;
+                input = document.createElement("input");
+                input.type = "hidden";
+                input.id = "removedImages";
+                input.name = "removed_images";
+                document.querySelector("form").appendChild(input);
+                input.value = filename;
             } else {
-              const current = input.value.split(",");
-              current.push(filename);
-              input.value = current.join(",");
+                const current = input.value.split(",");
+                current.push(filename);
+                input.value = current.join(",");
             }
-          }
+        }
           
           // Atualiza input file para enviar apenas arquivos selecionados
           function updateInputFiles() {
@@ -341,6 +334,7 @@
     </div>
   </div>
 </div>
+
 <script>
   function previewLogo(event) {
     const [file] = event.target.files;
@@ -426,49 +420,6 @@ localizacaoInputs.forEach(input => {
   }, false);
 })();
 
-</script>
-
-<script>
-const estadoInput = document.getElementById("inputEstado");
-const municipioInput = document.getElementById("inputMunicipio");
-const currentEstado = "{{ business.estado }}"; // Pega o estado atual do negócio
-
-// Sua função de carregamento de municípios
-async function loadMunicipios(uf) {
-    municipioInput.innerHTML = '<option value="" disabled selected>Carregando...</option>';
-    try {
-        const response = await fetch(`/get_municipios/${uf}`);
-        if (!response.ok) throw new Error("Erro ao buscar municípios");
-        const municipios = await response.json();
-        municipioInput.innerHTML = '<option value="" disabled>Escolha o município...</option>';
-        municipios.forEach(m => {
-            const option = document.createElement("option");
-            option.value = m.nome;
-            option.textContent = m.nome;
-            // Se o município for o mesmo do negócio, selecione-o
-            if (m.nome === "{{ business.municipio }}") {
-                option.selected = true;
-            }
-            municipioInput.appendChild(option);
-        });
-    } catch (err) {
-        municipioInput.innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
-        console.error(err);
-    }
-}
-
-// Evento de mudança
-estadoInput.addEventListener("change", function () {
-    loadMunicipios(this.value);
-});
-
-// Chamar a função ao carregar a página se o estado já estiver preenchido
-if (currentEstado) {
-    // Definir o estado atual no select
-    estadoInput.value = currentEstado;
-    // Carregar os municípios correspondentes
-    loadMunicipios(currentEstado);
-}
 </script>
 
 <script>

@@ -1,9 +1,35 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, jsonify, request
+from flask import Blueprint, render_template, redirect, url_for, flash, jsonify, request, session
 from auth import login_required, role_required
 from db import *
 from services import *
+from datetime import datetime, timedelta
+import uuid 
 
 routes = Blueprint('admin', __name__)
+
+
+usuarios_ativos = {}
+
+@routes.before_request
+def registrar_sessao():
+	# Cria um session_id único se ainda não existir
+	if 'session_id' not in session:
+		session['session_id'] = str(uuid.uuid4())
+
+	session_id = session['session_id']
+	usuarios_ativos[session_id] = datetime.now()
+
+@routes.route("/online")
+def online():
+	agora = datetime.now()
+	# filtra só quem acessou nos últimos 5 minutos
+	ativos = {sid: t for sid, t in usuarios_ativos.items() if agora - t < timedelta(minutes=5)}
+	# limpa o dicionário dos inativos
+	usuarios_ativos.clear()
+	usuarios_ativos.update(ativos)
+
+	return f"Usuários online: {len(ativos)}"
+
 
 @routes.route('/dashboard')
 @login_required
@@ -27,6 +53,13 @@ def dashboard():
 		if bus_list:
 			businesses.extend(bus_list)
 
+	agora = datetime.now()
+	ativos = {sid: t for sid, t in usuarios_ativos.items() if agora - t < timedelta(minutes=5)}
+	usuarios_online = len(ativos)
+	# atualizar dicionário pra remover inativos
+	usuarios_ativos.clear()
+	usuarios_ativos.update(ativos)
+
 	return render_template(
 		'dashboard.html',
 		users=users,
@@ -37,7 +70,8 @@ def dashboard():
 		total_comentarios=total_comentarios,
 		total_feeds=total_feeds,
 		total_users=total_users,
-		premium_count=premium_count
+		premium_count=premium_count,
+		usuarios_ativos=usuarios_ativos
 	)
 
 @routes.route("/api/businesses")
@@ -73,4 +107,3 @@ def toggle_premium(business_id):
 	action = "ativado" if novo_status else "removido"
 	flash(f"Premium {action} para {business['nome']}", "success")
 	return redirect(request.referrer or url_for('admin.dashboard'))
-	

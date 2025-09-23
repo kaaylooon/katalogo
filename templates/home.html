@@ -29,67 +29,7 @@
  <p class="lead text-muted px-2 px-md-5 mb-4" style="max-width: 80%; font-size: 1rem;" data-aos="fade-down">
   Explore os negócios recomendados e encontre o que precisa de forma prática.
  </p>
-
- <!-- Carrossel 
-  <div id="carouselClientes" class="carousel slide" data-bs-touch="false" data-bs-keyboard="false" data-bs-interval="2000" data-bs-ride="carousel" style="opacity: 0.5">
-    <div class="carousel-inner">
-
-      {% for i in range(0, businesses|length, 3) %}
-      <div class="carousel-item {% if i == 0 %}active{% endif %}">
-        <div class="d-flex justify-content-center gap-4">
-         
-
-          {% for b in businesses[i:i+3] %}
-          <div class="cards-wrapper" data-aos="fade-up" style="max-width: 300px;">
-
-            <div class="card h-100 {% if b[13] %}premium-glow border border-primary{% else %}shadow-sm{% endif %}">
-
-              {% if b[13] %}
-              <div class="position-absolute top-0 end-0 m-2 badge rounded-pill text-white d-flex align-items-center gap-1 shadow-sm"
-                   style="padding:0.3rem 0.8rem; font-size: 0.75rem; background: linear-gradient(45deg, var(--COLOR6), var(--COLOR7));"
-                   title="Premium" data-aos="zoom-in">
-                <i class="bi bi-star-fill"></i>
-              </div>
-              {% endif %}
-
-              <div class="card-body d-flex flex-column">
-                <div class="d-flex align-items-center mb-2">
-                  <img src="{{ url_for('static', filename='uploads/' ~ b[7]) if b[7] else 'https://placehold.co/150' }}"
-                       alt="{{ b[1] }}" class="rounded-circle me-3"
-                       style="width: 50px; height: 50px; object-fit: cover;" />
-                  <h5 class="card-title mb-0">
-                    {{ b[1] }} <br>
-                    <span class="badge bg-primary" style="font-size: 0.6em;">
-                      {{ b[3] }}
-                    </span>
-                  </h5>
-                </div>
-
-                <p class="line-clamp-3 card-text text-muted small flex-grow-1">
-                  {{ b[2] }}
-                </p>
-
-                <a href="/business/{{ b[0] }}" class="btn btn-sm btn-primary mt-auto">Ver mais</a>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-
-        </div>
-      </div>
-      {% endfor %}
-  
-    </div>
-    
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselClientes" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
-      <span class="visually-hidden">Anterior</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselClientes" data-bs-slide="next">
-      <span class="carousel-control-next-icon"></span>
-      <span class="visually-hidden">Próximo</span>
-    </button>
-  </div>-->
+ <a class="btn btn-outline-secondary" href="{{ url_for('business.businesses') }}">Ver negócios</a>
 </div>
 
 <!-- Comerciante -->
@@ -99,6 +39,7 @@
  <p class="lead text-muted px-2 px-md-5 mb-2" style="max-width: 80%; font-size: 1rem;" data-aos="fade-down">
   Tenha visibilidade, gerencie seus serviços e conquiste novos clientes com facilidade.
  </p>
+ <a class="btn btn-outline-secondary" href="{{ url_for('business.addbusiness') }}">Adicionar negócio</a>
 </div>
 
 <div id="carouselClientes" class="carousel slide p-2 py-4" data-bs-touch="false" data-bs-keyboard="false" data-bs-interval="3000" data-bs-ride="carousel" style="opacity: 0.5;" data-aos="fade-in">
@@ -108,7 +49,7 @@
    <div class="d-flex justify-content-center gap-2 flex-wrap">
     {% for b in businesses[i:i+4] %}
     <div class="cards-wrapper" style="max-width: 400px;">
-     <div class="card glass-card h-100 {% if b[13] %}premium-glow border border-primary{% else %}shadow-sm{% endif %}">
+     <div class="card glass-card h-100 {% if b['premium'] %}premium-glow border border-primary{% else %}shadow-sm{% endif %}">
       {% if b['premium'] %}
       <div
        class="position-absolute top-0 end-0 m-2 badge rounded-pill text-white d-flex align-items-center gap-1 shadow-sm"
@@ -119,7 +60,7 @@
       </div>
       {% endif %}
       <div class="card-body d-flex flex-column">
-       <img src="{{ url_for('uploads', filename=b['logo_path']) if b['logo_path'] else 'https://placehold.co/150' }}" alt="{{ b[1] }}" class="rounded-circle mb-2" style="width: 50px; height: 50px; object-fit: cover;" />
+       <img src="{{ url_for('uploads', filename=b['logo_path']) if b['logo_path'] else 'https://placehold.co/150' }}" alt="{{ b['nome'] }}" class="rounded-circle mb-2" style="width: 50px; height: 50px; object-fit: cover;" />
       </div>
      </div>
     </div>

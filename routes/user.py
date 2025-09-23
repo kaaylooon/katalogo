@@ -43,7 +43,7 @@ def perfiledit(user_id):
 					f"Erro ao enviar imagem: {pfp};"
 					f"Extensão não permitida."
 				)
-
+ 
 		# Só passa pfp se existir
 		edit_user(username, descricao, pfp_filename, user_id)
 
