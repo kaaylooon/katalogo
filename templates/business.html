@@ -121,7 +121,10 @@
             <div class="card-body">
               <h5 class="card-title">Horário de funcionamento <small class="text-muted">(hoje)</small></h5>
               <ul class="list-unstyled">
-                <li><i class="bi bi-clock me-2"></i> Das {{ horario[0]['abre'][:5] }} às {{ horario[0]['fecha'][:5] }}</li>
+                <li>
+                  <i class="bi bi-clock me-2"></i>
+                  Das {{ horario[0]['abre'].strftime("%H:%M") }} às {{ horario[0]['fecha'].strftime("%H:%M") }}
+                </li>
               </ul>
             </div>
           </div>
