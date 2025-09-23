@@ -124,13 +124,20 @@ def edit(business_id):
 		cidadeMunicipio = request.form.get('municipio')
 		estado = request.form.get('estado')
 		
-		address = f'{ruaAvenida}, {cidadeMunicipio}, {estado}, Brasil'
-
+		address = f'{ruaAvenida}, {numeroCasa}, {cidadeMunicipio} - {estado}, Brasil'
 		lat, lon = None, None
-		if address and bairro and ruaAvenida and cidadeMunicipio and bairro and estado:
-			lat, lon = get_coordenadas(address)
-		else:
-			address = None
+
+		if cep:
+			localization_data = get_cep(cep)
+			if isinstance(localization_data, dict) and 'lat' in localization_data and 'lng' in localization_data:
+				lat = localization_data['lat']
+				lon = localization_data['lng']
+
+		if not lat or not lon:
+			address = f'{ruaAvenida}, {numeroCasa}, {cidadeMunicipio} - {estado}, Brasil'
+			
+			if all([ruaAvenida, bairro, cidadeMunicipio, estado]):
+				lat, lon = get_coordenadas(address)
 
 		logo = request.files.get('logo')
 		logo_filename = business['logo_path']

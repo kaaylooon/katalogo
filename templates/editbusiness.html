@@ -130,33 +130,34 @@
               <label for="inputEstado" class="form-label">Estado</label>
               <select class="form-select" name="estado" id="inputEstado">
                  <option value="" selected disabled>Escolha...</option>
-                  <option value="12">Acre (AC)</option>
-                  <option value="27">Alagoas (AL)</option>
-                  <option value="16">Amapá (AP)</option>
-                  <option value="13">Amazonas (AM)</option>
-                  <option value="29">Bahia (BA)</option>
-                  <option value="23">Ceará (CE)</option>
-                  <option value="53">Distrito Federal (DF)</option>
-                  <option value="32">Espírito Santo (ES)</option>
-                  <option value="52">Goiás (GO)</option>
-                  <option value="21">Maranhão (MA)</option>
-                  <option value="51">Mato Grosso (MT)</option>
-                  <option value="50">Mato Grosso do Sul (MS)</option>
-                  <option value="31">Minas Gerais (MG)</option>
-                  <option value="15">Pará (PA)</option>
-                  <option value="25">Paraíba (PB)</option>
-                  <option value="41">Paraná (PR)</option>
-                  <option value="26">Pernambuco (PE)</option>
-                  <option value="22">Piauí (PI)</option>
-                  <option value="33">Rio de Janeiro (RJ)</option>
-                  <option value="24">Rio Grande do Norte (RN)</option>
-                  <option value="43">Rio Grande do Sul (RS)</option>
-                  <option value="11">Rondônia (RO)</option>
-                  <option value="14">Roraima (RR)</option>
-                  <option value="42">Santa Catarina (SC)</option>
-                  <option value="35">São Paulo (SP)</option>
-                  <option value="28">Sergipe (SE)</option>
-                  <option value="17">Tocantins (TO)</option>
+                  <option value="AC">Acre (AC)</option>
+                  <option value="AL">Alagoas (AL)</option>
+                  <option value="AP">Amapá (AP)</option>
+                  <option value="AM">Amazonas (AM)</option>
+                  <option value="BA">Bahia (BA)</option>
+                  <option value="CE">Ceará (CE)</option>
+                  <option value="DF">Distrito Federal (DF)</option>
+                  <option value="ES">Espírito Santo (ES)</option>
+                  <option value="GO">Goiás (GO)</option>
+                  <option value="MA">Maranhão (MA)</option>
+                  <option value="MT">Mato Grosso (MT)</option>
+                  <option value="MS">Mato Grosso do Sul (MS)</option>
+                  <option value="MG">Minas Gerais (MG)</option>
+                  <option value="PA">Pará (PA)</option>
+                  <option value="PB">Paraíba (PB)</option>
+                  <option value="PR">Paraná (PR)</option>
+                  <option value="PE">Pernambuco (PE)</option>
+                  <option value="PI">Piauí (PI)</option>
+                  <option value="RJ">Rio de Janeiro (RJ)</option>
+                  <option value="RN">Rio Grande do Norte (RN)</option>
+                  <option value="RS">Rio Grande do Sul (RS)</option>
+                  <option value="RO">Rondônia (RO)</option>
+                  <option value="RR">Roraima (RR)</option>
+                  <option value="SC">Santa Catarina (SC)</option>
+                  <option value="SP">São Paulo (SP)</option>
+                  <option value="SE">Sergipe (SE)</option>
+                  <option value="TO">Tocantins (TO)</option>
+
               </select>
               <div class="invalid-feedback">
       Por favor, escolha o Estado.
@@ -427,31 +428,44 @@ localizacaoInputs.forEach(input => {
 <script>
 const estadoInput = document.getElementById("inputEstado");
 const municipioInput = document.getElementById("inputMunicipio");
+const currentEstado = "{{ business.estado }}"; // Pega o estado atual do negócio
 
-estadoInput.addEventListener("change", async function () {
-  const uf = this.value;
-  
-  municipioInput.innerHTML = '<option value="" disabled selected>Carregando...</option>';
+// Sua função de carregamento de municípios
+async function loadMunicipios(uf) {
+    municipioInput.innerHTML = '<option value="" disabled selected>Carregando...</option>';
+    try {
+        const response = await fetch(`/get_municipios/${uf}`);
+        if (!response.ok) throw new Error("Erro ao buscar municípios");
+        const municipios = await response.json();
+        municipioInput.innerHTML = '<option value="" disabled>Escolha o município...</option>';
+        municipios.forEach(m => {
+            const option = document.createElement("option");
+            option.value = m.nome;
+            option.textContent = m.nome;
+            // Se o município for o mesmo do negócio, selecione-o
+            if (m.nome === "{{ business.municipio }}") {
+                option.selected = true;
+            }
+            municipioInput.appendChild(option);
+        });
+    } catch (err) {
+        municipioInput.innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
+        console.error(err);
+    }
+}
 
-  try {
-    const response = await fetch(`/get_municipios/${uf}`);
-    if (!response.ok) throw new Error("Erro ao buscar municípios");
-    
-    const municipios = await response.json();
-    
-    municipioInput.innerHTML = '<option value="" disabled selected>Escolha o município...</option>';  
-    municipios.forEach(m => {
-      const option = document.createElement("option");
-      option.value = m.id;   // ou m.nome se preferir
-      option.textContent = m.nome;
-      municipioInput.appendChild(option);
-    });
-  } catch (err) {
-    municipioInput.innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
-    console.error(err);
-  }
+// Evento de mudança
+estadoInput.addEventListener("change", function () {
+    loadMunicipios(this.value);
 });
 
+// Chamar a função ao carregar a página se o estado já estiver preenchido
+if (currentEstado) {
+    // Definir o estado atual no select
+    estadoInput.value = currentEstado;
+    // Carregar os municípios correspondentes
+    loadMunicipios(currentEstado);
+}
 </script>
 
 

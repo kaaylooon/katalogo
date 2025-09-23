@@ -1,5 +1,6 @@
 
 import requests
+from .logger import logger
 
 ESTADO_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
 CEP_URL = "https://cep.awesomeapi.com.br/"
@@ -15,33 +16,23 @@ def get_municipios(uf):
 		return []
 
 def get_coordenadas(address):
-    params = {"q": address, "format": "json"}
-    headers = {"User-Agent": "AppTest/1.0 (kaylon.alt@outlook.com)"}
-    try:
-        response = requests.get(GEOAPI_URL, params=params, headers=headers, timeout=5)
-        response.raise_for_status()
-        data = response.json()
-        if data:
-            lat = float(data[0]["lat"])
-            lon = float(data[0]["lon"])
-            return lat, lon
-    except Exception as e:
-        print("Erro ao obter coordenadas:", e)
+	logger.info(f"Tentando obter coordenadas para o endereço: {address}") 
+	params = {"q": address, "format": "json"}
+	headers = {"User-Agent": "AppTest/1.0 (kaylon.alt@outlook.com)"}
+	try:
+		response = requests.get(GEOAPI_URL, params=params, headers=headers, timeout=5)
+		response.raise_for_status()
+		data = response.json()
+		if data:
+			lat = float(data[0]["lat"])
+			lon = float(data[0]["lon"])
+			return lat, lon
+		else:
+			return None, None
+	except Exception as e:
+		print("Erro ao obter coordenadas:", e)
+		return None, None
 
-    fallback_address = 'Rua Planalto, 205, Centro, Macajuba, BA'
-    
-    try:
-        response = requests.get(GEOAPI_URL, params={"q": fallback_address, "format": "json"}, headers=headers, timeout=5)
-        response.raise_for_status()
-        data = response.json()
-        if data:
-            lat = float(data[0]["lat"])
-            lon = float(data[0]["lon"])
-            return lat, lon
-    except Exception as e:
-        print("Erro ao obter coordenadas do fallback:", e)
-
-    return None, None
 
 def get_cep(cep):
 	url = f"{CEP_URL}/json/{cep}"
