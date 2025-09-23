@@ -116,20 +116,29 @@
       </div>
       
       {% if business['premium'] %}
-        {% if horario and horario[0]['abre'] and horario[0]['fecha'] %}
-          <div class="card shadow-sm border-0 mb-4">
+    {% if horario and horario[0]['abre'] and horario[0]['fecha'] %}
+        <div class="card shadow-sm border-0 mb-4">
             <div class="card-body">
-              <h5 class="card-title">Horário de funcionamento <small class="text-muted">(hoje)</small></h5>
-              <ul class="list-unstyled">
-                <li>
-                  <i class="bi bi-clock me-2"></i>
-                  Das {{ horario[0]['abre'].strftime("%H:%M") }} às {{ horario[0]['fecha'].strftime("%H:%M") }}
-                </li>
-              </ul>
+                <h5 class="card-title">Horário de funcionamento <small class="text-muted">(hoje)</small></h5>
+                <ul class="list-unstyled">
+                    <li>
+                        <i class="bi bi-clock me-2"></i>
+                        Das {{ horario[0]['abre'].strftime("%H:%M") }} às {{ horario[0]['fecha'].strftime("%H:%M") }}
+                    </li>
+                </ul>
             </div>
-          </div>
-        {% endif %}
-      {% endif %}
+        </div>
+    {% elif horario and not horario[0]['abre'] %}
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Horário de funcionamento <small class="text-muted">(hoje)</small></h5>
+                <p class="text-danger fw-bold mb-0">
+                    <i class="bi bi-x-circle me-2"></i>Fechado
+                </p>
+            </div>
+        </div>
+    {% endif %}
+  {% endif %}
 
       {% if business['instagram'] or business['numero'] or business['email'] %}
       <div class="card shadow-sm border-0 mb-4">

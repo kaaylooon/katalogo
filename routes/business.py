@@ -101,6 +101,7 @@ def edit(business_id):
 	]
 	dias_map = {"dom":0, "seg":1, "ter":2, "qua":3, "qui":4, "sex":5, "sab":6}
 	horarios = {}
+	fechado_status = {}
 
 	images_urls = mostrar_business_images_urls(business_id)
 	business = buscar_id_business(business_id)
@@ -165,11 +166,20 @@ def edit(business_id):
 		for d, _ in dias:
 			abre = request.form.get(f'{d}_abre')
 			fecha = request.form.get(f'{d}_fecha')
+			fechado = request.form.get(f'{d}_fechado')
+
 			horarios[d] = (abre, fecha)
+			fechado_status[d] = fechado is not None
 
 		for d, (abre, fecha) in horarios.items():
-			if abre and fecha:
-				dias_num = dias_map[d]
+			dias_num = dias_map[d]
+
+			if fechado_status[d]:
+				del_horario(business_id, dias_num)
+				logger.info(f"Negócio {business_id} agora fechado na {dias_num}, por {session['user_id']}")
+
+			elif abre and fecha:
+				
 				update = update_horario(business_id, dias_num, abre, fecha)
 				if not update:
 					add_horario(business_id, dias_num, abre, fecha)

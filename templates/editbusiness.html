@@ -67,18 +67,21 @@
         
         {%if business['premium']%}
         <div class="col-12">
-          <label class="form-label" style="font-weight: 600;">Horário de funcionamento <small>(opcional)</small></label>
-          <div class="row g-3">
+        <label class="form-label" style="font-weight: 600;">Horário de funcionamento <small>(opcional)</small></label>
+        <div class="row g-3">
             {% for prefix, nome in dias %}
             <div class="col-md-6">
-              <label for="{{ prefix }}_horario" class="form-label">{{ nome }}</label>
-              <div class="input-group has-validation">
-                <input type="time" class="form-control" id="{{ prefix }}_abre" name="{{ prefix }}_abre" />
-                <input type="time" class="form-control" id="{{ prefix }}_fecha" name="{{ prefix }}_fecha" />
-              </div>
+                <label for="{{ prefix }}_horario" class="form-label">{{ nome }}</label>
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switch-{{ prefix }}">
+                    <label class="form-check-label" for="switch-{{ prefix }}">Fechado</label>
+                </div>
+                <div class="input-group has-validation horario-input-group">
+                    <input type="time" class="form-control" id="{{ prefix }}_abre" name="{{ prefix }}_abre" />
+                    <input type="time" class="form-control" id="{{ prefix }}_fecha" name="{{ prefix }}_fecha" />
+                </div>
             </div>
             {% endfor %}
-          </div>
         </div>
 
         {%endif%}
@@ -466,6 +469,35 @@ if (currentEstado) {
     // Carregar os municípios correspondentes
     loadMunicipios(currentEstado);
 }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Seleciona todos os switches de "Fechado"
+        const toggleSwitches = document.querySelectorAll('.form-check-input[type="checkbox"]');
+
+        toggleSwitches.forEach(function(toggle) {
+            // Adiciona um listener para cada switch
+            toggle.addEventListener('change', function() {
+                // Encontra o grupo de inputs de horário correspondente
+                const inputGroup = this.closest('.col-md-6').querySelector('.horario-input-group');
+                const timeInputs = inputGroup.querySelectorAll('input[type="time"]');
+                
+                // Se o switch estiver checado, desabilita os inputs
+                if (this.checked) {
+                    timeInputs.forEach(input => {
+                        input.disabled = true;
+                        input.value = ''; // Limpa o valor para não enviar dados inválidos
+                    });
+                } else {
+                    // Se não estiver checado, habilita os inputs
+                    timeInputs.forEach(input => {
+                        input.disabled = false;
+                    });
+                }
+            });
+        });
+    });
 </script>
 
 
