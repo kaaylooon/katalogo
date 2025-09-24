@@ -134,13 +134,8 @@ def seed_db(full):
 	cur.execute("""
 		INSERT INTO users (id, username, email, password, telephone, role)
 		VALUES (%s, %s, %s, %s, %s, %s)
-		ON CONFLICT (id) DO UPDATE
-		SET username = EXCLUDED.username,
-			email = EXCLUDED.email,
-			password = EXCLUDED.password,
-			telephone = EXCLUDED.telephone,
-			role = EXCLUDED.role
-	""", (1, "Someone", "kaylon.contact@outlook.com", hashed, "(11) 91659-1346", "admin"))
+		ON CONFLICT (id) DO NOTHING
+	""", (1, "KatAdmin", "kaylon.alt@outlook.com", hashed, "(11) 91659-1346", "admin"))
 	conn.commit()
 	cur.close()
 	conn.close()
