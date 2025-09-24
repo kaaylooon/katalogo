@@ -1,8 +1,13 @@
 db.db
 
 .env
+.log
 
-app.log
+# Docker
+.docker/
+*.pid
+*.log
+
 
 # Cache do Python
 routes/__pycache__/

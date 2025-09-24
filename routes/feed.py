@@ -13,7 +13,9 @@ routes = Blueprint('feed', __name__)
 @routes.route('/feed', methods=['GET'])
 def feed():
 	feed = mostrar_feed()
-	meusbusinesses = mostrar_businesses_user(session['user_id'])
+	
+	user_id = session.get('user_id')
+	meusbusinesses = mostrar_businesses_user(user_id) if user_id else None
 
 	return render_template("feed.html", feed=feed, meusbusinesses=meusbusinesses)
 
@@ -43,9 +45,9 @@ def add():
 @routes.route('/feed/<int:feed_id>/del', methods=['POST'])
 @login_required
 @author_or_admin_required(
-    mostrar_feed_by_id,   
-    author_field="by_user",
-    arg_name="feed_id"
+	mostrar_feed_by_id,   
+	author_field="by_user",
+	arg_name="feed_id"
 )
 def del_feed_route(feed_id):
 	feed = mostrar_feed_by_id(feed_id)

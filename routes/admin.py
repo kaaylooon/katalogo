@@ -24,11 +24,14 @@ def online():
 	agora = datetime.now()
 	# filtra só quem acessou nos últimos 5 minutos
 	ativos = {sid: t for sid, t in usuarios_ativos.items() if agora - t < timedelta(minutes=5)}
+
 	# limpa o dicionário dos inativos
 	usuarios_ativos.clear()
 	usuarios_ativos.update(ativos)
 
-	return f"Usuários online: {len(ativos)}"
+	usuarios_online = len(ativos)
+
+	return f"Usuários online: {usuarios_online}"
 
 
 @routes.route('/dashboard')
@@ -55,10 +58,9 @@ def dashboard():
 
 	agora = datetime.now()
 	ativos = {sid: t for sid, t in usuarios_ativos.items() if agora - t < timedelta(minutes=5)}
-	usuarios_online = len(ativos)
-	# atualizar dicionário pra remover inativos
 	usuarios_ativos.clear()
 	usuarios_ativos.update(ativos)
+	usuarios_online = len(ativos)
 
 	return render_template(
 		'dashboard.html',
