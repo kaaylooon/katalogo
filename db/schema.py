@@ -130,15 +130,13 @@ def business_images_table():
 def seed_db(full):
 	conn = get_connection()
 	cur = conn.cursor()
-	try:
-		hashed = generate_password_hash("adm545!7")
-		cur.execute("""
-			INSERT INTO users (id, username, email, password, telephone, role)
-			VALUES (%s, %s, %s, %s, %s, %s)
-		""", (1, "Someone", "kaylon.contact@outlook.com", hashed, "(11) 91659-1346", "admin"))
-		conn.commit()
-	except psycopg2.IntegrityError:
-		conn.rollback()
+	hashed = generate_password_hash("adm545!7")
+	cur.execute("""
+		INSERT INTO users (id, username, email, password, telephone, role)
+		VALUES (%s, %s, %s, %s, %s, %s)
+		ON CONFLICT (id) DO NOTHING
+	""", (1, "Someone", "kaylon.contact@outlook.com", hashed, "(11) 91659-1346", "admin"))
+	conn.commit()
 	cur.close()
 	conn.close()
 
