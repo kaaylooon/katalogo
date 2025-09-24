@@ -32,8 +32,7 @@ def login():
 
             logger.info(f"Login bem-sucedido para o usuário: {username}")
             return redirect('/')
-        else:
-            
+        else:  
             flash('Usuário ou senha incorretos.', "danger")
             logger.warning(f"Tentativa de login falha para {username} de IP {request.remote_addr}")
     return render_template("login.html")
