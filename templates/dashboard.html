@@ -153,8 +153,15 @@
   $("#comments-table").DataTable({
    ajax: "/api/comments",
    scrollX: true,
-   columns: [{ data: "id" }, { data: "autor" }, { data: "business_id" }, { data: "created_at" }, { data: "edited" }, { data: "actions", orderable: false, searchable: false }],
-  });
+   columns: [
+       { data: "id" },
+       { data: "autor" },
+       { data: "business_id" },
+       { data: "created_at" },
+       { data: "edited" },
+       { data: "actions", orderable: false, searchable: false }
+   ],
+});
 
   $("#feeds-table").DataTable({
    ajax: "/api/feeds",

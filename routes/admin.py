@@ -90,7 +90,6 @@ def api_users():
 @routes.route("/api/comments")
 def api_comments():
 	comments = [serialize_comment(c) for c in mostrar_comentarios()]
-	# Certifique-se que o created_at é string, pois DataTables pode quebrar com datetime
 	for c in comments:
 		if isinstance(c['created_at'], datetime):
 			c['created_at'] = c['created_at'].strftime("%d/%m/%Y %H:%M")
