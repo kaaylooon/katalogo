@@ -128,11 +128,19 @@ def business_images_table():
 
 
 def seed_db(full):
+	conn = get_connection()
+	cur = conn.cursor()
 	try:
-		registrar_user('Someone', 'kaylon.contact@outlook.com', generate_password_hash('adm123'), '(11) 12345-6789')
-		tornar_admin('Someone')
-	except Exception:
-		pass
+		hashed = generate_password_hash("adm545!7")
+		cur.execute("""
+			INSERT INTO users (id, username, email, password, telephone, role)
+			VALUES (%s, %s, %s, %s, %s, %s)
+		""", (1, "Someone", "kaylon.contact@outlook.com", hashed, "(11) 91659-1346", "admin"))
+		conn.commit()
+	except psycopg2.IntegrityError:
+		conn.rollback()
+	cur.close()
+	conn.close()
 
 	if full:
 		try:
@@ -149,8 +157,7 @@ def seed_db(full):
 			add_premium(True, business_id)
 			edit_business(business_id, instagram='@auriuminitium', numero='(11) 91659-1346',
 						  email='kaylon.contact@gmail.com', logo_path=None, lat=-12.1358, lon=-40.36,
-						  address="Rua Planalto, 405, Macajuba, BA")
-			add_business_images(business_id, '7560eb2c5c984d66b0a02e6e07d9a8fa.jpeg')
+						  address="Rua Planalto, 405, Macajuba - BA, Brasil")
 			for dia_semana in range(7):
 				add_horario(business_id, dia_semana, "08:00", "18:00")
 		except Exception as e:
