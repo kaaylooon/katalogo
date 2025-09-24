@@ -63,9 +63,9 @@ def verificar_user(username):
     return dict(user) if user else None
 
 
-def tornar_admin(user_id):
+def tornar_admin(username):
     conn = get_connection()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute("UPDATE users SET role = 'admin' WHERE id = %s", (user_id,))
+    cur.execute("UPDATE users SET role = 'admin' WHERE username = %s", (username,))
     conn.commit()
     conn.close()

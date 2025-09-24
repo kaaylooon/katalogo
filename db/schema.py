@@ -129,8 +129,8 @@ def business_images_table():
 
 def seed_db(full):
 	try:
-		registrar_user('Kaylon', 'kaylon.contact@outlook.com', generate_password_hash('adm123'), '(11) 12345-6789')
-		tornar_admin(1)
+		registrar_user('Someone', 'kaylon.contact@outlook.com', generate_password_hash('adm123'), '(11) 12345-6789')
+		tornar_admin('Someone')
 	except Exception:
 		pass
 
