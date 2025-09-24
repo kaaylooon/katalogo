@@ -11,6 +11,11 @@ logger = logging.getLogger(__name__)
 
 auth = Blueprint('auth', __name__)
 
+@auth.route("/check_username")
+def check_username():
+    username = request.args.get("username")
+    exists = bool(verificar_user(username))
+    return {"exists": exists}
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -18,7 +23,7 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        user = verificar_user(username)  # agora retorna dict do Postgres
+        user = verificar_user(username) 
 
         if user and check_password_hash(user['password'], password):
             session["user_id"] = user['id']

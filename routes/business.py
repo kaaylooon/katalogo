@@ -24,8 +24,12 @@ def addbusiness():
 	try:
 		if request.method == "POST":
 			by_user = session.get('user_id')
-			nome = request.form.get('nome').capitalize()
+			nome = request.form.get('nome')
+			nome = nome[0].upper() + nome[1:]
+
 			descricao = request.form.get('descricao', 'Sem descrição.').capitalize()
+			descricao = descricao[0].upper() + descricao[1:]
+			
 			categoria = request.form.get('categoria')
 			
 			instagram = request.form.get('insta', None)
@@ -107,9 +111,12 @@ def edit(business_id):
 	business = buscar_id_business(business_id)
 
 	if request.method == "POST":
-		nome = request.form.get('nome').capitalize()
+		nome = request.form.get('nome')
+		nome = nome[0].upper() + nome[1:]
+
 		categoria = request.form.get('categoria')
-		descricao = request.form.get('descricao', 'Sem descrição.').capitalize()
+		descricao = request.form.get('descricao', 'Sem descrição.')
+		descricao = descricao[0].upper() + descricao[1:]
 
 		instagram = request.form.get('insta')
 		if instagram and '@' not in instagram:
