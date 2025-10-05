@@ -35,90 +35,53 @@
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg shadow-sm rounded-5 mx-4 my-4 px-1 py-2">
-  <div class="container mx-2 d-flex align-items-center">
-    <!-- Logo -->
-    <a class="navbar-brand me-2" href="/">
-      <!--<img src="{{ url_for('static', filename='logo.png') }}" alt="Katálogo" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;" /> -->
-      <span class="material-symbols-outlined">home
-          </span>
-    </a>
-    <div class="d-flex align-items-center ms-auto gap-1">
-        <a class="btn position-relative" id="notifButton"
-         {% if session.get('user_id') %}
-         data-bs-toggle="modal"
-         data-bs-target="#notifModal"
-         {% else %}
-         href="{{url_for('auth.login', link=request.path) }}"
-         {% endif %}
-         aria-expanded="false">
-          <span class="material-symbols-outlined">notifications
-          </span>
-          <span id="notifBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
-            0
-          </span>
-        </a>
 
-      <!-- Botão hambúrguer -->
-      <button
-        class="btn navbar-toggle d-lg-none"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarButtonsExample"
-        aria-controls="navbarButtonsExample"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+<nav class="navbar navbar-expand-lg shadow-sm rounded-5 mx-4 my-4 px-1 py-2">
+  <div class="container mx-2 d-flex align-items-center">
+    <a class="navbar-brand" href="/">Katálogo</a>
+
+    <div class="d-flex align-items-center gap-2 order-lg-last">
+      {% if session.get('user_id') %}
+      <a class="btn position-relative" id="notifButton" data-bs-toggle="modal"
+        data-bs-target="#notifModal" aria-expanded="false">
+        <span class="material-symbols-outlined">notifications</span>
+        <span id="notifBadge"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
+      </a>
+      {%endif%}
+
+      <button class="btn navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarButtons" aria-controls="navbarButtons"
+        aria-expanded="false" aria-label="Toggle navigation">
         <span class="material-symbols-outlined">menu</span>
       </button>
     </div>
 
-
-    <!-- Conteúdo colapsável -->
-    <div class="collapse navbar-collapse" id="navbarButtonsExample">
-      <!-- Links à esquerda -->
+    <div class="collapse navbar-collapse" id="navbarButtons">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="/">Início</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('feed.feed') }}">Atividades</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('business.businesses') }}">Negócios</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('service.services') }}">Serviços</a>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('feed.feed') }}">Atividades</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('business.businesses') }}">Negócios</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('service.services') }}">Serviços</a></li>
         {% if session.get('role') == 'admin' %}
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('admin.dashboard') }}">Painel</a>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard') }}">Painel</a></li>
         {% endif %}
       </ul>
 
-      <!--dropdown) -->
-      <ul class="navbar-nav mb-2 mb-lg-0 d-flex">
-        {% if session.get('user_id') %}
-          <div class="d-flex align-items-center">
-            <a class="nav-link btn me-3" href="{{ url_for('auth.logout') }}">
-                Sair
-            </a>
-            <a class="btn btn-primary rounded shadow-sm ms-auto spacing-button" href="{{ url_for('user.perfil', user_id=session['user_id']) }}">
-                Perfil
-            </a>
-          </div>
-        {% else %}
-          <div class="d-flex align-items-center">
-            <a class="nav-link btn me-3" href="{{ url_for('auth.login', link=request.path) }}">
-              Entrar
-            </a>
-            <a class="btn btn-primary rounded shadow-sm ms-auto spacing-button" href="{{ url_for('auth.signup') }}">
-              Registrar
-            </a>
-          </div>
-        {% endif %}
-      </ul>
+      {% if session.get('user_id') %}
+      <div class="d-flex ms-lg-auto">
+        <a class="btn btn-link" href="{{ url_for('auth.logout') }}">Sair</a>
+
+        <a class="btn btn-primary rounded shadow-sm ms-auto spacing-buttom"
+          href="{{ url_for('user.perfil', user_id=session['user_id']) }}">Perfil</a>
+      </div>
+      {% else %}
+      <div class="d-flex ms-lg-auto">
+        <a class="btn btn-link" href="{{ url_for('auth.login', link=request.path) }}">Entrar</a>
+
+        <a class="btn btn-primary rounded shadow-sm ms-auto spacing-buttom" href="{{ url_for('auth.signup') }}">Registrar</a>
+      </div>
+      {% endif %}
     </div>
   </div>
 </nav>
