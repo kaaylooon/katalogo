@@ -86,7 +86,7 @@ def inject_notifications():
         return dict(notifications=notifications)
     return dict(notifications=[])
 
-DEPLOY = False
+DEPLOY = True
 
 if DEPLOY:
 	init_db()
