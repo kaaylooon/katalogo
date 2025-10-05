@@ -42,8 +42,14 @@
       <!--<img src="{{ url_for('static', filename='logo.png') }}" alt="Katálogo" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;" /> -->
       Katálogo
     </a>
-    <div class="d-flex align-items-center ms-auto nav-icon">
-        <a class="nav-link position-relative btn navbar-toggler" id="notifButton" role="button" data-bs-toggle="modal" data-bs-target="#notifModal" aria-expanded="false">
+    <div class="nav-item d-flex align-items-center ms-auto nav-icon">
+        <a class="nav-link position-relative btn navbar-toggler" id="notifButton" role="button" data-bs-toggle="modal"
+         {% if session.get('user_id') %}
+         data-bs-target="#notifModal"
+         {% else %}
+         href="url_for('auth.login', link=request.path) }}"
+         {% endif %}
+         aria-expanded="false">
           <span class="material-symbols-outlined" style="font-size: 25px;">notifications
           </span>
           <span id="notifBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
@@ -53,7 +59,7 @@
 
       <!-- Botão hambúrguer -->
       <button
-        class="nav-link nav-icon"
+        class="nav-link navbar-toggle nav-icon"
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#navbarButtonsExample"
