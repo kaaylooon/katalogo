@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button z-1050"
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded d-flex justify-content-center align-items-center shadow-sm spacing-button p-3 pt-0 pb-0"
   {% if 'user_id' in session %}
     data-bs-target="#add_feed"
     data-bs-toggle="modal"
   {% else %}
     href="{{ url_for('auth.login')}}"
   {% endif %}>
-   <span class="material-symbols-outlined spacing-button-icon">post_add</span>
+   <span class="material-symbols-outlined spacing-button-icon me-2">post_add</span> Compartilhar
 </a>
 
 <div class="modal fade" id="add_feed" tabindex="-1" aria-labelledby="addFeedLabel" aria-hidden="true">

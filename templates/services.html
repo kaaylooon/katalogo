@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="title-2 mb-3 text-center" data-aos="zoom-in">SERVIÇOS</h1>
+
+<div class="container p-5 pt-4 pb-5" data-aos="zoom-out">
+ <div class="row">
+  <h5>Buscar / Filtrar</h5>
+  <form action="{{ url_for('business.businesses') }}" method="get" class="card-body">
+   <div class="d-grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+    <div>
+     <input type="text" class="form-control" name="q" placeholder="Nome do serviço" id="exampleDataList" />
+    </div>
+   </div>
+  </form>
+ </div>
+</div>
+
+<div class="pt-0 pb-0 d-flex align-items-center justify-content-center" data-aos="fade-in">
+  <div class="toggle-switch" onclick="location.href='{{ url_for('business.businesses') }}'">
+      <span class="switch-label {% if mode=='negocios' %}active{% endif %}">Negócios</span>
+      <span class="switch-label {% if mode=='servicos' %}active{% endif %}">Serviços</span>
+      <div class="switch-slider" style="left: {% if mode=='servicos' %}102px{% else %}2px{% endif %};"></div>
+    </div>
+</div>
+
+{% if not servico %}
+<div class="text-center p-3" data-aos="zoom-in">
+ <p class="line-clamp-3 card-text text-muted small flex-grow-1">Nenhum serviço encontrado. Desculpe pela inconveniência</p>
+</div>
+{% endif %}
+
+<script>
+const toggle = document.getElementById("modeToggle");
+toggle.addEventListener("change", () => {
+  window.location.href = toggle.checked ? "{{ url_for('service.services') }}" : "{{ url_for('business.businesses') }}";
+});
+</script>
+
+
+{% endblock %}

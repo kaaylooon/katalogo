@@ -88,7 +88,45 @@ html{
  border-radius: 10px;
 }
 
+.toggle-switch {
+  display: flex;
+  position: relative;
+  width: 200px;
+  height: 40px;
+  background: #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  user-select: none;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
 
+.toggle-switch .switch-label {
+  flex: 1;
+  text-align: center;
+  z-index: 2;
+  font-weight: 500;
+  color: #555;
+  transition: color 0.5s;
+}
+
+.toggle-switch .switch-label.active {
+  color: white;
+}
+
+.toggle-switch .switch-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 96px; /* metade do toggle */
+  height: 36px;
+  background: var(--COLOR4);
+  border-radius: 20px;
+  transition: left 0.5s;
+  z-index: 1;
+}
 .card-feed {
  background: var(--COLOR10);
  backdrop-filter: blur(15px);
@@ -183,11 +221,10 @@ a {
  color: var(--COLOR3);
 }
 
-.spacing-button{
-  width: 60px; height: 60px; z-index: 50555;
+.spacing-button{height: 40px; z-index: 50555;
 }
 .spacing-button-icon{
-font-size: 28px; line-height: 1; z-index: 5056;
+font-size: 25px; line-height: 1; z-index: 5056;
 }
 
 .premium-glow {

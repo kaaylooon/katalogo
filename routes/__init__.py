@@ -5,3 +5,4 @@ from .comment import *
 from .feed import *
 from .home import *
 from .user import *
+from .service import *

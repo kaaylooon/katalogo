@@ -14,7 +14,7 @@ def businesses():
 	categoria = request.args.get('categoria', '')
 	businesses = mostrar_business(search_query, categoria)
 
-	return render_template("businesses.html", businesses=businesses)
+	return render_template("businesses.html", businesses=businesses, mode="negocios")
 
 #adicionar business
 @routes.route('/addbusiness', methods=['GET', 'POST'])
@@ -24,10 +24,10 @@ def addbusiness():
 	try:
 		if request.method == "POST":
 			by_user = session.get('user_id')
-			nome = request.form.get('nome')
+			nome = request.form.get('nome', 'Anônimo')
 			nome = nome[0].upper() + nome[1:]
 
-			descricao = request.form.get('descricao', 'Sem descrição.').capitalize()
+			descricao = request.form.get('descricao', 'Sem descrição.')
 			descricao = descricao[0].upper() + descricao[1:]
 			
 			categoria = request.form.get('categoria')
@@ -50,14 +50,29 @@ def addbusiness():
 			business_id = adicionar_business(nome, descricao, categoria, instagram, numero, logo_filename, by_user, evento, integrantes)
 
 			if business_id:
-				logger.info(f'Novo negócio: {nome}, criado por {by_user}')
-			else:
-				logger.error(f"Erro na criação do negócio {nome}, tentativa por {by_user}")
+				logger.info(
+					f" Novo negócio"
+					f"Nome do negócio: {nome}"
+					f"ID do usuário: {by_user}")
 
+				add_notification(by_user, f"Negócio {nome} cadastrado com sucesso! Para editar as  informações, basta acessar a página do negócio e clicar no botão da direita inferior.")
+			else:
+				logger.error(
+					f" Erro na criação de negócio"
+					f"Nome do negócio: {nome}"
+					f"ID do usuário: {by_user}"
+				)
 			return redirect(f"/business/{business_id}")
 
 	except RateLimitExceeded:
 		flash("Você atingiu o limite de envios. Tente novamente mais tarde.", "warning")
+
+		negociosDoUsuario = mostrar_businesses_user(session['user_id'])
+		logger.warning(
+			f" Usuário atingiu o limite de criação de negócios por hora"
+			f"ID do usuário: {session['user_id']}"
+			f"Negócios cadastrados pelo usuário: {negociosDoUsuario}"
+		)
 		return redirect(url_for("business.businesses"))
 
 	return render_template("addbusiness.html")
@@ -77,7 +92,6 @@ def business(business_id):
 	
 	feeds = mostrar_feed_business(business_id)
 	images_urls = mostrar_business_images_urls(business_id)
-
 
 	if not business:
 		flash('Negócio não encontrado.', 'danger')
@@ -166,9 +180,24 @@ def edit(business_id):
 				if allowed_file(image.filename):
 					image_filename = save_image(image)
 					add_business_images(business_id, image_filename)
-					logger.info("Arquivo adicionado: {image_filename}")
+
+					log_event(
+						" Arquivo adicionado",
+						level=logging.INFO,
+						negocio=f"{nome} (ID: {business_id})",
+						user_id=session['user_id']
+						)
+
 				else:
-					logger.warning("Extensão não permitida")
+					flash("Extensão de arquivo não permitida", 'danger')
+
+					log_event(
+						" Extensão de arquivo não permitida",
+						level=logging.WARNING,
+						imagem=image.filename,
+						negocio=f"{nome} (ID: {business_id})",
+						user_id=session["user_id"]
+					)
 
 		for d, _ in dias:
 			abre = request.form.get(f'{d}_abre')
@@ -183,14 +212,11 @@ def edit(business_id):
 
 			if fechado_status[d]:
 				del_horario(business_id, dias_num)
-				logger.info(f"Negócio {business_id} agora fechado na {dias_num}, por {session['user_id']}")
-
 			elif abre and fecha:
 				
 				update = update_horario(business_id, dias_num, abre, fecha)
 				if not update:
 					add_horario(business_id, dias_num, abre, fecha)
-					logger.info(f"Horário modificado no negócio {business_id}, por {session['user_id']}")
 
 		removed_images = request.form.get('removed_images')
 		
@@ -205,8 +231,12 @@ def edit(business_id):
 				if os.path.exists(filepath):
 					os.remove(filepath)
 
-
-		logger.info(f"Negócio editado: {nome} (ID: {business_id}), pelo usuário de ID {session['user_id']}")
+		log_event(
+			" Negócio editado",
+			level=logging.INFO,
+			negocio=f"{nome} (ID: {business_id})",
+			user_id=session['user_id']
+		)
 
 		return redirect(url_for('business.business', business_id=business_id))
 	return render_template('editbusiness.html', business_id=business_id, business=business, images_urls=images_urls, dias=dias)	
@@ -222,7 +252,14 @@ def edit(business_id):
 def delbusiness(business_id):
 	del_business(business_id)
 	flash('Négócio excluído com sucesso', 'sucess')
-	logger.info(f"Negócio excluído: {business_id}, por {session['user_id']}")
+
+	log_event(
+			" Negócio excluído",
+			level=logging.INFO,
+			business_id=business_id,
+			user_id=session['user_id']
+		)
+
 	return redirect(request.referrer or '/')
 
 @routes.route('/business/<int:business_id>/upgrade', methods=['GET'])

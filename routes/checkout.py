@@ -123,7 +123,11 @@ def create_checkout_session_pix(business_id):
     arg_name="business_id"
 )
 def sucesso(business_id):
-	logger.warning(f'Checkout com sucesso: negócio de ID {business_id}')
+	logger.warning(
+		f"## Checkout com sucesso"
+		f"ID do negócio: {business_id}"
+		f"ID do usuário: {session['user_id']}"
+	)
 	return render_template('sucess.html', business_id=business_id)
 
 
@@ -135,7 +139,12 @@ def sucesso(business_id):
     arg_name="business_id"
 )
 def cancelado(business_id):
-	logger.warning(f'Checkout cancelado: negócio de ID {business_id}.')
+	logger.warning(
+		f"## Checkout cancelado" 
+		f"ID do negócio: {business_id}"
+		f"ID do usuário: {session['user_id']}"
+	)
+
 	return render_template('cancel.html')
 
 
@@ -161,7 +170,13 @@ def stripe_webhook():
 		business_id = invoice["metadata"]["business_id"]
 		payment_type = invoice["metadata"].get("payment_type", "card")
 
-		logger.warning(f'Subscription paga ({payment_type}): negócio de ID {business_id}')
+		log_event(
+			"## Subscription paga",
+			level=logging.WARNING,
+			tipo=payment_type,
+			business_id=business_id
+		)
+
 		add_premium(True, business_id)  # cartão sempre libera
 
 	# ------------------------
@@ -172,7 +187,12 @@ def stripe_webhook():
 		business_id = intent["metadata"]["business_id"]
 		payment_type = intent["metadata"].get("payment_type")
 
-		logger.warning(f'Pagamento único confirmado ({payment_type}): negócio de ID {business_id}')
+		log_event(
+			"## Pagamento único confirmado",
+			level=logging.WARNING,
+			tipo=payment_type,
+			business_id=business_id
+		)
 
 		if payment_type == "boleto":
 			add_premium(True, business_id, dias=30)
@@ -182,6 +202,12 @@ def stripe_webhook():
 		business_id = intent["metadata"]["business_id"]
 
 		logger.warning(f"O negócio de ID {business_id} passou com sucesso pelo checkout.")
+
+		log_event(
+			"## Passou com sucesso pelo checkout",
+			level=logging.WARNING,
+			business_id=business_id
+		)
 
 	return '', 200
 

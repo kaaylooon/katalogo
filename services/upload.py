@@ -1,10 +1,16 @@
 import os, uuid
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/var/data/uploads' 
+# Pasta de uploads depende do ambiente
+if os.environ.get("FLASK_ENV") == "development":
+	UPLOAD_FOLDER = "/mock_data/uploads"  # pasta local para testes
+else:
+	UPLOAD_FOLDER = "/var/data/uploads"  # produção no Render
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# Cria a pasta local se não existir
+#os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def allowed_file(filename: str) -> bool:
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

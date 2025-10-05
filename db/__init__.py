@@ -6,6 +6,6 @@ from .feed import *
 from .horarios import *
 from .images import *
 from .users import *
-
+from .notifications import *
 from .schema import init_db
 from .schema import seed_db

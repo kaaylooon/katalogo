@@ -3,14 +3,12 @@ db.db
 .env
 .log
 
-# Docker
-.docker/
-*.pid
-*.log
-
 
 # Cache do Python
 routes/__pycache__/
 db/__pycache__/
 services/__pycache__/
 __pycache__/
+
+var
+mock_data

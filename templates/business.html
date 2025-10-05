@@ -243,9 +243,9 @@
     {% else %}
       <p class="text-center">Nenhum comentário ainda. Seja o primeiro a comentar</p>
     {% endif %}
-      <a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button z-1050"
+      <a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded d-flex justify-content-center align-items-center shadow-sm spacing-button p-3 pt-0 pb-0" style="z-index: 6000"
          data-bs-toggle="modal" data-bs-target="#add_comment">
-         <span class="material-symbols-outlined spacing-button-icon">add_comment</span>
+         <span class="material-symbols-outlined spacing-button-icon me-2">comment</span> Comentar
       </a>
     </div>
   </div>
@@ -255,15 +255,15 @@
 <div class="position-fixed bottom-0 end-0 m-4 d-flex flex-column gap-3 ">
   {% if not business['premium'] %}
   <a href="{{ url_for('business.upgrade', business_id=business['id']) }}" 
-     class="btn text-white rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button premium-bg"
+     class="btn text-white rounded d-flex justify-content-center align-items-center shadow-sm spacing-button premium-bg p-3 pt-0 pb-0"
      title="Upgrade">
-    <i class="bi bi-gem spacing-button-icon"></i>
+    <span class="material-symbols-outlined spacing-button-icon me-2">diamond</span> Premium
   </a>
   {% endif %}
   <a href="{{ url_for('business.edit', business_id=business['id']) }}" 
-     class="btn btn-primary rounded-circle d-flex justify-content-center align-items-center shadow-sm spacing-button"
+     class="btn btn-primary rounded d-flex justify-content-center align-items-center shadow-sm spacing-button p-3 pt-0 pb-0"
      title="Editar">
-    <i class="bi bi-pencil-square spacing-button-icon"></i>
+    <span class="material-symbols-outlined spacing-button-icon me-2">edit</span> Editar
   </a>
 </div>
 {% endif %}

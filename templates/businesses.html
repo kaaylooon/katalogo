@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow spacing-button" href="{{ url_for('business.addbusiness') }}">
- <span class="material-symbols-outlined spacing-button-icon">
-  add_business
- </span>
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded d-flex justify-content-center align-items-center shadow spacing-button p-3 pt-0 pb-0"
+    href="{{ url_for('business.addbusiness')}}">
+   <span class="material-symbols-outlined spacing-button-icon me-2">add_business</span> Adicionar negócio
 </a>
 
 <h1 class="title-2 mb-3 text-center" data-aos="zoom-in">NEGÓCIOS</h1>
 
 <div class="container p-5 pt-4 pb-5" data-aos="zoom-out">
  <div class="row">
-  <h5>Buscar / Filtrar</h5>
+  <h5 class="d-flex align-items-center"><span class="material-symbols-outlined me-2" style="font-size: 20px;">
+search
+</span> Buscar / Filtrar</h5>
   <form action="{{ url_for('business.businesses') }}" method="get" class="card-body">
    <div class="d-grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
     <div>
@@ -20,6 +21,14 @@
    </div>
   </form>
  </div>
+</div>
+
+<div class="pt-0 pb-0 d-flex align-items-center justify-content-center" data-aos="fade-in">
+  <div class="toggle-switch" onclick="location.href='{{ url_for('service.services') }}'">
+      <span class="switch-label {% if mode=='negocios' %}active{% endif %}">Negócios</span>
+      <span class="switch-label {% if mode=='servicos' %}active{% endif %}">Serviços</span>
+      <div class="switch-slider" style="left: {% if mode=='servicos' %}102px{% else %}2px{% endif %};"></div>
+    </div>
 </div>
 
 <div class="container mt-2 mb-4 p-3" id="businesses">
@@ -32,7 +41,7 @@
      class="position-absolute top-0 end-0 m-2 badge rounded-pill text-white d-flex align-items-center gap-1 shadow-sm premium-bg"
      style="padding: 0.3rem 0.8rem; font-size: 0.75rem;"
      title="Premium"
-     data-aos="zoom-in"
+     data-aos="zoom-out"
     >
      <i class="bi bi-star-fill"></i> Premium
     </div>
@@ -62,9 +71,16 @@
 </div>
 
 {% if not businesses %}
-<div class="text-center">
+<div class="text-center p-5" data-aos="zoom-in">
  <p class="line-clamp-3 card-text text-muted small flex-grow-1">Nenhum negócio encontrado. Desculpe pela inconveniência</p>
 </div>
 {% endif %}
+
+<script>
+const toggle = document.getElementById("modeToggle");
+toggle.addEventListener("change", () => {
+  window.location.href = toggle.checked ? "{{ url_for('service.services') }}" : "{{ url_for('business.businesses') }}";
+});
+</script>
 
 {% endblock %}

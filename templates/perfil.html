@@ -1,8 +1,8 @@
 {% extends "base.html" %} {% block content %} {% if session_id == user['id'] %}
-<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center shadow spacing-button z-1050" href="{{url_for('user.perfiledit', user_id=user['id'])}}">
- <span class="material-symbols-outlined spacing-button-icon">
+<a class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded d-flex justify-content-center align-items-center shadow spacing-button p-3 pt-0 pb-0" href="{{url_for('user.perfiledit', user_id=user['id'])}}">
+ <span class="material-symbols-outlined spacing-button-icon me-2">
   manage_accounts
- </span>
+ </span> Editar perfil
 </a>
 {% endif %}
 

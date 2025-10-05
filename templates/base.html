@@ -35,26 +35,36 @@
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg shadow-sm bg-light rounded-4 mx-3 my-3 px-1 py-1">
+  <nav class="navbar navbar-expand-lg shadow-sm bg-light rounded-4 mx-3 my-3 px-1 py-2">
   <div class="container">
     <!-- Logo -->
     <a class="navbar-brand me-2" href="/">
       <!--<img src="{{ url_for('static', filename='logo.png') }}" alt="Katálogo" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;" /> -->
       Katálogo
     </a>
+    <div class="d-flex align-items-center ms-auto nav-icon">
+        <a class="nav-link position-relative btn navbar-toggler" id="notifButton" role="button" data-bs-toggle="modal" data-bs-target="#notifModal" aria-expanded="false">
+          <span class="material-symbols-outlined" style="font-size: 25px;">notifications
+          </span>
+          <span id="notifBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+            0
+          </span>
+        </a>
 
-    <!-- Botão hambúrguer -->
-    <button
-      class="btn navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarButtonsExample"
-      aria-controls="navbarButtonsExample"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <i class="bi bi-three-dots" style="font-size: 25px"></i>
-    </button>
+      <!-- Botão hambúrguer -->
+      <button
+        class="nav-link nav-icon"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarButtonsExample"
+        aria-controls="navbarButtonsExample"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="material-symbols-outlined" style="font-size: 25px">menu</span>
+      </button>
+    </div>
+
 
     <!-- Conteúdo colapsável -->
     <div class="collapse navbar-collapse" id="navbarButtonsExample">
@@ -68,6 +78,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('business.businesses') }}">Negócios</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('service.services') }}">Serviços</a>
         </li>
         {% if session.get('role') == 'admin' %}
         <li class="nav-item">
@@ -113,6 +126,24 @@
 	  {% endfor %}
 	{% endif %}
   {% endwith %}
+</div>
+
+<div class="modal fade" id="notifModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Notificações</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-0">
+        <ul id="notifList" class="list-group list-group-flush">
+          {% for n in notifications %}
+          <li class="list-group-item small">{{ n.message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -166,6 +197,33 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+</script>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+const socket = io();
+const notifList = document.getElementById("notifList");
+const notifBadge = document.getElementById("notifBadge");
+const notifModal = new bootstrap.Modal(document.getElementById('notifModal'));
+let unseenCount = 0;
+
+document.getElementById("notifButton").addEventListener("click", () => {
+  notifModal.show();
+  unseenCount = 0;
+  notifBadge.classList.add("d-none");
+  notifBadge.textContent = "0";
+});
+
+socket.on("new_notification", data => {
+  const li = document.createElement("li");
+  li.className = "list-group-item small";
+  li.textContent = data.text;
+  notifList.prepend(li);
+
+  unseenCount++;
+  notifBadge.textContent = unseenCount;
+  notifBadge.classList.remove("d-none");
+});
 </script>
 
 </body>

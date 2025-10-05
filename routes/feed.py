@@ -35,8 +35,10 @@ def add():
 	add_feed(business_id, content, session['user_id'], image_filename)
 
 	logger.info(
-		f"Novo feed adicionado. ID do negócio: {business_id}; "
+		f"Novo feed adicionado"
+		f"ID do negócio: {business_id};"
 		f"ID do usuário: {session['user_id']}"
+		f"Imagem: {image_filename if image_filename else 'Sem imagem'}"
 	)
 
 	return redirect(request.referrer or '/')
@@ -53,6 +55,11 @@ def del_feed_route(feed_id):
 	feed = mostrar_feed_by_id(feed_id)
 	if feed:
 		del_feed(feed_id)
-		logger.warning(f"Feed do negócio de ID {feed['id']} excluído pelo usuário de ID {session['user_id']}. Conteúdo: {feed['description']}")
+		logger.warning(
+			f"Feed excluído"
+			f"Negócio de ID: {feed['business_id']}"
+			f"ID do usuário: {session['user_id']}"
+			f"Conteúdo: {feed['description']}"
+		)
 
 	return redirect(request.referrer or '/')

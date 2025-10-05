@@ -30,7 +30,7 @@ def tabela_users():
 		CREATE TABLE IF NOT EXISTS users (
 			id SERIAL PRIMARY KEY,
 			username TEXT NOT NULL,
-			email TEXT NOT NULL UNIQUE,
+			email TEXT NOT NULL,
 			password TEXT NOT NULL,
 			telephone TEXT NOT NULL,
 			pfp_filename TEXT DEFAULT NULL,
@@ -126,6 +126,22 @@ def business_images_table():
 	cur.close()
 	conn.close()
 
+def notifications_table():
+	conn = get_connection()
+	cur = conn.cursor()
+	cur.execute("""
+		CREATE TABLE IF NOT EXISTS notifications (
+			id SERIAL PRIMARY KEY,
+			user_id INT NOT NULL,
+			message TEXT NOT NULL,
+			read BOOLEAN DEFAULT FALSE,
+			created_at TIMESTAMP DEFAULT NOW()
+		)
+	""")
+	conn.commit()
+	cur.close()
+	conn.close()
+
 
 def seed_db(full):
 	conn = get_connection()
@@ -168,3 +184,4 @@ def init_db():
 	tabela_comentarios()
 	tabela_horarios()
 	business_images_table()
+	notifications_table()
