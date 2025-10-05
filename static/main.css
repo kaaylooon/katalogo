@@ -212,6 +212,10 @@ a {
  font-weight: 800;
 }
 
+.nav-icon{
+  font-size: 25px;
+}
+
 .icone {
  text-decoration: None;
  cursor: pointer;

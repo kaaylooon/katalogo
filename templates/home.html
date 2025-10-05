@@ -29,7 +29,7 @@
  <p class="lead text-muted px-2 px-md-5 mb-4" style="max-width: 80%; font-size: 1rem;" data-aos="fade-down">
   Explore os negócios recomendados e encontre o que precisa de forma prática.
  </p>
- <a class="btn btn-outline-secondary" href="{{ url_for('business.businesses') }}">Ver negócios</a>
+ <a class="btn btn-outline-secondary" href="{{ url_for('business.businesses') }}" data-aos="zoom-in-up">Ver negócios</a>
 </div>
 
 <!-- Comerciante -->
@@ -39,10 +39,10 @@
  <p class="lead text-muted px-2 px-md-5 mb-2" style="max-width: 80%; font-size: 1rem;" data-aos="fade-down">
   Tenha visibilidade, gerencie seus serviços e conquiste novos clientes com facilidade.
  </p>
- <a class="btn btn-outline-secondary" href="{{ url_for('business.addbusiness') }}">Adicionar negócio</a>
+ <a class="btn btn-outline-secondary" href="{{ url_for('business.addbusiness') }}" data-aos="zoom-in-up">Adicionar negócio</a>
 </div>
 
-<div id="carouselClientes" class="carousel slide p-2 py-4" data-bs-touch="false" data-bs-keyboard="false" data-bs-interval="3000" data-bs-ride="carousel" style="opacity: 0.5;" data-aos="fade-in">
+<div id="carouselClientes" class="carousel slide p-2 py-4" data-bs-touch="false" data-bs-keyboard="false" data-bs-interval="3000" data-bs-ride="carousel" style="opacity: 0.5;" data-aos="fade-up">
  <div class="carousel-inner">
   {% for i in range(0, businesses|length, 4) %}
   <div class="carousel-item {% if i == 0 %}active{% endif %}">
