@@ -78,7 +78,7 @@ def humanize_datetime(value):
 	return arrow.get(value).humanize(locale="pt_br")
 app.jinja_env.filters['humandate'] = humanize_datetime
 
-DEPLOY = True
+DEPLOY = False
 
 if DEPLOY:
 	init_db()

@@ -216,6 +216,10 @@ a {
   font-size: 25px;
 }
 
+.material-symbols-outlined{
+  font-size: 25px;
+}
+
 .icone {
  text-decoration: None;
  cursor: pointer;
